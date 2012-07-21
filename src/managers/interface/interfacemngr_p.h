@@ -28,7 +28,6 @@
 
 #include <QtCore/QtGlobal>
 #include <QtGui>
-#include <QtUiTools>
 
 class InterfaceMngr;
 class ModuleMngr;

@@ -26,6 +26,8 @@
 #include "interfacemngr.h"
 #include "interfacemngr_p.h"
 
+#include <QtUiTools>
+
 #include <QDebug>
 
 InterfaceMngrPrivate::InterfaceMngrPrivate(InterfaceMngr *q) :
