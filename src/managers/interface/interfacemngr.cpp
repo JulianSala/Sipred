@@ -40,6 +40,11 @@ InterfaceMngr::InterfaceMngr(QObject *parent) :
 {
 }
 
+InterfaceMngr::~InterfaceMngr()
+{
+
+}
+
 void InterfaceMngrPrivate::loadMainwindow()
 {
     QUiLoader uiLoader;

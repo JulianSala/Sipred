@@ -32,7 +32,6 @@
 
 class ModuleMngr;
 class PluginMngr;
-class InterfaceMngr;
 class InterfaceMngrPrivate;
 
 class INTERFACEMNGR_EXPORT InterfaceMngr : public QObject
@@ -40,6 +39,7 @@ class INTERFACEMNGR_EXPORT InterfaceMngr : public QObject
     Q_OBJECT
 public:
     InterfaceMngr(QObject *parent = 0);
+    ~InterfaceMngr();
     
 public slots:
     void registerModuleManager(ModuleMngr *moduleMngr);

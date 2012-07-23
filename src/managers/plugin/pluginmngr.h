@@ -38,7 +38,8 @@ class PLUGINMNGR_EXPORT PluginMngr : public QObject
 {
     Q_OBJECT
 public:
-    explicit PluginMngr(QObject *parent = 0);
+    PluginMngr(QObject *parent = 0);
+    ~PluginMngr();
     bool activePlugin(const QString &);
     bool disablePlugin(const QString &);
     QStringList avaliablePlugins();
