@@ -29,7 +29,7 @@
 #include <QObject>
 #include "pluginmngr.h"
 #include "modulemngr.h"
-#include "interfacemngr.h"
+//#include "interfacemngr.h"
 
 class QUiLoader;
 class QMainWindow;
@@ -49,7 +49,7 @@ private slots:
 private:
     PluginMngr *m_pluginManager;
     ModuleMngr *m_moduleManager;
-    InterfaceMngr *m_interfaceManager;
+//    InterfaceMngr *m_interfaceManager;
     
 };
 
