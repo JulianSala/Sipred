@@ -46,6 +46,12 @@ void PluginMngrPrivate::initPluginManager()
 PluginMngr::PluginMngr(QObject *parent) :
     QObject(parent), d_ptr(new PluginMngrPrivate(this))
 {
+
+}
+
+PluginMngr::~PluginMngr()
+{
+
 }
 
 void PluginMngrPrivate::loadPlugins()

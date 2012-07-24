@@ -39,6 +39,7 @@ class MODULEMNGR_EXPORT ModuleMngr : public QObject
     Q_OBJECT
 public:
     ModuleMngr(QObject *parent = 0);
+    ~ModuleMngr();
     bool activeModule(const QString &);
     bool disableModule(const QString &);
     QStringList avaliableModules() const;

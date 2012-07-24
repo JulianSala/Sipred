@@ -34,7 +34,7 @@ Core::Core(QObject *parent) :
     QObject(parent)
 {
     configure();
-    loadMainWindows();
+//    loadMainWindows();
 }
 
 Core::~Core()
@@ -47,7 +47,7 @@ void Core::initVariables()
     m_moduleManager = new ModuleMngr(this);
     m_pluginManager = new PluginMngr(this);
 
-    m_interfaceManager->initInterface();
+//    m_interfaceManager->initInterface();
 }
 
 void Core::configure()
@@ -57,7 +57,5 @@ void Core::configure()
 
 void Core::run()
 {
-    if (m_mainWindow)
-        m_mainWindow->show();
-    loadPluginManager();
+
 }
