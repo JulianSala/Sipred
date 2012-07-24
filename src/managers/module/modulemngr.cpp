@@ -42,6 +42,11 @@ ModuleMngr::ModuleMngr(QObject *parent) :
 
 }
 
+ModuleMngr::~ModuleMngr()
+{
+
+}
+
 void ModuleMngrPrivate::initModuleManager()
 {
     this->setModulesPath("../lib/modules");

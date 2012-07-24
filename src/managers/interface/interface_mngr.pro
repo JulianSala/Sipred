@@ -7,7 +7,9 @@ contains(CONFIG, plugin) {
     CONFIG -= plugin
 }
 
-CONFIG += uitools
+!contains(CONFIG, uitools) {
+    CONFIG += uitools
+}
 
 DESTDIR = $$SIPRED_LIBRARY_PATH
 TARGET = $$qtLibraryTarget(interfacemanager)
@@ -21,4 +23,4 @@ SOURCES += \
     interfacemngr.cpp
 
 DEFINES += \
-    INTERFACEMNGRLIB_LIBRARY
+    INTERFACEMNGRLIB_LIBRARY \

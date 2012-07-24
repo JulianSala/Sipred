@@ -44,6 +44,11 @@ ModuleInfo::ModuleInfo(QObject *parent) :
     this->resetAll();
 }
 
+ModuleInfo::~ModuleInfo()
+{
+
+}
+
 QString ModuleInfo::instance() const
 {
     return m_instance;
