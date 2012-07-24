@@ -43,7 +43,7 @@ Core::~Core()
 
 void Core::initVariables()
 {
-//    m_interfaceManager = new InterfaceMngr(this);
+    m_interfaceManager = new InterfaceMngr(this);
     m_moduleManager = new ModuleMngr(this);
     m_pluginManager = new PluginMngr(this);
 
