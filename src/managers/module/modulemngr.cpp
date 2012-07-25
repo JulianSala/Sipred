@@ -96,7 +96,7 @@ bool ModuleMngrPrivate::setModulesPath(const QString &path)
     QDir dir(path);
 
     if (!dir.exists()) {
-        qWarning() << "Path " << path << " doesn't exist";
+        qWarning() << "Path" << path << "doesn't exist";
         return false;
     }
 

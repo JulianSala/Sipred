@@ -27,11 +27,12 @@
 #include "interfacemngr_p.h"
 
 #include <QtUiTools>
+#include <QScreen>
 
 #include <QDebug>
 
 InterfaceMngrPrivate::InterfaceMngrPrivate(InterfaceMngr *q) :
-    q_ptr(q)
+    q_ptr(q), m_mainwindow(0)
 {
 }
 
@@ -47,16 +48,27 @@ InterfaceMngr::~InterfaceMngr()
 
 void InterfaceMngrPrivate::loadMainwindow()
 {
-    QUiLoader uiLoader;
-
     QFile file("../share/mainwindow.ui");
-    if (!file.open(QIODevice::ReadOnly))
+    if (!file.open(QIODevice::ReadOnly)) {
+        qWarning() << "Can't find mainwindow.ui";
         return;
+    }
+
+    QUiLoader uiLoader;
 
     m_mainwindow = qobject_cast<QMainWindow *>(uiLoader.load(&file));
     file.close();
+}
 
-    m_mainwindow->show();
+void InterfaceMngrPrivate::loadDefaultMainWindow()
+{
+    m_mainwindow = new QMainWindow(0, Qt::Window);
+
+    QDockWidget *dockWidget = new QDockWidget("Modulos", m_mainwindow);
+    m_mainwindow->addDockWidget(Qt::LeftDockWidgetArea, dockWidget, Qt::Vertical);
+
+    QStackedWidget *stackedWidget = new QStackedWidget(m_mainwindow);
+    m_mainwindow->setCentralWidget(stackedWidget);
 }
 
 void InterfaceMngr::registerModuleManager(ModuleMngr *moduleMngr)
@@ -78,9 +90,33 @@ void InterfaceMngr::initInterface()
     Q_D(InterfaceMngr);
 
     d->loadMainwindow();
+
+    if (!d->m_mainwindow)
+        d->loadDefaultMainWindow();
+
+    d->centerWindow();
+    d->m_mainwindow->show();
 }
 
 void InterfaceMngr::endInterface()
 {
 
+}
+
+void InterfaceMngrPrivate::centerWindow()
+{
+    QSize dSize = qApp->desktop()->size();
+
+    qint32 w = dSize.width();
+    qint32 h = dSize.height();
+
+    w *= 0.7;
+    h *= 0.7;
+
+    QSize newSize(w, h);
+
+    m_mainwindow->setGeometry(QStyle::alignedRect(Qt::LeftToRight,
+                                                  Qt::AlignCenter,
+                                                  newSize,
+                                                  qApp->desktop()->availableGeometry()));
 }

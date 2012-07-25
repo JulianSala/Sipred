@@ -40,12 +40,16 @@ class InterfaceMngrPrivate
 public:
     InterfaceMngrPrivate(InterfaceMngr *q);
     void loadMainwindow();
+    void loadDefaultMainWindow();
 
     InterfaceMngr * const q_ptr;
 
     QMainWindow *m_mainwindow;
     ModuleMngr *m_moduleManager;
     PluginMngr *m_pluginManager;
+
+private:
+    void centerWindow();
 };
 
 #endif // INTERFACEMNGR_P_H

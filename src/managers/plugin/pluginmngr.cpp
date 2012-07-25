@@ -32,7 +32,6 @@
 PluginMngrPrivate::PluginMngrPrivate(PluginMngr *parent) :
     q_ptr(parent)
 {
-//    Q_Q(PluginMngr);
     initPluginManager();
     loadPlugins();
 }
@@ -40,7 +39,7 @@ PluginMngrPrivate::PluginMngrPrivate(PluginMngr *parent) :
 void PluginMngrPrivate::initPluginManager()
 {
     setPluginsPath("../lib/plugins");
-    qDebug() << "Plugin path is: " << m_pluginsDir.path();
+    qDebug() << "Plugin path is:" << m_pluginsDir.path();
 }
 
 PluginMngr::PluginMngr(QObject *parent) :
@@ -56,8 +55,6 @@ PluginMngr::~PluginMngr()
 
 void PluginMngrPrivate::loadPlugins()
 {
-//    Q_Q(PluginMngr);
-
     qDebug() << "Loading plugins...";
 
     foreach (QString pluginDir, m_pluginsDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
@@ -106,12 +103,12 @@ bool PluginMngrPrivate::setPluginsPath(const QString &path)
     QDir dir(path);
 
     if (!dir.exists()) {
-        qWarning() << "Path " << path << " doesn't exist";
+        qWarning() << "Path" << path << "doesn't exist";
         return false;
     }
 
     if (dir.isRelative())
-        qWarning() << "Set a relative path: " << path;
+        qWarning() << "Set a relative path:" << path;
 
     m_pluginsDir.setPath(path);
 
@@ -153,7 +150,7 @@ bool PluginMngr::activePlugin(const QString &pluginId)
     Q_D(PluginMngr);
 
     if (!d->m_pluginsInfo.contains(pluginId)) {
-        qWarning() << "Plugin " << pluginId << " can't be activated.";
+        qWarning() << "Plugin" << pluginId << "can't be activated.";
         return false;
     }
 
