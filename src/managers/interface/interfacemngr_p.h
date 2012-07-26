@@ -40,7 +40,7 @@ class InterfaceMngrPrivate
 public:
     InterfaceMngrPrivate(InterfaceMngr *q);
     void loadMainwindow();
-    void loadDefaultMainWindow();
+    void loadDefaultWindow();
 
     InterfaceMngr * const q_ptr;
 
@@ -49,6 +49,8 @@ public:
     PluginMngr *m_pluginManager;
 
 private:
+    void loadDefaultDock();
+    void loadDefaultCenterWidget();
     void centerWindow();
 };
 

@@ -60,7 +60,7 @@ void InterfaceMngrPrivate::loadMainwindow()
     file.close();
 }
 
-void InterfaceMngrPrivate::loadDefaultMainWindow()
+void InterfaceMngrPrivate::loadDefaultWindow()
 {
     m_mainwindow = new QMainWindow(0, Qt::Window);
 
@@ -92,13 +92,23 @@ void InterfaceMngr::initInterface()
     d->loadMainwindow();
 
     if (!d->m_mainwindow)
-        d->loadDefaultMainWindow();
+        d->loadDefaultWindow();
 
     d->centerWindow();
     d->m_mainwindow->show();
 }
 
 void InterfaceMngr::endInterface()
+{
+
+}
+
+void InterfaceMngrPrivate::loadDefaultDock()
+{
+
+}
+
+void InterfaceMngrPrivate::loadDefaultCenterWidget()
 {
 
 }

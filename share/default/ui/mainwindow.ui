@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="fileMenu">
+    <property name="title">
+     <string>&amp;Archivo</string>
+    </property>
+    <addaction name="openAction"/>
+    <addaction name="saveAction"/>
+    <addaction name="saveAsAction"/>
+    <addaction name="separator"/>
+    <addaction name="quitAction"/>
+   </widget>
+   <widget class="QMenu" name="toolsMenu">
+    <property name="title">
+     <string>&amp;Herramientas</string>
+    </property>
+    <addaction name="separator"/>
+    <addaction name="confAction"/>
+   </widget>
+   <addaction name="fileMenu"/>
+   <addaction name="toolsMenu"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="openAction">
+   <property name="text">
+    <string>Abrir</string>
+   </property>
+  </action>
+  <action name="saveAction">
+   <property name="text">
+    <string>Guardar</string>
+   </property>
+  </action>
+  <action name="saveAsAction">
+   <property name="text">
+    <string>Guardar como</string>
+   </property>
+  </action>
+  <action name="quitAction">
+   <property name="text">
+    <string>Salir</string>
+   </property>
+  </action>
+  <action name="confAction">
+   <property name="text">
+    <string>Configuración</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
