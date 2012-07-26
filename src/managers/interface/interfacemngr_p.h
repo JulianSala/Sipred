@@ -40,7 +40,7 @@ class InterfaceMngrPrivate
 public:
     InterfaceMngrPrivate(InterfaceMngr *q);
     void loadMainwindow();
-    void loadDefaultWindow();
+    void setDefaultWindow();
 
     InterfaceMngr * const q_ptr;
 
@@ -49,9 +49,15 @@ public:
     PluginMngr *m_pluginManager;
 
 private:
-    void loadDefaultDock();
-    void loadDefaultCenterWidget();
+    void setDefaultDock();
+    void setDefaultCenterWidget();
+
     void centerWindow();
+
+    QMenuBar *m_menuBar;
+    QToolBar *m_toolBar;
+    QWidget *m_centralWidget;
+    QMap<QString, QVariant> *m_treeInformation;
 };
 
 #endif // INTERFACEMNGR_P_H

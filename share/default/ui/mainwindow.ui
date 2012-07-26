@@ -48,25 +48,49 @@
    <property name="text">
     <string>Abrir</string>
    </property>
+   <property name="toolTip">
+    <string>Abrir un archivo existente</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
   </action>
   <action name="saveAction">
    <property name="text">
     <string>Guardar</string>
+   </property>
+   <property name="toolTip">
+    <string>Guardar proyecto en el sistema de archivos</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
    </property>
   </action>
   <action name="saveAsAction">
    <property name="text">
     <string>Guardar como</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
+   </property>
   </action>
   <action name="quitAction">
    <property name="text">
     <string>Salir</string>
    </property>
+   <property name="toolTip">
+    <string>Salir de la aplicación</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+Q</string>
+   </property>
   </action>
   <action name="confAction">
    <property name="text">
     <string>Configuración</string>
+   </property>
+   <property name="toolTip">
+    <string>Panel de configuración de módulos</string>
    </property>
   </action>
  </widget>

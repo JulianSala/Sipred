@@ -60,7 +60,7 @@ void InterfaceMngrPrivate::loadMainwindow()
     file.close();
 }
 
-void InterfaceMngrPrivate::loadDefaultWindow()
+void InterfaceMngrPrivate::setDefaultWindow()
 {
     QFile file(":/ui/mainwindow.ui");
 
@@ -80,6 +80,17 @@ void InterfaceMngrPrivate::loadDefaultWindow()
 
     QIcon icon(":/logo/logo_sipred");
     m_mainwindow->setWindowIcon(icon);
+
+    foreach (QAction *p, m_mainwindow->menuWidget()->actions()) {
+        qDebug() << p->text();
+
+        foreach (QAction *a, p->menu()->actions()) {
+            QString actText = a->text();
+            if (actText == "Salir")
+                a->setIcon(QIcon(":/icons_enable/quit"));
+        }
+
+    }
 }
 
 void InterfaceMngr::registerModuleManager(ModuleMngr *moduleMngr)
@@ -103,7 +114,7 @@ void InterfaceMngr::initInterface()
     d->loadMainwindow();
 
     if (!d->m_mainwindow)
-        d->loadDefaultWindow();
+        d->setDefaultWindow();
 
     d->centerWindow();
     d->m_mainwindow->show();
@@ -114,12 +125,12 @@ void InterfaceMngr::endInterface()
 
 }
 
-void InterfaceMngrPrivate::loadDefaultDock()
+void InterfaceMngrPrivate::setDefaultDock()
 {
 
 }
 
-void InterfaceMngrPrivate::loadDefaultCenterWidget()
+void InterfaceMngrPrivate::setDefaultCenterWidget()
 {
 
 }
