@@ -62,13 +62,24 @@ void InterfaceMngrPrivate::loadMainwindow()
 
 void InterfaceMngrPrivate::loadDefaultWindow()
 {
-    m_mainwindow = new QMainWindow(0, Qt::Window);
+    QFile file(":/ui/mainwindow.ui");
 
-    QDockWidget *dockWidget = new QDockWidget("Modulos", m_mainwindow);
-    m_mainwindow->addDockWidget(Qt::LeftDockWidgetArea, dockWidget, Qt::Vertical);
+    if (!file.open(QIODevice::ReadOnly)) {
+        qWarning() << "Can't find mainwindow.ui";
+        return;
+    }
 
-    QStackedWidget *stackedWidget = new QStackedWidget(m_mainwindow);
-    m_mainwindow->setCentralWidget(stackedWidget);
+    QUiLoader loader;
+
+    m_mainwindow = qobject_cast<QMainWindow *>(loader.load(&file));
+
+    file.close();
+
+    if (!m_mainwindow)
+        qFatal("Can't open default window.");
+
+    QIcon icon(":/logo/logo_sipred");
+    m_mainwindow->setWindowIcon(icon);
 }
 
 void InterfaceMngr::registerModuleManager(ModuleMngr *moduleMngr)

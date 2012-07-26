@@ -24,13 +24,47 @@
 ****************************************************************************/
 
 #include <QApplication>
-
+#include <QtGui>
+#include <QPixmap>
 #include <QDebug>
+
+
+inline void registerResources(const QString &resourcesDir)
+{
+    QDir dir(resourcesDir);
+
+    if (!dir.exists())
+        qWarning() << "Resources dir doesn't exist.\n"
+                   << "Please verify the folder" << dir.absolutePath();
+
+    QStringList filter;
+    filter << "*.rcc" << "*.sip";
+    dir.setNameFilters(filter);
+
+    qDebug() << "Registering resource...";
+    foreach (QString resource, dir.entryList(QDir::Files)) {
+        if (!QResource::registerResource(dir.absoluteFilePath(resource)))
+            qWarning() << "Can't register resource" << resource;
+        else
+            qDebug() << "Resource" << resource << "have been register.";
+    }
+}
+
+
 #include "core.h"
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
+
+    registerResources("../share");
+
+//    QPixmap logo(":/logo/logo_sipred", "PNG");
+//    QSplashScreen splash(logo);
+//    splash.setAutoFillBackground(true);
+
+//    QTimer::singleShot(3500, &splash, SLOT(close()));
+//    splash.show();
 
     Core core;
     core.run();
