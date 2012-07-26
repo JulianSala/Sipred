@@ -31,6 +31,13 @@
 class Module
 {
 public:
+    enum ModuleType {
+        Sql,
+        DataStream,
+        DataVisualizer,
+        Core
+    };
+
     virtual QString id() = 0;
     virtual QString name() = 0;
     virtual QString version() = 0;
@@ -43,11 +50,13 @@ public:
     virtual QString license() = 0;
     virtual QIcon icon() = 0;
 
+    virtual ModuleType type() = 0;
+
     virtual QVariant dependences() = 0;
     virtual QString instance() = 0;
     virtual bool configurable() = 0;
 };
 
-Q_DECLARE_INTERFACE(Module, "interface.module")
+//Q_DECLARE_INTERFACE(Module, "interface.module")
 
 #endif // MODULE_H
