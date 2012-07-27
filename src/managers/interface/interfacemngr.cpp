@@ -62,10 +62,10 @@ void InterfaceMngrPrivate::loadMainwindow()
 
 void InterfaceMngrPrivate::setDefaultWindow()
 {
-    QFile file(":/ui/mainwindow.ui");
+    QFile file(":/ui/mainwindow");
 
     if (!file.open(QIODevice::ReadOnly)) {
-        qWarning() << "Can't find mainwindow.ui";
+        qFatal("Can't find mainwindow.ui");
         return;
     }
 
