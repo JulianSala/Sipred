@@ -104,7 +104,7 @@
         <file>icons/yahoo_1.png</file>
     </qresource>
     <qresource prefix="/thumbnail">
-        <file>icons/Logo_Sipred.png</file>
+        <file alias="logo_sipred">icons/Logo_Sipred.png</file>
     </qresource>
     <qresource prefix="/ui">
         <file alias="mainwindow">ui/mainwindow.ui</file>

@@ -59,12 +59,12 @@ int main(int argc, char *argv[])
 
     registerResources("../share");
 
-//    QPixmap logo(":/logo/logo_sipred", "PNG");
-//    QSplashScreen splash(logo);
-//    splash.setAutoFillBackground(true);
+    QPixmap logo(":/thumbnail/logo_sipred", "PNG");
+    QSplashScreen splash(logo);
+    splash.setAutoFillBackground(true);
 
-//    QTimer::singleShot(3500, &splash, SLOT(close()));
-//    splash.show();
+    QTimer::singleShot(3500, &splash, SLOT(close()));
+    splash.show();
 
     Core core;
     core.run();
