@@ -27,6 +27,26 @@
 
 #include <QDataStream>
 
+/*!
+ *  \class PluginInfo
+ *
+ *  \brief The PluginInfo provide basic information handling for plugins.
+ *
+ *  PluginInfo is used for store informacion about plugins, using a basic
+ *  seters and getters.
+ *
+ *  By default plugin have following information:
+ *
+ *  \table
+ *  \header \o Name \o Description
+ *  \row \o Basic Info
+ *       \o Basic information about any Sipred library, this information can
+ *          be used for modules, plugins, libs and general libraries.
+ *  \row \o
+ *  \endtable
+ *
+ */
+
 PluginInfo::PluginInfo() :
     QObject(0)
 {
