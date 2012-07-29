@@ -41,7 +41,7 @@ CREATE PROCEDURE Debug.debug_off(IN p_procedure_id VARCHAR(50))
 BEGIN
   CALL Debug.debug_insert(p_procedure_id, CONCAT('Debug ended at: ', NOW()));
   SELECT debug_output FROM Debug.debug WHERE proc_id = p_procedure_id ORDER BY line_id;
-  DELETE FROM Debug WHERE proc_id = p_procedure_id;
+  DELETE FROM Debug.debug WHERE proc_id = p_procedure_id;
 END %%
 
 DELIMITER ;
