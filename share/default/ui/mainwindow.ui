@@ -40,8 +40,18 @@
     <addaction name="separator"/>
     <addaction name="confAction"/>
    </widget>
+   <widget class="QMenu" name="menu_Plugins">
+    <property name="title">
+     <string>&amp;Plugins</string>
+    </property>
+    <addaction name="actionAgregar"/>
+    <addaction name="actionEliminar"/>
+    <addaction name="separator"/>
+    <addaction name="actionDisponibles"/>
+   </widget>
    <addaction name="fileMenu"/>
    <addaction name="toolsMenu"/>
+   <addaction name="menu_Plugins"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="openAction">
@@ -91,6 +101,21 @@
    </property>
    <property name="toolTip">
     <string>Panel de configuración de módulos</string>
+   </property>
+  </action>
+  <action name="actionAgregar">
+   <property name="text">
+    <string>Agregar</string>
+   </property>
+  </action>
+  <action name="actionEliminar">
+   <property name="text">
+    <string>Eliminar</string>
+   </property>
+  </action>
+  <action name="actionDisponibles">
+   <property name="text">
+    <string>Disponibles</string>
    </property>
   </action>
  </widget>
