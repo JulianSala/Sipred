@@ -7,6 +7,11 @@
 # Use this script like:
 # $ mysql < init_master_table.sql
 #
+#
+# TODO:
+# Inprove check funtions and automatization in names an creator
+# function.
+#
 
 USE Sipred;
 
