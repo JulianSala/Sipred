@@ -1,12 +1,14 @@
+#
 # Debug database and debug table for Sipred debug control.
 # Run as:
-# $ mysql -e "source _path_to_this_file_/create_dbg.sql"
+# $ mysql < create_dbg.sql"
 #
 # Example test dbg:
 # SET @l_proc_id := 'test_debug';
 # CALL Debug.debug_on(@l_proc_id);
 # CALL Debug.debug_insert(@l_proc_id,'Testing Debug');
 # CALL Debug.debug_off(@l_proc_id);
+#
 
 DROP DATABASE IF EXISTS Debug;
 CREATE DATABASE Debug;
