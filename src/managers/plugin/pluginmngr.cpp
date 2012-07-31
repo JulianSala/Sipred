@@ -53,6 +53,11 @@ PluginMngr::~PluginMngr()
 
 }
 
+PluginMngrPrivate::~PluginMngrPrivate()
+{
+
+}
+
 void PluginMngrPrivate::loadPlugins()
 {
     qDebug() << "Loading plugins...";
@@ -70,8 +75,8 @@ void PluginMngrPrivate::loadPlugins()
             m_loader.setFileName(filePath);
 
             if (!m_loader.load()) {
-                qWarning() << "Error cargando el plugin << " << fileName;
-                qDebug() << m_loader.errorString();
+                qWarning() << "Error cargando el plugin:" << fileName;
+                qWarning() << m_loader.errorString();
                 continue;
             }
 
@@ -89,7 +94,7 @@ void PluginMngrPrivate::loadPlugins()
             if (!plugin)
                 continue;
 
-            this->registerPlugin(plugin, fileName);
+            this->registerPlugin(plugin, filePath);
 
             m_loader.unload();
         }
@@ -118,14 +123,12 @@ bool PluginMngrPrivate::setPluginsPath(const QString &path)
 void PluginMngrPrivate::registerPlugin(Plugin *plugin,
                                        const QString &fileName)
 {
-    Q_Q(PluginMngr);
-
     if (m_pluginsInfo.contains(plugin->id())) {
         qWarning() << "Plugin ID:" << plugin->id() << "already exist.";
         return;
     }
 
-    PluginInfo info(q);
+    PluginInfo info;
     info.setId(plugin->id());
     info.setFileName(fileName);
     info.setName(plugin->name());
@@ -135,13 +138,14 @@ void PluginMngrPrivate::registerPlugin(Plugin *plugin,
     info.setAuthor(plugin->author());
     info.setMail(plugin->mail());
     info.setWebside(plugin->webside());
-    info.setLicence(plugin->license());
+    info.setLicence(plugin->licence());
     info.setIcon(plugin->icon());
     info.setConfigurable(plugin->isConfigurable());
     info.setConfigList(plugin->configList());
 
     m_pluginsInfo.insert(info.id(), info);
 
+    qDebug() << "Register info:";
     qDebug() << info;
 }
 
@@ -165,11 +169,39 @@ bool PluginMngr::disablePlugin(const QString &pluginId)
 
 QStringList PluginMngr::avaliablePlugins()
 {
-    return QStringList();
+    Q_D(PluginMngr);
+
+    QStringList list = d->m_pluginsInfo.keys();
+
+    return list;
 }
 
 Plugin* PluginMngr::plugin(const QString &pluginId)
 {
-    Q_UNUSED(pluginId);
-    return NULL;
+    Q_D(PluginMngr);
+
+    if (!d->m_pluginsInfo.contains(pluginId)) {
+        qWarning() << "Requested plugin id:" << pluginId
+                   << "is not avaliable.";
+        return NULL;
+    }
+
+    d->m_loader.setFileName(d->m_pluginsInfo.value(pluginId).fileName());
+
+    QObject *pluginInstance = d->m_loader.instance();
+
+    if (!pluginInstance)
+        return NULL;
+
+    PluginFactory *pluginFactory = qobject_cast<PluginFactory *>(pluginInstance);
+
+    if (!pluginInstance)
+        return NULL;
+
+    Plugin *plugin = pluginFactory->plugin();
+
+    if (!plugin)
+        return NULL;
+
+    return plugin;
 }

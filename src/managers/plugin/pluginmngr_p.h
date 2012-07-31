@@ -42,6 +42,7 @@ class PluginMngrPrivate
     Q_DECLARE_PUBLIC(PluginMngr)
 public:
     PluginMngrPrivate(PluginMngr *q);
+    ~PluginMngrPrivate();
 
     void initPluginManager();
     void loadPlugins();

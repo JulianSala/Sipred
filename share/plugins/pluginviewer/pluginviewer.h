@@ -6,7 +6,7 @@
 **
 *****************************************************************************
 **
-**  interfacemngr_p.h is part of Sipred.
+**  pluginviewer.h is part of Sipred.
 **
 **    Sipred is free software: you can redistribute it and/or modify
 **    it under the terms of the GNU General Public License as published by
@@ -23,43 +23,50 @@
 **
 ****************************************************************************/
 
-#ifndef INTERFACEMNGR_P_H
-#define INTERFACEMNGR_P_H
+#ifndef PLUGINVIEWER_H
+#define PLUGINVIEWER_H
 
-#include <QtCore/QtGlobal>
-#include <QtGui>
+#include <QObject>
+#include "plugin.h"
+#include "libraryinfo.h"
 
-class InterfaceMngr;
-class ModuleMngr;
-class PluginMngr;
-
-class InterfaceMngrPrivate
+class PluginViewer : public QObject, public Plugin
 {
-    Q_DECLARE_PUBLIC(InterfaceMngr)
-
+    Q_OBJECT
 public:
-    InterfaceMngrPrivate(InterfaceMngr *q);
-    void loadMainwindow();
-    void loadDockWidget();
-    void setDefaultWindow();
+    PluginViewer(QObject *parent = 0);
+    ~PluginViewer();
+    QString id() const;
+    QString name() const;
+    QString version() const;
+    QString summary() const;
+    QString category() const;
+    QString applyTo() const;
+    QString author() const;
+    QString mail() const;
+    QString webside() const;
+    QString licence() const;
+    QIcon icon() const;
 
-    InterfaceMngr * const q_ptr;
+    bool isConfigurable() const;
+    QWidget *configDialog() const;
+    QHash<QString, QVariant> defaultConfig() const;
+    bool setConfigs(QVariant);
+    QStringList configList() const;
 
-    QMainWindow *m_mainwindow;
-    ModuleMngr *m_moduleManager;
-    PluginMngr *m_pluginManager;
+    QMenu *menu();
+    QDialog *dialog();
+
+signals:
+    
+public slots:
+    void launchDialog();
 
 private:
-    void setDefaultDock();
-    void setDefaultCenterWidget();
+    void loadDialog();
 
-    void centerWindow();
-
-    QMenuBar *m_menuBar;
-    QToolBar *m_toolBar;
-    QWidget *m_centralWidget;
-    QDockWidget *m_dockWidget;
-    QMap<QString, QVariant> *m_treeInformation;
+    QMenu *m_menu;
+    QDialog *m_dialog;
 };
 
-#endif // INTERFACEMNGR_P_H
+#endif // PLUGINVIEWER_H

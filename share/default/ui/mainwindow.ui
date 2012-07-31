@@ -93,6 +93,21 @@
     <string>Panel de configuración de módulos</string>
    </property>
   </action>
+  <action name="actionAgregar">
+   <property name="text">
+    <string>Agregar</string>
+   </property>
+  </action>
+  <action name="actionEliminar">
+   <property name="text">
+    <string>Eliminar</string>
+   </property>
+  </action>
+  <action name="actionDisponibles">
+   <property name="text">
+    <string>Disponibles</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

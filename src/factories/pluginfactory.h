@@ -26,13 +26,15 @@
 #ifndef PLUGINFACTORY_H
 #define PLUGINFACTORY_H
 
-class Plugin;
+#include <QtPlugin>
+#include "plugin.h"
 
 class PluginFactory
 {
-    virtual Plugin* instance() = 0;
+public:
+    virtual Plugin* plugin() = 0;
 };
 
-Q_DECLARE_INTERFACE(PluginFactory, "plugin.PluginFactory")
+Q_DECLARE_INTERFACE(PluginFactory, "plugin.PluginFactory/1.1.2")
 
 #endif // PLUGINFACTORY_H
