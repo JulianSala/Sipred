@@ -8,4 +8,5 @@ SUBDIRS = \
 OTHER_FILES += \
     default/default.qrc \
     default/ui/*.ui \
-    default/icons/*.png
+    default/icons/*.png \
+    scripts/python/*.py
