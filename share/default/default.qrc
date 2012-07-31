@@ -109,6 +109,5 @@
     <qresource prefix="/ui">
         <file alias="mainwindow">ui/mainwindow.ui</file>
         <file alias="dockwidget">ui/dockwidget.ui</file>
-        <file alias="pluginviewer">ui/pluginsdialog.ui</file>
     </qresource>
 </RCC>

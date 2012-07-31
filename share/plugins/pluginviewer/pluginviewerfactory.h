@@ -6,7 +6,7 @@
 **
 *****************************************************************************
 **
-**  plugin.h is part of Sipred.
+**  pluginviewerfactory.h is part of Sipred.
 **
 **    Sipred is free software: you can redistribute it and/or modify
 **    it under the terms of the GNU General Public License as published by
@@ -23,35 +23,21 @@
 **
 ****************************************************************************/
 
-#ifndef PLUGIN_H
-#define PLUGIN_H
+#ifndef PLUGINVIEWERFACTORY_H
+#define PLUGINVIEWERFACTORY_H
 
-#include <QtGui>
-#include "libraryinfo.h"
+#include "pluginfactory.h"
+//#include "plugin.h"
 
-class Plugin : public LibraryInfo
+class Plugin;
+
+class PluginViewerFactory : public QObject, public PluginFactory
 {
+    Q_OBJECT
+    Q_INTERFACES(PluginFactory)
+
 public:
-//    virtual QString id() = 0;
-//    virtual QString name() = 0;
-//    virtual QString version() = 0;
-//    virtual QString summary() = 0;
-//    virtual QString category() = 0;
-//    virtual QString applyTo() = 0;
-//    virtual QString author() = 0;
-//    virtual QString mail() = 0;
-//    virtual QString webside() = 0;
-//    virtual QString license() = 0;
-//    virtual QIcon icon() = 0;
-
-    virtual bool isConfigurable() const = 0;
-    virtual QWidget *configDialog() const = 0;
-    virtual QHash<QString, QVariant> defaultConfig() const = 0;
-    virtual bool setConfigs(QVariant) = 0;
-    virtual QStringList configList() const = 0;
-
-    virtual QMenu *menu() = 0;
-    virtual QDialog *dialog() = 0;
+    Plugin *plugin();
 };
 
-#endif // PLUGIN_H
+#endif // PLUGINVIEWERFACTORY_H

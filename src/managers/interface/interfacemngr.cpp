@@ -26,6 +26,9 @@
 #include "interfacemngr.h"
 #include "interfacemngr_p.h"
 
+#include "pluginmngr.h"
+#include "modulemngr.h"
+
 #include <QtUiTools>
 #include <QScreen>
 
@@ -52,6 +55,10 @@ InterfaceMngr::InterfaceMngr(QObject *parent) :
 InterfaceMngr::~InterfaceMngr()
 {
 
+}
+
+void InterfaceMngr::createConnections()
+{
 }
 
 void InterfaceMngrPrivate::loadMainwindow()
@@ -115,17 +122,6 @@ void InterfaceMngrPrivate::setDefaultWindow()
 
     QIcon icon(":/logo/logo_sipred");
     m_mainwindow->setWindowIcon(icon);
-
-    foreach (QAction *p, m_mainwindow->menuWidget()->actions()) {
-        qDebug() << p->text();
-
-        foreach (QAction *a, p->menu()->actions()) {
-            QString actText = a->text();
-            if (actText == "Salir")
-                a->setIcon(QIcon(":/icons_enable/quit"));
-        }
-
-    }
 }
 
 void InterfaceMngr::registerModuleManager(ModuleMngr *moduleMngr)
@@ -140,6 +136,13 @@ void InterfaceMngr::registerPluginManager(PluginMngr *pluginMngr)
     Q_D(InterfaceMngr);
 
     d->m_pluginManager = pluginMngr;
+
+    qDebug() << d->m_pluginManager->avaliablePlugins();
+
+    foreach (QString pluginId, d->m_pluginManager->avaliablePlugins()) {
+        Plugin *p = d->m_pluginManager->plugin(pluginId);
+        d->m_mainwindow->menuBar()->addMenu(p->menu());
+    }
 }
 
 void InterfaceMngr::initInterface()

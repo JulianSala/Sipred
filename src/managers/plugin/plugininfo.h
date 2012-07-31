@@ -77,6 +77,6 @@ public:
 
 Q_DECLARE_METATYPE(PluginInfo)
 
-QDebug operator <<(QDebug dbg, const PluginInfo &info);
+QDebug& operator <<(QDebug dbg, const PluginInfo &info);
 
 #endif // PLUGININFO_H

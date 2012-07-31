@@ -40,18 +40,8 @@
     <addaction name="separator"/>
     <addaction name="confAction"/>
    </widget>
-   <widget class="QMenu" name="menu_Plugins">
-    <property name="title">
-     <string>&amp;Plugins</string>
-    </property>
-    <addaction name="actionAgregar"/>
-    <addaction name="actionEliminar"/>
-    <addaction name="separator"/>
-    <addaction name="actionDisponibles"/>
-   </widget>
    <addaction name="fileMenu"/>
    <addaction name="toolsMenu"/>
-   <addaction name="menu_Plugins"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="openAction">

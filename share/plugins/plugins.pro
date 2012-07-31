@@ -2,4 +2,4 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
-    plugin1
+    pluginviewer

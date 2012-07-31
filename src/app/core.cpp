@@ -56,6 +56,7 @@ void Core::configure()
 void Core::run()
 {
     m_interfaceManager->initInterface();
+    m_interfaceManager->registerPluginManager(m_pluginManager);
 
 }
 

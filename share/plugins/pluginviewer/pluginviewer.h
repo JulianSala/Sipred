@@ -6,7 +6,7 @@
 **
 *****************************************************************************
 **
-**  plugin.h is part of Sipred.
+**  pluginviewer.h is part of Sipred.
 **
 **    Sipred is free software: you can redistribute it and/or modify
 **    it under the terms of the GNU General Public License as published by
@@ -23,35 +23,52 @@
 **
 ****************************************************************************/
 
-#ifndef PLUGIN_H
-#define PLUGIN_H
+#ifndef PLUGINVIEWER_H
+#define PLUGINVIEWER_H
 
-#include <QtGui>
+#include <QObject>
+#include "plugin.h"
 #include "libraryinfo.h"
 
-class Plugin : public LibraryInfo
+class QUiLoader;
+
+class PluginViewer : public QObject, public Plugin
 {
+    Q_OBJECT
 public:
-//    virtual QString id() = 0;
-//    virtual QString name() = 0;
-//    virtual QString version() = 0;
-//    virtual QString summary() = 0;
-//    virtual QString category() = 0;
-//    virtual QString applyTo() = 0;
-//    virtual QString author() = 0;
-//    virtual QString mail() = 0;
-//    virtual QString webside() = 0;
-//    virtual QString license() = 0;
-//    virtual QIcon icon() = 0;
+    PluginViewer(QObject *parent = 0);
+    ~PluginViewer();
+    QString id() const;
+    QString name() const;
+    QString version() const;
+    QString summary() const;
+    QString category() const;
+    QString applyTo() const;
+    QString author() const;
+    QString mail() const;
+    QString webside() const;
+    QString licence() const;
+    QIcon icon() const;
 
-    virtual bool isConfigurable() const = 0;
-    virtual QWidget *configDialog() const = 0;
-    virtual QHash<QString, QVariant> defaultConfig() const = 0;
-    virtual bool setConfigs(QVariant) = 0;
-    virtual QStringList configList() const = 0;
+    bool isConfigurable() const;
+    QWidget *configDialog() const;
+    QHash<QString, QVariant> defaultConfig() const;
+    bool setConfigs(QVariant);
+    QStringList configList() const;
 
-    virtual QMenu *menu() = 0;
-    virtual QDialog *dialog() = 0;
+    QMenu *menu();
+    QDialog *dialog();
+
+signals:
+    
+public slots:
+    void launchDialog();
+
+private:
+    void loadDialog();
+
+    QMenu *m_menu;
+    QDialog *m_dialog;
 };
 
-#endif // PLUGIN_H
+#endif // PLUGINVIEWER_H

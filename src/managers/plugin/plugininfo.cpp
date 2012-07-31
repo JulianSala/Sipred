@@ -192,7 +192,7 @@ QTextStream& operator <<(QTextStream &out, const PluginInfo &object)
     return out;
 }
 
-QDebug operator <<(QDebug dbg, const PluginInfo &info)
+QDebug& operator <<(QDebug dbg, const PluginInfo &info)
 {
     dbg << "Plugin Information" << endl;
     dbg << info;
