@@ -32,6 +32,11 @@
 
 #include "libraryinfo.h"
 
+/*
+ * TODO: Fix 'qDebug() <<' operator, currently don't print all information
+ *       requested.
+ */
+
 class PluginInfo : public LibraryInfo
 {
     Q_PROPERTY(QString applyTo READ applyTo WRITE setApplyTo RESET resetApplyTo)
