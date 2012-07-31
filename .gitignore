@@ -17,6 +17,7 @@ Makefile*
 
 ## Archivos temporales VIM
 .*.swp
+*.directory
 
 ## Archivos de MinGW
 *.Debug
