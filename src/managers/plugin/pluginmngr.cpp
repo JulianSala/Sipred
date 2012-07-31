@@ -123,14 +123,12 @@ bool PluginMngrPrivate::setPluginsPath(const QString &path)
 void PluginMngrPrivate::registerPlugin(Plugin *plugin,
                                        const QString &fileName)
 {
-    Q_Q(PluginMngr);
-
     if (m_pluginsInfo.contains(plugin->id())) {
         qWarning() << "Plugin ID:" << plugin->id() << "already exist.";
         return;
     }
 
-    PluginInfo info(q);
+    PluginInfo info;
     info.setId(plugin->id());
     info.setFileName(fileName);
     info.setName(plugin->name());
