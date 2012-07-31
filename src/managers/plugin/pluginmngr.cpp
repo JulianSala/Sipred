@@ -53,6 +53,11 @@ PluginMngr::~PluginMngr()
 
 }
 
+PluginMngrPrivate::~PluginMngrPrivate()
+{
+
+}
+
 void PluginMngrPrivate::loadPlugins()
 {
     qDebug() << "Loading plugins...";
@@ -89,7 +94,7 @@ void PluginMngrPrivate::loadPlugins()
             if (!plugin)
                 continue;
 
-            this->registerPlugin(plugin, fileName);
+            this->registerPlugin(plugin, filePath);
 
             m_loader.unload();
         }

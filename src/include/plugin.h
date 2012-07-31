@@ -29,20 +29,20 @@
 #include <QtGui>
 #include "libraryinfo.h"
 
-class Plugin : public LibraryInfo
+class Plugin
 {
 public:
-//    virtual QString id() = 0;
-//    virtual QString name() = 0;
-//    virtual QString version() = 0;
-//    virtual QString summary() = 0;
-//    virtual QString category() = 0;
-//    virtual QString applyTo() = 0;
-//    virtual QString author() = 0;
-//    virtual QString mail() = 0;
-//    virtual QString webside() = 0;
-//    virtual QString license() = 0;
-//    virtual QIcon icon() = 0;
+    virtual QString id() const = 0;
+    virtual QString name() const = 0;
+    virtual QString version() const = 0;
+    virtual QString summary() const = 0;
+    virtual QString category() const = 0;
+    virtual QString applyTo() const = 0;
+    virtual QString author() const = 0;
+    virtual QString mail() const = 0;
+    virtual QString webside() const = 0;
+    virtual QString licence() const = 0;
+    virtual QIcon icon() const = 0;
 
     virtual bool isConfigurable() const = 0;
     virtual QWidget *configDialog() const = 0;

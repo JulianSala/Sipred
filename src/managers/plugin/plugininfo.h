@@ -43,10 +43,9 @@ class PluginInfo : public QObject, public LibraryInfo
 
 public:
     PluginInfo();
-    ~PluginInfo();
     PluginInfo(const PluginInfo &);
-
     PluginInfo(QObject *parent);
+    ~PluginInfo();
 
     QString applyTo() const;
     bool isConfigurable() const;
@@ -77,6 +76,25 @@ public:
 
 Q_DECLARE_METATYPE(PluginInfo)
 
-QDebug& operator <<(QDebug dbg, const PluginInfo &info);
+inline QDebug& operator <<(QDebug &dbg, const PluginInfo &info) {
+    dbg << "Plugin Information" << endl;
+    dbg << info;
+    dbg << "Apply to:" << info.applyTo() << endl;
+    if (info.isConfigurable())
+        dbg << "Configurable:" << "yes" << endl;
+    else
+        dbg << "Configurable:" << "no" << endl;
+
+    dbg << "Config List:";
+
+    if (!info.configList().isEmpty() && info.isConfigurable()) {
+        foreach (QString var, info.configList())
+            dbg << endl << "    " << var;
+    } else {
+        dbg << "empty";
+    }
+
+    return dbg.maybeSpace();
+}
 
 #endif // PLUGININFO_H

@@ -93,7 +93,7 @@ QString PluginViewer::licence() const
 
 QIcon PluginViewer::icon() const
 {
-    QIcon icon(":/icons/enable");
+    QIcon icon(":/icons/dart_3.png");
 
     return icon;
 }
@@ -151,6 +151,9 @@ void PluginViewer::launchDialog()
 {
     if (!m_dialog)
         loadDialog();
+
+    if (!m_dialog)
+        return;
 
     m_dialog->exec();
 }

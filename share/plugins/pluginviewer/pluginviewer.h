@@ -30,8 +30,6 @@
 #include "plugin.h"
 #include "libraryinfo.h"
 
-class QUiLoader;
-
 class PluginViewer : public QObject, public Plugin
 {
     Q_OBJECT

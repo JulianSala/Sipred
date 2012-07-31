@@ -17,5 +17,8 @@ HEADERS += \
     pluginviewer.h \
     pluginviewerfactory.h
 
-RESOURCES += \
+#RESOURCES += \
+#    pluginviewer.qrc
+
+OTHER_FILES += \
     pluginviewer.qrc
