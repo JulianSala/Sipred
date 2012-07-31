@@ -47,26 +47,18 @@
  *
  */
 
-PluginInfo::PluginInfo() :
-    QObject(0)
+PluginInfo::PluginInfo()
 {
     resetAll();
 }
 
 PluginInfo::PluginInfo(const PluginInfo &object) :
-    QObject(object.parent()),
     LibraryInfo(object),
     m_applyTo(object.m_applyTo),
     m_configurable(object.m_configurable),
     m_configList(object.m_configList)
 {
     m_info = object.basicInfo();
-}
-
-PluginInfo::PluginInfo(QObject *parent) :
-    QObject(parent)
-{
-    resetAll();
 }
 
 PluginInfo::~PluginInfo()
@@ -192,24 +184,24 @@ QTextStream& operator <<(QTextStream &out, const PluginInfo &object)
     return out;
 }
 
-QDebug operator <<(QDebug dbg, const PluginInfo &info)
-{
-    dbg << "Plugin Information" << endl;
-    dbg << info;
-    dbg << "Apply to:" << info.applyTo() << endl;
-    if (info.isConfigurable())
-        dbg << "Configurable:" << "yes" << endl;
-    else
-        dbg << "Configurable:" << "no" << endl;
+//QDebug &operator <<(QDebug dbg, const PluginInfo &info)
+//{
+//    dbg << "Plugin Information";
+//    dbg << info;
+//    dbg << "Apply to:" << info.applyTo() << endl;
+//    if (info.isConfigurable())
+//        dbg << "Configurable:" << "yes" << endl;
+//    else
+//        dbg << "Configurable:" << "no" << endl;
 
-    dbg << "Config List:";
+//    dbg << "Config List:";
 
-    if (!info.configList().isEmpty() && info.isConfigurable()) {
-        foreach (QString var, info.configList())
-            dbg << endl << "    " << var;
-    } else {
-        dbg << "empty";
-    }
+//    if (!info.configList().isEmpty() && info.isConfigurable()) {
+//        foreach (QString var, info.configList())
+//            dbg << endl << "    " << var;
+//    } else {
+//        dbg << "empty";
+//    }
 
-    return dbg.maybeSpace();
-}
+//    return dbg.maybeSpace();
+//}

@@ -275,17 +275,17 @@ Q_DECLARE_METATYPE(LibraryInfo)
 
 inline QDebug& operator <<(QDebug dbg, const LibraryInfo &libInfo)
 {
-    dbg << "Id:" << libInfo.id();
-    dbg << "File name" << libInfo.fileName();
-    dbg << "Name:" << libInfo.name();
-    dbg << "Version:" << libInfo.version();
-    dbg << "Summary:" << libInfo.summary();
-    dbg << "Category:" << libInfo.category();
-    dbg << "Author:" << libInfo.author();
-    dbg << "Mail:" << libInfo.mail();
-    dbg << "Webside:" << libInfo.webside();
-    dbg << "Licence:" << libInfo.licence();
-    dbg << "Icon:" << libInfo.icon().name();
+    dbg << "Id:" << libInfo.id() << endl;
+    dbg << "File name:" << libInfo.fileName() << endl;
+    dbg << "Name:" << libInfo.name() << endl;
+    dbg << "Version:" << libInfo.version() << endl;
+    dbg << "Summary:" << libInfo.summary() << endl;
+    dbg << "Category:" << libInfo.category() << endl;
+    dbg << "Author:" << libInfo.author() << endl;
+    dbg << "Mail:" << libInfo.mail() << endl;
+    dbg << "Webside:" << libInfo.webside() << endl;
+    dbg << "Licence:" << libInfo.licence() << endl;
+    dbg << "Icon:" << libInfo.icon().name() << endl;
 
     return dbg.maybeSpace();
 }

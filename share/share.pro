@@ -3,6 +3,9 @@ TEMPLATE = subdirs
 CONFIG += ordered
 
 SUBDIRS = \
-#    plugins
+    plugins
 
-RESOURCES += default/default.qrc
+OTHER_FILES += \
+    default/default.qrc \
+    default/ui/*.ui \
+    default/icons/*.png
