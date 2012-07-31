@@ -26,17 +26,14 @@
 #ifndef PLUGININFO_H
 #define PLUGININFO_H
 
-#include <QObject>
 #include <QMetaType>
 #include <QDebug>
 #include <QtGui>
 
 #include "libraryinfo.h"
 
-class PluginInfo : public QObject, public LibraryInfo
+class PluginInfo : public LibraryInfo
 {
-    Q_OBJECT
-
     Q_PROPERTY(QString applyTo READ applyTo WRITE setApplyTo RESET resetApplyTo)
     Q_PROPERTY(bool configurable READ isConfigurable WRITE setConfigurable RESET resetConfigurable)
     Q_PROPERTY(QStringList configList READ configList WRITE setConfigList RESET resetConfigList)
@@ -44,7 +41,6 @@ class PluginInfo : public QObject, public LibraryInfo
 public:
     PluginInfo();
     PluginInfo(const PluginInfo &);
-    PluginInfo(QObject *parent);
     ~PluginInfo();
 
     QString applyTo() const;
