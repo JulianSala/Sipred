@@ -49,8 +49,11 @@ public:
     bool setPluginsPath(const QString &);
     void registerPlugin(Plugin *, const QString &);
 
+    bool loadPlugin(const QString &pluginId);
+    bool unloadPlugin(const QString &pluginId);
+
     QPluginLoader m_loader;
-    QList<Plugin *> m_activePlugins;
+    QHash<QString, Plugin *> m_activePlugins;
     QHash<QString, PluginInfo> m_pluginsInfo;
     QHash<QString, QVariant> m_pluginConfig;
     QDir m_pluginsDir;

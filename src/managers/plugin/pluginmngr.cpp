@@ -29,6 +29,73 @@
 #include <QHash>
 #include <QDebug>
 
+
+PluginMngr::PluginMngr(QObject *parent) :
+    QObject(parent), d_ptr(new PluginMngrPrivate(this))
+{
+
+}
+
+PluginMngr::~PluginMngr()
+{
+
+}
+
+bool PluginMngr::activePlugin(const QString &pluginId)
+{
+    Q_D(PluginMngr);
+
+    if (!d->m_pluginsInfo.contains(pluginId)) {
+        qWarning() << "Plugin" << pluginId << "can't be activated.";
+        return false;
+    }
+
+    return false;
+}
+
+bool PluginMngr::disablePlugin(const QString &pluginId)
+{
+    Q_UNUSED(pluginId);
+    return true;
+}
+
+Plugin* PluginMngr::plugin(const QString &pluginId)
+{
+    Q_D(PluginMngr);
+
+    if (!d->m_pluginsInfo.contains(pluginId)) {
+        qWarning() << "Requested plugin id:" << pluginId
+                   << "is not avaliable.";
+        return NULL;
+    }
+
+    d->m_loader.setFileName(d->m_pluginsInfo.value(pluginId).fileName());
+
+    QObject *pluginInstance = d->m_loader.instance();
+
+    if (!pluginInstance)
+        return NULL;
+
+    PluginFactory *pluginFactory = qobject_cast<PluginFactory *>(pluginInstance);
+
+    if (!pluginInstance)
+        return NULL;
+
+    Plugin *plugin = pluginFactory->plugin();
+
+    d->m_activePlugins.insert(pluginId, plugin);
+
+    if (!plugin)
+        return NULL;
+
+    return plugin;
+}
+
+
+/***************************************************************************/
+/*                      PluginMngrPrivate
+/***************************************************************************/
+
 PluginMngrPrivate::PluginMngrPrivate(PluginMngr *parent) :
     q_ptr(parent)
 {
@@ -40,17 +107,6 @@ void PluginMngrPrivate::initPluginManager()
 {
     setPluginsPath("../lib/plugins");
     qDebug() << "Plugin path is:" << m_pluginsDir.path();
-}
-
-PluginMngr::PluginMngr(QObject *parent) :
-    QObject(parent), d_ptr(new PluginMngrPrivate(this))
-{
-
-}
-
-PluginMngr::~PluginMngr()
-{
-
 }
 
 PluginMngrPrivate::~PluginMngrPrivate()
@@ -149,21 +205,55 @@ void PluginMngrPrivate::registerPlugin(Plugin *plugin,
     qDebug() << info;
 }
 
-bool PluginMngr::activePlugin(const QString &pluginId)
+bool PluginMngrPrivate::loadPlugin(const QString &pluginId)
 {
-    Q_D(PluginMngr);
-
-    if (!d->m_pluginsInfo.contains(pluginId)) {
-        qWarning() << "Plugin" << pluginId << "can't be activated.";
+    if (!m_pluginsInfo.contains(pluginId)) {
+        qWarning() << "Requested plugin id:" << pluginId
+                   << "is not avaliable.";
         return false;
     }
 
-    return false;
+    m_loader.setFileName(m_pluginsInfo.value(pluginId).fileName());
+
+    QObject *pluginInstance = m_loader.instance();
+
+    if (!pluginInstance)
+        return false;
+
+    PluginFactory *pluginFactory = qobject_cast<PluginFactory *>(pluginInstance);
+
+    if (!pluginInstance)
+        return false;
+
+    Plugin *plugin = pluginFactory->plugin();
+
+    d->m_activePlugins.insert(pluginId, plugin);
+
+    if (!plugin)
+        return false;
+
+    return true;
 }
 
-bool PluginMngr::disablePlugin(const QString &pluginId)
+bool PluginMngrPrivate::unloadPlugin(const QString &pluginId)
 {
-    Q_UNUSED(pluginId);
+    if (!m_activePlugins.contains(pluginId)) {
+        qWarning() << "Requested plugin id:" << pluginId
+                   << "is not loaded.";
+        return false;
+    }
+
+    delete m_activePlugins.value(pluginId);
+
+    m_loader.setFileName(m_pluginsInfo.value(pluginId).fileName());
+    m_loader.unload();
+
+    if (m_loader.isLoaded()) {
+        qWarning() << "Can't unload plugin id:" << pluginId
+                   << m_loader.errorString();
+        return false;
+    }
+
     return true;
 }
 
@@ -174,34 +264,4 @@ QStringList PluginMngr::avaliablePlugins()
     QStringList list = d->m_pluginsInfo.keys();
 
     return list;
-}
-
-Plugin* PluginMngr::plugin(const QString &pluginId)
-{
-    Q_D(PluginMngr);
-
-    if (!d->m_pluginsInfo.contains(pluginId)) {
-        qWarning() << "Requested plugin id:" << pluginId
-                   << "is not avaliable.";
-        return NULL;
-    }
-
-    d->m_loader.setFileName(d->m_pluginsInfo.value(pluginId).fileName());
-
-    QObject *pluginInstance = d->m_loader.instance();
-
-    if (!pluginInstance)
-        return NULL;
-
-    PluginFactory *pluginFactory = qobject_cast<PluginFactory *>(pluginInstance);
-
-    if (!pluginInstance)
-        return NULL;
-
-    Plugin *plugin = pluginFactory->plugin();
-
-    if (!plugin)
-        return NULL;
-
-    return plugin;
 }
