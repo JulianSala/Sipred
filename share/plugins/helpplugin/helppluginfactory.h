@@ -6,7 +6,7 @@
 **
 *****************************************************************************
 **
-**  interfacemngr_p.h is part of Sipred.
+**  helppluginfactory.h is part of Sipred.
 **
 **    Sipred is free software: you can redistribute it and/or modify
 **    it under the terms of the GNU General Public License as published by
@@ -23,43 +23,20 @@
 **
 ****************************************************************************/
 
-#ifndef INTERFACEMNGR_P_H
-#define INTERFACEMNGR_P_H
+#ifndef HELPPLUGINFACTORY_H
+#define HELPPLUGINFACTORY_H
 
-#include <QtCore/QtGlobal>
-#include <QtGui>
+#include <QObject>
+#include "pluginfactory.h"
 
-class InterfaceMngr;
-class ModuleMngr;
-class PluginMngr;
-
-class InterfaceMngrPrivate
+class HelpPluginFactory : public QObject, public PluginFactory
 {
-    Q_DECLARE_PUBLIC(InterfaceMngr)
+    Q_OBJECT
+    Q_INTERFACES(PluginFactory)
 
 public:
-    InterfaceMngrPrivate(InterfaceMngr *q);
-    void loadMainwindow();
-    void loadDockWidget();
-    void setDefaultWindow();
+    Plugin* plugin();
 
-    InterfaceMngr * const q_ptr;
-
-    QMainWindow *m_mainwindow;
-    ModuleMngr *m_moduleManager;
-    PluginMngr *m_pluginManager;
-
-private:
-    void setDefaultDock();
-    void setDefaultCenterWidget();
-
-    void centerWindow();
-
-    QMenuBar *m_menuBar;
-    QToolBar *m_toolBar;
-    QWidget *m_centralWidget;
-    QDockWidget *m_dockWidget;
-    QMap<QString, QVariant> *m_treeInformation;
 };
 
-#endif // INTERFACEMNGR_P_H
+#endif // HELPPLUGINFACTORY_H

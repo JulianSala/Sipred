@@ -26,6 +26,9 @@
 #include "interfacemngr.h"
 #include "interfacemngr_p.h"
 
+#include "pluginmngr.h"
+#include "modulemngr.h"
+
 #include <QtUiTools>
 #include <QScreen>
 
@@ -34,6 +37,14 @@
 InterfaceMngrPrivate::InterfaceMngrPrivate(InterfaceMngr *q) :
     q_ptr(q), m_mainwindow(0)
 {
+    m_mainwindow = NULL;
+    m_moduleManager = NULL;
+    m_pluginManager = NULL;
+    m_menuBar = NULL;
+    m_toolBar = NULL;
+    m_centralWidget = NULL;
+    m_dockWidget = NULL;
+    m_treeInformation = NULL;
 }
 
 InterfaceMngr::InterfaceMngr(QObject *parent) :
@@ -46,18 +57,47 @@ InterfaceMngr::~InterfaceMngr()
 
 }
 
+void InterfaceMngr::createConnections()
+{
+}
+
 void InterfaceMngrPrivate::loadMainwindow()
 {
     QFile file("../share/mainwindow.ui");
     if (!file.open(QIODevice::ReadOnly)) {
-        qWarning() << "Can't find mainwindow.ui";
+        qWarning() << "Can't open mainwindow.ui";
+        qWarning() << file.errorString();
         return;
     }
 
     QUiLoader uiLoader;
 
     m_mainwindow = qobject_cast<QMainWindow *>(uiLoader.load(&file));
+
     file.close();
+
+    if (!m_mainwindow)
+        qWarning() << "Can't load mainwindow.ui";
+}
+
+void InterfaceMngrPrivate::loadDockWidget()
+{
+    QFile file("../share/dockwidget.ui");
+
+    if (!file.open(QIODevice::ReadOnly)) {
+        qWarning() << "Can't open dockwidget.ui";
+        qWarning() << file.errorString();
+        return;
+    }
+
+    QUiLoader loader;
+
+    m_dockWidget = qobject_cast<QDockWidget *>(loader.load(&file));
+
+    file.close();
+
+    if (!m_dockWidget)
+        qWarning() << "Can't load dockwidget.ui";
 }
 
 void InterfaceMngrPrivate::setDefaultWindow()
@@ -65,8 +105,8 @@ void InterfaceMngrPrivate::setDefaultWindow()
     QFile file(":/ui/mainwindow");
 
     if (!file.open(QIODevice::ReadOnly)) {
-        qFatal("Can't find mainwindow.ui");
-        return;
+        qWarning(file.errorString().toLatin1());
+        qFatal("Can't open default mainwindow.ui");
     }
 
     QUiLoader loader;
@@ -75,22 +115,13 @@ void InterfaceMngrPrivate::setDefaultWindow()
 
     file.close();
 
-    if (!m_mainwindow)
-        qFatal("Can't open default window.");
+    if (!m_mainwindow) {
+        qWarning() << file.errorString().toLatin1();
+        qFatal("Can't load default mainwindow.");
+    }
 
     QIcon icon(":/logo/logo_sipred");
     m_mainwindow->setWindowIcon(icon);
-
-    foreach (QAction *p, m_mainwindow->menuWidget()->actions()) {
-        qDebug() << p->text();
-
-        foreach (QAction *a, p->menu()->actions()) {
-            QString actText = a->text();
-            if (actText == "Salir")
-                a->setIcon(QIcon(":/icons_enable/quit"));
-        }
-
-    }
 }
 
 void InterfaceMngr::registerModuleManager(ModuleMngr *moduleMngr)
@@ -105,6 +136,13 @@ void InterfaceMngr::registerPluginManager(PluginMngr *pluginMngr)
     Q_D(InterfaceMngr);
 
     d->m_pluginManager = pluginMngr;
+
+    qDebug() << d->m_pluginManager->avaliablePlugins();
+
+    foreach (QString pluginId, d->m_pluginManager->avaliablePlugins()) {
+        Plugin *p = d->m_pluginManager->plugin(pluginId);
+        d->m_mainwindow->menuBar()->addMenu(p->menu());
+    }
 }
 
 void InterfaceMngr::initInterface()
@@ -117,6 +155,14 @@ void InterfaceMngr::initInterface()
         d->setDefaultWindow();
 
     d->centerWindow();
+
+    d->loadDockWidget();
+
+    if (!d->m_dockWidget)
+        d->setDefaultDock();
+
+    d->m_mainwindow->addDockWidget(Qt::LeftDockWidgetArea, d->m_dockWidget);
+
     d->m_mainwindow->show();
 }
 
@@ -127,7 +173,17 @@ void InterfaceMngr::endInterface()
 
 void InterfaceMngrPrivate::setDefaultDock()
 {
+    QFile file(":/ui/dockwidget");
 
+    if (!file.open(QIODevice::ReadOnly))
+        qFatal("Can't open default dockwidget.ui");
+
+    QUiLoader loader;
+
+    m_dockWidget = qobject_cast<QDockWidget *>(loader.load(&file, m_mainwindow));
+
+    if (!m_dockWidget)
+        qFatal("Can't load default dockwidget");
 }
 
 void InterfaceMngrPrivate::setDefaultCenterWidget()
