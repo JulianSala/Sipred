@@ -28,6 +28,9 @@
 
 #include <QtGui>
 #include "libraryinfo.h"
+//#include "pluginmngr.h"
+
+class PluginMngr;
 
 class Plugin
 {
@@ -52,6 +55,12 @@ public:
 
     virtual QMenu *menu() = 0;
     virtual QDialog *dialog() = 0;
+
+    virtual void registerPluginManager(PluginMngr *) = 0;
+
+public Q_SLOTS:
+    virtual bool start() = 0;
+    virtual bool stop() = 0;
 };
 
 #endif // PLUGIN_H

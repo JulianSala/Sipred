@@ -147,6 +147,11 @@ QDialog *PluginViewer::dialog()
     return m_dialog;
 }
 
+void PluginViewer::registerPluginManager(PluginMngr *pm)
+{
+
+}
+
 void PluginViewer::launchDialog()
 {
     if (!m_dialog)

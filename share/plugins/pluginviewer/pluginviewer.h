@@ -57,9 +57,14 @@ public:
     QMenu *menu();
     QDialog *dialog();
 
+
+    void registerPluginManager(PluginMngr *pm);
+
 signals:
     
 public slots:
+    bool start() { return true; }
+    bool stop() { return true; }
     void launchDialog();
 
 private:
