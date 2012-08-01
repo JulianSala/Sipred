@@ -6,7 +6,7 @@
 **
 *****************************************************************************
 **
-**  pluginviewerfactory.h is part of Sipred.
+**  helppluginfactory.cpp is part of Sipred.
 **
 **    Sipred is free software: you can redistribute it and/or modify
 **    it under the terms of the GNU General Public License as published by
@@ -23,20 +23,12 @@
 **
 ****************************************************************************/
 
-#ifndef PLUGINVIEWERFACTORY_H
-#define PLUGINVIEWERFACTORY_H
+#include "helppluginfactory.h"
+#include "help.h"
 
-#include "pluginfactory.h"
-
-class Plugin;
-
-class PluginViewerFactory : public QObject, public PluginFactory
+Plugin* HelpPluginFactory::plugin()
 {
-    Q_OBJECT
-    Q_INTERFACES(PluginFactory)
+    return new Help();
+}
 
-public:
-    Plugin *plugin();
-};
-
-#endif // PLUGINVIEWERFACTORY_H
+Q_EXPORT_PLUGIN2(helpplugin, HelpPluginFactory)

@@ -63,15 +63,18 @@ public:
 signals:
     
 public slots:
-    bool start() { return true; }
-    bool stop() { return true; }
+    bool start();
+    bool stop();
     void launchDialog();
+    void retrieveInformation();
 
 private:
     void loadDialog();
 
     QMenu *m_menu;
     QDialog *m_dialog;
+    PluginMngr *pluginManager;
+    QStandardItemModel *m_model;
 };
 
 #endif // PLUGINVIEWER_H

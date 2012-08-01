@@ -28,11 +28,15 @@
 #include <QtGui>
 #include <QDebug>
 #include <QtUiTools>
+#include "pluginmngr.h"
+#include <QAbstractItemModel>
 
 PluginViewer::PluginViewer(QObject *parent) :
     QObject(parent)
 {
     m_menu = NULL;
+    m_dialog = NULL;
+    m_model = NULL;
 }
 
 PluginViewer::~PluginViewer()
@@ -53,7 +57,7 @@ QString PluginViewer::name() const
 
 QString PluginViewer::version() const
 {
-    return QString("1.0.0");
+    return QString("1.0.6");
 }
 
 QString PluginViewer::summary() const
@@ -93,7 +97,10 @@ QString PluginViewer::licence() const
 
 QIcon PluginViewer::icon() const
 {
-    QIcon icon(":/icons/dart_3.png");
+    QIcon icon(":/icons/e_pluginviewer.png");
+
+    if (icon.isNull())
+        return QIcon();
 
     return icon;
 }
@@ -130,7 +137,7 @@ QStringList PluginViewer::configList() const
 QMenu* PluginViewer::menu()
 {
     if (!m_menu) {
-        m_menu = new QMenu("Plugins");
+        m_menu = new QMenu("&Plugins");
         m_menu->addSeparator();
         m_menu->addAction(icon(), "Plugin Viewer",
                           this, SLOT(launchDialog()));
@@ -149,7 +156,31 @@ QDialog *PluginViewer::dialog()
 
 void PluginViewer::registerPluginManager(PluginMngr *pm)
 {
+    pluginManager = pm;
+}
 
+bool PluginViewer::start()
+{
+    if (!m_dialog)
+        loadDialog();
+
+    m_model = new QStandardItemModel(this);
+
+    retrieveInformation();
+    QTreeView *view = m_dialog->findChild<QTreeView *>();
+    view->setModel(m_model);
+
+    connect(pluginManager, SIGNAL(pluginConfigurationChange()),
+            this, SLOT(retrieveInformation()));
+
+    retrieveInformation();
+
+    return true;
+}
+
+bool PluginViewer::stop()
+{
+    return false;
 }
 
 void PluginViewer::launchDialog()
@@ -175,7 +206,52 @@ void PluginViewer::loadDialog()
     QUiLoader loader;
     m_dialog = qobject_cast<QDialog *>(loader.load(&file));
 
+    if (!m_dialog)
+        qWarning() << "Can't load plugin viewer dialog";
+
     file.close();
 }
 
+void PluginViewer::retrieveInformation()
+{
+    m_model->clear();
 
+    QStringList header;
+    header << "Plugin" << "Información";
+    m_model->setHorizontalHeaderLabels(header);
+
+    QStandardItem *item = m_model->invisibleRootItem();
+
+    foreach (QString pluginId, pluginManager->avaliablePlugins()) {
+        QList<QStandardItem *> row;
+        QList<QStandardItem *> info;
+        QList<QStandardItem *> value;
+
+        PluginInfo pluginInfo = pluginManager->pluginInfo(pluginId);
+        row << new QStandardItem(pluginInfo.name());
+
+        info << new QStandardItem("Nombre");
+        info << new QStandardItem("Id");
+        info << new QStandardItem("Version");
+        info << new QStandardItem("Categoria");
+        info << new QStandardItem("Autor");
+        info << new QStandardItem("e-mail");
+        info << new QStandardItem("Webside");
+        info << new QStandardItem("Licencia");
+        info << new QStandardItem("Icono");
+
+        value << new QStandardItem(pluginInfo.name());
+        value << new QStandardItem(pluginInfo.id());
+        value << new QStandardItem(pluginInfo.version());
+        value << new QStandardItem(pluginInfo.category());
+        value << new QStandardItem(pluginInfo.author());
+        value << new QStandardItem(pluginInfo.mail());
+        value << new QStandardItem(pluginInfo.webside());
+        value << new QStandardItem(pluginInfo.licence());
+        value << new QStandardItem(pluginInfo.icon(), QString());
+
+        row.first()->appendColumn(info);
+        row.last()->appendColumn(value);
+        item->appendRow(row);
+    }
+}

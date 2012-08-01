@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/dialog">
+        <file alias="help_dialog">helpdialog.ui</file>
+    </qresource>
+    <qresource prefix="/icon">
+        <file>pidgin_1.png</file>
+        <file alias="enable.png">pidgin_3.png</file>
+        <file alias="qt_logo">qt_logo.png</file>
+        <file alias="sipred_logo">Logo_Sipred.png</file>
+    </qresource>
+</RCC>

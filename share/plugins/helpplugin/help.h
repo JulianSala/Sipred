@@ -6,7 +6,7 @@
 **
 *****************************************************************************
 **
-**  pluginviewerfactory.h is part of Sipred.
+**  help.h is part of Sipred.
 **
 **    Sipred is free software: you can redistribute it and/or modify
 **    it under the terms of the GNU General Public License as published by
@@ -23,20 +23,53 @@
 **
 ****************************************************************************/
 
-#ifndef PLUGINVIEWERFACTORY_H
-#define PLUGINVIEWERFACTORY_H
+#ifndef HELP_H
+#define HELP_H
 
-#include "pluginfactory.h"
+#include <QObject>
+#include "plugin.h"
 
-class Plugin;
-
-class PluginViewerFactory : public QObject, public PluginFactory
+class Help : public QObject, public Plugin
 {
     Q_OBJECT
-    Q_INTERFACES(PluginFactory)
-
 public:
-    Plugin *plugin();
+    Help(QObject *parent = 0);
+    ~Help();
+
+    QString id() const;
+    QString name() const;
+    QString version() const;
+    QString summary() const;
+    QString category() const;
+    QString applyTo() const;
+    QString author() const;
+    QString mail() const;
+    QString webside() const;
+    QString licence() const;
+    QIcon icon() const;
+
+    bool isConfigurable() const;
+    QWidget *configDialog() const;
+    QHash<QString, QVariant> defaultConfig() const;
+    bool setConfigs(QVariant);
+    QStringList configList() const;
+    
+    QMenu *menu();
+    QDialog *dialog();
+
+    void registerPluginManager(PluginMngr *);
+signals:
+    
+public slots:
+    bool start();
+    bool stop();
+    void launchDialog();
+
+private:
+    void loadDialog();
+    QMenu *m_menu;
+    QDialog *m_dialog;
+    
 };
 
-#endif // PLUGINVIEWERFACTORY_H
+#endif // HELP_H

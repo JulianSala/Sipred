@@ -35,6 +35,8 @@ class PluginMngr;
 class Plugin
 {
 public:
+    virtual ~Plugin() = 0;
+
     virtual QString id() const = 0;
     virtual QString name() const = 0;
     virtual QString version() const = 0;

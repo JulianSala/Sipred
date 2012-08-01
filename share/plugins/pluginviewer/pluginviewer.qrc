@@ -3,7 +3,7 @@
         <file alias="dialog">plugindialog.ui</file>
     </qresource>
     <qresource prefix="/icons">
-        <file alias="enable.png">dart_1.png</file>
-        <file alias="disable.png">dart_3.png</file>
+        <file alias="d_pluginviewer.png">dart_1.png</file>
+        <file alias="e_pluginviewer.png">dart_3.png</file>
     </qresource>
 </RCC>
