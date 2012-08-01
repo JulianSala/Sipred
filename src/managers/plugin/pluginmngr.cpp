@@ -59,6 +59,19 @@ bool PluginMngr::disablePlugin(const QString &pluginId)
     return true;
 }
 
+PluginInfo PluginMngr::pluginInfo(const QString &pluginId)
+{
+    Q_D(PluginMngr);
+
+    if (!d->m_pluginsInfo.contains(pluginId)) {
+        qWarning() << "Requested plugin id:" << pluginId
+                   << "is not avaliable.";
+        return PluginInfo();
+    }
+
+    return d->m_pluginsInfo.value(pluginId, PluginInfo());
+}
+
 Plugin* PluginMngr::plugin(const QString &pluginId)
 {
     Q_D(PluginMngr);
@@ -88,13 +101,16 @@ Plugin* PluginMngr::plugin(const QString &pluginId)
     if (!plugin)
         return NULL;
 
+    plugin->registerPluginManager(this);
+    plugin->start();
+
     return plugin;
 }
 
 
-/***************************************************************************/
-/*                      PluginMngrPrivate
-/***************************************************************************/
+/***************************************************************************
+ *                           PluginMngrPrivate
+ ***************************************************************************/
 
 PluginMngrPrivate::PluginMngrPrivate(PluginMngr *parent) :
     q_ptr(parent)
@@ -207,8 +223,10 @@ void PluginMngrPrivate::registerPlugin(Plugin *plugin,
 
 bool PluginMngrPrivate::loadPlugin(const QString &pluginId)
 {
+    Q_Q(PluginMngr);
+
     if (!m_pluginsInfo.contains(pluginId)) {
-        qWarning() << "Requested plugin id:" << pluginId
+        qWarning() << "Requested plugin id:" << pluginId << endl
                    << "is not avaliable.";
         return false;
     }
@@ -227,10 +245,13 @@ bool PluginMngrPrivate::loadPlugin(const QString &pluginId)
 
     Plugin *plugin = pluginFactory->plugin();
 
-    d->m_activePlugins.insert(pluginId, plugin);
 
     if (!plugin)
         return false;
+
+    m_activePlugins.insert(pluginId, plugin);
+
+    emit q->pluginConfigurationChange();
 
     return true;
 }
@@ -238,7 +259,7 @@ bool PluginMngrPrivate::loadPlugin(const QString &pluginId)
 bool PluginMngrPrivate::unloadPlugin(const QString &pluginId)
 {
     if (!m_activePlugins.contains(pluginId)) {
-        qWarning() << "Requested plugin id:" << pluginId
+        qWarning() << "Requested plugin id:" << pluginId << endl
                    << "is not loaded.";
         return false;
     }
@@ -249,7 +270,7 @@ bool PluginMngrPrivate::unloadPlugin(const QString &pluginId)
     m_loader.unload();
 
     if (m_loader.isLoaded()) {
-        qWarning() << "Can't unload plugin id:" << pluginId
+        qWarning() << "Can't unload plugin id:" << pluginId << endl
                    << m_loader.errorString();
         return false;
     }
