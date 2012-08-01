@@ -40,6 +40,7 @@ class INTERFACEMNGR_EXPORT InterfaceMngr : public QObject
 public:
     InterfaceMngr(QObject *parent = 0);
     ~InterfaceMngr();
+    void createConnections();
     
 public slots:
     void registerModuleManager(ModuleMngr *moduleMngr);

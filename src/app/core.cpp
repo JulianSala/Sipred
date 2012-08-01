@@ -56,5 +56,23 @@ void Core::configure()
 void Core::run()
 {
     m_interfaceManager->initInterface();
+    m_interfaceManager->registerPluginManager(m_pluginManager);
 
+}
+
+void Core::unregisterResources()
+{
+    QDir resourcesDir(RESOURCES_PATH);
+
+    QStringList filter;
+    filter << "*.rcc" << "*.sip";
+    resourcesDir.setNameFilters(filter);
+
+    qDebug() << "Unregistering resources...";
+    foreach (QString file, resourcesDir.entryList(QDir::Files)) {
+        if (!QResource::unregisterResource(resourcesDir.filePath(file)))
+            qWarning() << "Can't unregister resource file" << file;
+        else
+            qDebug() << "Resource file" << file << "have been unregister";
+    }
 }

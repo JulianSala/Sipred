@@ -6,7 +6,7 @@
 **
 *****************************************************************************
 **
-**  interfacemngr_p.h is part of Sipred.
+**  help.h is part of Sipred.
 **
 **    Sipred is free software: you can redistribute it and/or modify
 **    it under the terms of the GNU General Public License as published by
@@ -23,43 +23,53 @@
 **
 ****************************************************************************/
 
-#ifndef INTERFACEMNGR_P_H
-#define INTERFACEMNGR_P_H
+#ifndef HELP_H
+#define HELP_H
 
-#include <QtCore/QtGlobal>
-#include <QtGui>
+#include <QObject>
+#include "plugin.h"
 
-class InterfaceMngr;
-class ModuleMngr;
-class PluginMngr;
-
-class InterfaceMngrPrivate
+class Help : public QObject, public Plugin
 {
-    Q_DECLARE_PUBLIC(InterfaceMngr)
-
+    Q_OBJECT
 public:
-    InterfaceMngrPrivate(InterfaceMngr *q);
-    void loadMainwindow();
-    void loadDockWidget();
-    void setDefaultWindow();
+    Help(QObject *parent = 0);
+    ~Help();
 
-    InterfaceMngr * const q_ptr;
+    QString id() const;
+    QString name() const;
+    QString version() const;
+    QString summary() const;
+    QString category() const;
+    QString applyTo() const;
+    QString author() const;
+    QString mail() const;
+    QString webside() const;
+    QString licence() const;
+    QIcon icon() const;
 
-    QMainWindow *m_mainwindow;
-    ModuleMngr *m_moduleManager;
-    PluginMngr *m_pluginManager;
+    bool isConfigurable() const;
+    QWidget *configDialog() const;
+    QHash<QString, QVariant> defaultConfig() const;
+    bool setConfigs(QVariant);
+    QStringList configList() const;
+    
+    QMenu *menu();
+    QDialog *dialog();
+
+    void registerPluginManager(PluginMngr *);
+signals:
+    
+public slots:
+    bool start();
+    bool stop();
+    void launchDialog();
 
 private:
-    void setDefaultDock();
-    void setDefaultCenterWidget();
-
-    void centerWindow();
-
-    QMenuBar *m_menuBar;
-    QToolBar *m_toolBar;
-    QWidget *m_centralWidget;
-    QDockWidget *m_dockWidget;
-    QMap<QString, QVariant> *m_treeInformation;
+    void loadDialog();
+    QMenu *m_menu;
+    QDialog *m_dialog;
+    
 };
 
-#endif // INTERFACEMNGR_P_H
+#endif // HELP_H

@@ -13,9 +13,11 @@ Makefile*
 *.pro.user*
 *.qmlproject.user*
 *.autosave
+*.rcc
 
 ## Archivos temporales VIM
 .*.swp
+*.directory
 
 ## Archivos de MinGW
 *.Debug
