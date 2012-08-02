@@ -27,6 +27,7 @@
 #include "modulemngr_p.h"
 #include "moduleinfo.h"
 
+#include <QStringListIterator>
 #include <QDebug>
 
 ModuleMngr::ModuleMngr(QObject *parent) :
@@ -51,10 +52,14 @@ ModuleMngrPrivate::ModuleMngrPrivate(ModuleMngr *q) :
     this->loadModules();
 }
 
+ModuleMngrPrivate::~ModuleMngrPrivate()
+{
+
+}
+
 void ModuleMngrPrivate::initModuleManager()
 {
     this->setModulesPath("../lib/modules");
-    qDebug() << "Modules path is:" << m_modulesDir.path();
 }
 
 void ModuleMngrPrivate::loadModules()
@@ -100,7 +105,7 @@ bool ModuleMngrPrivate::setModulesPath(const QString &path)
     QDir dir(path);
 
     if (!dir.exists()) {
-        qWarning() << "Path" << path << "doesn't exist";
+        qWarning() << "Module path" << path << "doesn't exist";
         return false;
     }
 
@@ -131,8 +136,30 @@ void ModuleMngrPrivate::registerModule(Module *module, const QString &fileName)
     info.setWebside(module->webside());
     info.setLicence(module->license());
     info.setIcon(module->icon());
+    info.setDependences(module->dependences());
     info.setInstance(module->instance());
     info.setConfigurable(module->configurable());
+    info.setType(module->type());
 
     m_modulesInfo.insert(info.id(), info);
+
+    qDebug() << "Register module:";
+    qDebug() << info;
+}
+
+bool ModuleMngrPrivate::checkDependences(const Module *module) const
+{
+    QStringList depList = module->dependences().toStringList();
+
+    QStringListIterator i(depList);
+
+    while (i.hasNext()) {
+        if (!m_modulesInfo.contains(i.next())) {
+            qWarning() << "Can't resolve dependences for module"
+                       << module->id();
+            return false;
+        }
+    }
+
+    return true;
 }

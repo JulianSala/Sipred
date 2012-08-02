@@ -6,7 +6,7 @@
 **
 *****************************************************************************
 **
-**  modulefactory.h is part of Sipred.
+**  sqlmodule.cpp is part of Sipred.
 **
 **    Sipred is free software: you can redistribute it and/or modify
 **    it under the terms of the GNU General Public License as published by
@@ -23,18 +23,9 @@
 **
 ****************************************************************************/
 
-#ifndef MODULEFACTORY_H
-#define MODULEFACTORY_H
+#include "sqlmodule.h"
 
-#include <QtPlugin>
-#include "module.h"
-
-class ModuleFactory
+SqlModule::SqlModule(QObject *parent) :
+    QObject(parent)
 {
-public:
-    virtual Module* module() = 0;
-};
-
-Q_DECLARE_INTERFACE(ModuleFactory, "module.moduleFactory")
-
-#endif // MODULEFACTORY_H
+}

@@ -119,15 +119,14 @@ PluginMngrPrivate::PluginMngrPrivate(PluginMngr *parent) :
     loadPlugins();
 }
 
-void PluginMngrPrivate::initPluginManager()
-{
-    setPluginsPath("../lib/plugins");
-    qDebug() << "Plugin path is:" << m_pluginsDir.path();
-}
-
 PluginMngrPrivate::~PluginMngrPrivate()
 {
 
+}
+
+void PluginMngrPrivate::initPluginManager()
+{
+    setPluginsPath("../lib/plugins");
 }
 
 void PluginMngrPrivate::loadPlugins()
@@ -180,7 +179,7 @@ bool PluginMngrPrivate::setPluginsPath(const QString &path)
     QDir dir(path);
 
     if (!dir.exists()) {
-        qWarning() << "Path" << path << "doesn't exist";
+        qWarning() << "Plugin path" << path << "doesn't exist";
         return false;
     }
 
@@ -217,7 +216,7 @@ void PluginMngrPrivate::registerPlugin(Plugin *plugin,
 
     m_pluginsInfo.insert(info.id(), info);
 
-    qDebug() << "Register info:";
+    qDebug() << "Register plugin:";
     qDebug() << info;
 }
 

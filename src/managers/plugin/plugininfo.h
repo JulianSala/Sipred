@@ -67,7 +67,6 @@ public:
     void resetConfigurable();
     void resetConfigList();
 
-//public:
     PluginInfo& operator =(const PluginInfo &);
     bool operator ==(const PluginInfo &) const;
     friend QDataStream& operator <<(QDataStream &, const PluginInfo &);

@@ -28,7 +28,10 @@
 
 #include <QMetaType>
 #include <QDebug>
+#include <QtGui>
+
 #include "libraryinfo.h"
+#include "module.h"
 
 class ModuleInfo : public LibraryInfo
 {
@@ -36,29 +39,31 @@ class ModuleInfo : public LibraryInfo
     Q_PROPERTY(bool configurable READ isConfigurable WRITE setConfigurable RESET resetConfigurable)
 
 public:
-
-    enum ModuleType {
-        ModuleSql,
-        ModuleDataHandling,
-        ModuleDataEditor
-    };
-
     ModuleInfo();
     ModuleInfo(const ModuleInfo &);
     ~ModuleInfo();
 
+    QVariant dependences() const;
     QString instance() const;
     bool isConfigurable() const;
+    Module::ModuleType type() const;
 
-    QString m_instance;
-    bool m_configurable;
-
+    void setDependences(const QVariant &);
     void setInstance(const QString &);
     void setConfigurable(bool);
+    void setType(const Module::ModuleType &);
 
     void resetAll();
+    void resetDependences();
     void resetInstance();
     void resetConfigurable();
+    void resetType();
+
+private:
+    QString m_instance;
+    bool m_configurable;
+    Module::ModuleType m_type;
+    QVariant m_dependences;
 
 public:
     ModuleInfo& operator =(const ModuleInfo &);

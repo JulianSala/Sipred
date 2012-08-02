@@ -42,17 +42,22 @@ class ModuleMngrPrivate
 
 public:
     ModuleMngrPrivate(ModuleMngr *q);
+    ~ModuleMngrPrivate();
 
     void initModuleManager();
     void loadModules();
     bool setModulesPath(const QString &);
     void registerModule(Module *, const QString &);
 
+    bool checkDependences(const Module *) const;
+    void setStartSecuence(const Module *);
+
     QPluginLoader m_loader;
     QList<Module *> m_activeModules;
     QHash<QString, ModuleInfo> m_modulesInfo;
     QHash<QString, QVariant> m_modulesConfig;
     QDir m_modulesDir;
+    QStringList m_startSecuence;
 
     ModuleMngr * const q_ptr;
 };
