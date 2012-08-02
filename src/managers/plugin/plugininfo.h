@@ -57,7 +57,7 @@ private:
     bool m_configurable;
     QStringList m_configList;
 
-public slots:
+public:
     void setApplyTo(const QString &);
     void setConfigurable(const bool);
     void setConfigList(const QStringList &);
@@ -67,7 +67,7 @@ public slots:
     void resetConfigurable();
     void resetConfigList();
 
-public:
+//public:
     PluginInfo& operator =(const PluginInfo &);
     bool operator ==(const PluginInfo &) const;
     friend QDataStream& operator <<(QDataStream &, const PluginInfo &);

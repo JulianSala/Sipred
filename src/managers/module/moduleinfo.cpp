@@ -25,21 +25,13 @@
 
 #include "moduleinfo.h"
 
-ModuleInfo::ModuleInfo() :
-    QObject(0)
+ModuleInfo::ModuleInfo()
 {
     this->resetAll();
 }
 
 ModuleInfo::ModuleInfo(const ModuleInfo &object) :
-    QObject(object.parent()),
     LibraryInfo(object)
-{
-    this->resetAll();
-}
-
-ModuleInfo::ModuleInfo(QObject *parent) :
-    QObject(parent)
 {
     this->resetAll();
 }

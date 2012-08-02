@@ -29,13 +29,6 @@
 
 #include <QDebug>
 
-ModuleMngrPrivate::ModuleMngrPrivate(ModuleMngr *q) :
-    q_ptr(q)
-{
-    this->initModuleManager();
-    this->loadModules();
-}
-
 ModuleMngr::ModuleMngr(QObject *parent) :
     QObject(parent), d_ptr(new ModuleMngrPrivate(this))
 {
@@ -45,6 +38,17 @@ ModuleMngr::ModuleMngr(QObject *parent) :
 ModuleMngr::~ModuleMngr()
 {
 
+}
+
+/****************************************************************************
+ *                           ModuleMngrPrivate
+ ***************************************************************************/
+
+ModuleMngrPrivate::ModuleMngrPrivate(ModuleMngr *q) :
+    q_ptr(q)
+{
+    this->initModuleManager();
+    this->loadModules();
 }
 
 void ModuleMngrPrivate::initModuleManager()
@@ -110,14 +114,12 @@ bool ModuleMngrPrivate::setModulesPath(const QString &path)
 
 void ModuleMngrPrivate::registerModule(Module *module, const QString &fileName)
 {
-    Q_Q(ModuleMngr);
-
     if (m_modulesInfo.contains(module->id())) {
         qWarning() << "Module ID:" << module->id() << "already exist";
         return;
     }
 
-    ModuleInfo info(q);
+    ModuleInfo info;
     info.setId(module->id());
     info.setFileName(fileName);
     info.setName(module->name());

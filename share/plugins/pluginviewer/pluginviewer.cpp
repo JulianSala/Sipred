@@ -250,7 +250,6 @@ void PluginViewer::retrieveInformation()
         value << new QStandardItem(pluginInfo.licence());
         value << new QStandardItem(pluginInfo.icon(), QString());
 
-<<<<<<< HEAD
         foreach (QStandardItem *i, info) {
             i->setFlags(i->flags() & ~Qt::ItemIsEditable);
         }
@@ -259,8 +258,6 @@ void PluginViewer::retrieveInformation()
             i->setFlags(i->flags() & ~Qt::ItemIsEditable);
         }
 
-=======
->>>>>>> b40a6fbe4ba0319e90aca0b4a72d35d0fbd4eba7
         row.first()->appendColumn(info);
         row.last()->appendColumn(value);
         item->appendRow(row);

@@ -26,32 +26,33 @@
 #ifndef MODULEINFO_H
 #define MODULEINFO_H
 
-#include <QObject>
+#include <QMetaType>
 #include <QDebug>
 #include "libraryinfo.h"
 
-class ModuleInfo :public QObject, public LibraryInfo
+class ModuleInfo : public LibraryInfo
 {
-    Q_OBJECT
-
     Q_PROPERTY(QString instance READ instance WRITE setInstance RESET resetInstance)
     Q_PROPERTY(bool configurable READ isConfigurable WRITE setConfigurable RESET resetConfigurable)
 
 public:
+
+    enum ModuleType {
+        ModuleSql,
+        ModuleDataHandling,
+        ModuleDataEditor
+    };
+
     ModuleInfo();
     ModuleInfo(const ModuleInfo &);
     ~ModuleInfo();
 
-    ModuleInfo(QObject *parent);
-
     QString instance() const;
     bool isConfigurable() const;
 
-private:
     QString m_instance;
     bool m_configurable;
 
-public slots:
     void setInstance(const QString &);
     void setConfigurable(bool);
 
