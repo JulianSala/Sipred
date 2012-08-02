@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>294</width>
+    <height>341</height>
+   </rect>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>16777215</width>
+    <height>16777215</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="3" column="0">
+    <widget class="QLabel" name="pwdLabel">
+     <property name="text">
+      <string>Contra&amp;seña</string>
+     </property>
+     <property name="buddy">
+      <cstring>pwdLineEdit</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QLineEdit" name="hostLineEdit"/>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="portLabel">
+     <property name="text">
+      <string>&amp;Puerto</string>
+     </property>
+     <property name="buddy">
+      <cstring>portLineEdit</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QLineEdit" name="userLineEdit"/>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="userLabel">
+     <property name="text">
+      <string>&amp;Usuario</string>
+     </property>
+     <property name="buddy">
+      <cstring>userLineEdit</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2" rowspan="4">
+    <widget class="QGraphicsView" name="graphicsView">
+     <property name="maximumSize">
+      <size>
+       <width>100</width>
+       <height>16777215</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QLineEdit" name="pwdLineEdit"/>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="hostLabel">
+     <property name="text">
+      <string>&amp;Host</string>
+     </property>
+     <property name="buddy">
+      <cstring>hostLineEdit</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0" colspan="3">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="connectPushButton">
+       <property name="text">
+        <string>Co&amp;nectar</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="okPushButton">
+       <property name="text">
+        <string>&amp;Aceptar</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="cancelPushButton">
+       <property name="text">
+        <string>&amp;Cancelar</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="2" column="1">
+    <widget class="QLineEdit" name="portLineEdit"/>
+   </item>
+   <item row="4" column="0" colspan="3">
+    <widget class="QGroupBox" name="advancedGroupBox">
+     <property name="title">
+      <string>Avanzadas</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QLabel" name="protocolLabel">
+          <property name="text">
+           <string>Pro&amp;tocolo</string>
+          </property>
+          <property name="buddy">
+           <cstring>protocolComboBox</cstring>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="protocolComboBox">
+          <item>
+           <property name="text">
+            <string>TCP/IP</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Socket</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Pipe</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Memory</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="1" column="0">
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QLabel" name="soketLabel">
+          <property name="text">
+           <string>Soc&amp;ket</string>
+          </property>
+          <property name="buddy">
+           <cstring>socketLineEdit</cstring>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="socketLineEdit"/>
+        </item>
+       </layout>
+      </item>
+      <item row="2" column="0">
+       <widget class="QCheckBox" name="sshCheckBox">
+        <property name="text">
+         <string>Usar SSH</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Opciones adicionales de conexión:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QTextEdit" name="optionsTextEdit">
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>60</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="5" column="0" colspan="3">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>0</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>userLineEdit</tabstop>
+  <tabstop>hostLineEdit</tabstop>
+  <tabstop>portLineEdit</tabstop>
+  <tabstop>pwdLineEdit</tabstop>
+  <tabstop>graphicsView</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

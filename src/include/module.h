@@ -63,16 +63,17 @@ public:
     virtual ModuleType type() const = 0;
 
     virtual QVariant dependences() const = 0;
-    virtual QString instance() const = 0;
+//    virtual QString instance() const = 0;
     virtual bool configurable() const = 0;
     virtual QWidget *configDialog() const = 0;
     virtual QHash<QString, QVariant> defaultConfig() const = 0;
     virtual bool setConfig(QVariant) = 0;
-    virtual void setConfigs(QVariant) = 0;
+    virtual bool setConfigs(QVariant) = 0;
 
-    virtual QMenu *menu() = 0;
-    virtual QWidget *centralWidget() = 0;
-    virtual QWidget *aditionalWidget() = 0;
+    virtual QMenu *menu() const = 0;
+    virtual QWidget *centralWidget() const = 0;
+    virtual QWidget *controlsWidget() const = 0;
+    virtual QWidget *additionalWidget() const = 0;
 
     virtual void registerModuleManager(ModuleMngr *) = 0;
 

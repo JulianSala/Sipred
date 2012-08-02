@@ -23,9 +23,142 @@
 **
 ****************************************************************************/
 
-#include "sqlmodule.h"
+#include "../include/sqlmodule.h"
+#include <modulemngr.h>
 
 SqlModule::SqlModule(QObject *parent) :
     QObject(parent)
 {
+    m_configDialog = NULL;
+    m_centralWidget = NULL;
+    m_controlsWidget = NULL;
+    m_additionalWidget = NULL;
+    m_menu = NULL;
+}
+
+SqlModule::~SqlModule()
+{
+
+}
+
+QString SqlModule::id() const
+{
+    return QString("SqlModule");
+}
+
+QString SqlModule::name() const
+{
+    return QString("Sql Module");
+}
+
+QString SqlModule::version() const
+{
+    return QString("3.0.0");
+}
+
+QString SqlModule::category() const
+{
+    return QString("SQL");
+}
+
+QString SqlModule::author() const
+{
+    return QString("Julian Salamanca E.");
+}
+
+QString SqlModule::mail() const
+{
+    return QString("julian.sse@gmail.com");
+}
+
+QString SqlModule::webside() const
+{
+    return QString("https://github.com/thanatosJSSE/Sipred");
+}
+
+QString SqlModule::license() const
+{
+    return QString("GPLv3");
+}
+
+QIcon SqlModule::icon() const
+{
+    return QIcon();
+}
+
+Module::ModuleType SqlModule::type() const
+{
+    return Module::ModuleTypeSql;
+}
+
+QVariant SqlModule::dependences() const
+{
+    return QVariant();
+}
+
+//QString SqlModule::instance() const
+//{
+//    return QString();
+//}
+
+bool SqlModule::configurable() const
+{
+    return true;
+}
+
+QWidget* SqlModule::configDialog() const
+{
+    return NULL;
+}
+
+QHash<QString, QVariant> SqlModule::defaultConfig() const
+{
+    return m_config;
+}
+
+bool SqlModule::setConfig(QVariant)
+{
+    return true;
+}
+
+bool SqlModule::setConfigs(QVariant)
+{
+    return true;
+}
+
+QMenu* SqlModule::menu() const
+{
+    return m_menu;
+}
+
+QWidget* SqlModule::centralWidget() const
+{
+    return m_centralWidget;
+}
+
+QWidget* SqlModule::controlsWidget() const
+{
+    return m_controlsWidget;
+}
+
+QWidget* SqlModule::additionalWidget() const
+{
+    return m_additionalWidget;
+}
+
+void SqlModule::registerModuleManager(ModuleMngr *modMngr)
+{
+    m_moduleManger = modMngr;
+    connect(m_moduleManger, SIGNAL(destroyed()),
+            this, SLOT(stop()));
+}
+
+bool SqlModule::start()
+{
+    return true;
+}
+
+bool SqlModule::stop()
+{
+    return true;
 }

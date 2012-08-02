@@ -11,9 +11,13 @@ TARGET = $$qtLibraryTarget(sqlmodule)
 DESTDIR = $$SIPRED_MODULE_PATH/SqlModule
 
 SOURCES += \
-    src/sqlmodule.cpp
+    src/sqlmodule.cpp \
+    src/sqlmodulefactory.cpp
 
 HEADERS += \
-    include/sqlmodule.h
+    include/sqlmodule.h \
+    include/sqlmodulefactory.h
 
-OTHER_FILES
+OTHER_FILES += \
+    sqlmodule.qrc \
+
