@@ -56,6 +56,11 @@ QString SqlModule::version() const
     return QString("3.0.0");
 }
 
+QString SqlModule::summary() const
+{
+    return QString("Management all mysql connections.");
+}
+
 QString SqlModule::category() const
 {
     return QString("SQL");

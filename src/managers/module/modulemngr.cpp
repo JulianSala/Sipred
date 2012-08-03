@@ -137,7 +137,7 @@ void ModuleMngrPrivate::registerModule(Module *module, const QString &fileName)
     info.setLicence(module->license());
     info.setIcon(module->icon());
     info.setDependences(module->dependences());
-    info.setInstance(module->instance());
+//    info.setInstance(module->instance());
     info.setConfigurable(module->configurable());
     info.setType(module->type());
 

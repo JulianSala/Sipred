@@ -35,8 +35,8 @@
 
 class ModuleInfo : public LibraryInfo
 {
-    Q_PROPERTY(QString instance READ instance WRITE setInstance RESET resetInstance)
-    Q_PROPERTY(bool configurable READ isConfigurable WRITE setConfigurable RESET resetConfigurable)
+//    Q_PROPERTY(QString instance READ instance WRITE setInstance RESET resetInstance)
+//    Q_PROPERTY(bool configurable READ isConfigurable WRITE setConfigurable RESET resetConfigurable)
 
 public:
     ModuleInfo();

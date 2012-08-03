@@ -40,6 +40,7 @@ public:
     QString id() const;
     QString name() const;
     QString version() const;
+    QString summary() const;
     QString category() const;
     QString author() const;
     QString mail() const;
