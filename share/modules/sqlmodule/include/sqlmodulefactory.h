@@ -32,6 +32,7 @@
 
 class SqlModuleFactory : public QObject, public ModuleFactory
 {
+    Q_OBJECT
     Q_INTERFACES(ModuleFactory)
 
 public:

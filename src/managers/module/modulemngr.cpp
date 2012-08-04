@@ -73,6 +73,7 @@ void ModuleMngrPrivate::loadModules()
             if (!QLibrary::isLibrary(fileName))
                 continue;
 
+
             QString filePath = m_modulesDir.absoluteFilePath(fileName);
 
             m_loader.setFileName(filePath);
@@ -80,6 +81,8 @@ void ModuleMngrPrivate::loadModules()
             QObject *moduleInstance = m_loader.instance();
             if (!moduleInstance)
                 continue;
+            qDebug() << fileName;
+
 
             ModuleFactory *moduleFactory = qobject_cast<ModuleFactory *>(moduleInstance);
 
@@ -91,7 +94,7 @@ void ModuleMngrPrivate::loadModules()
             if (!module)
                 continue;
 
-            this->registerModule(module, fileName);
+            this->registerModule(module, m_modulesDir.absoluteFilePath(fileName));
 
             m_loader.unload();
         }
@@ -144,10 +147,10 @@ void ModuleMngrPrivate::registerModule(Module *module, const QString &fileName)
     m_modulesInfo.insert(info.id(), info);
 
     qDebug() << "Register module:";
-    qDebug() << info;
+//    qDebug() << info;
 }
 
-bool ModuleMngrPrivate::checkDependences(const Module *module) const
+bool ModuleMngrPrivate::resolveDependences(const Module *module) const
 {
     QStringList depList = module->dependences().toStringList();
 
@@ -162,4 +165,51 @@ bool ModuleMngrPrivate::checkDependences(const Module *module) const
     }
 
     return true;
+}
+
+void ModuleMngrPrivate::setStartSecuence(const Module *module)
+{
+
+}
+
+bool ModuleMngrPrivate::loadModule(const QString &moduleId)
+{
+    Q_Q(ModuleMngr);
+
+    if (!m_modulesInfo.contains(moduleId)) {
+        qWarning() << "Requested module id:" << moduleId << endl
+                   << "is not avaliable";
+        return false;
+    }
+
+    m_loader.setFileName(m_modulesInfo.value(moduleId).fileName());
+
+    QObject *moduleInstance = m_loader.instance();
+
+    if (!moduleInstance)
+        return false;
+
+    ModuleFactory *moduleFactory = qobject_cast<ModuleFactory *>(moduleInstance);
+
+    if (!moduleInstance)
+        return false;
+
+    Module *module = moduleFactory->module();
+
+    if (!module)
+        return false;
+
+//    resolveDependences(module);
+    module->registerModuleManager(q);
+    module->start();
+
+    m_activeModules.insert(moduleId, module);
+
+    return true;
+}
+
+bool ModuleMngrPrivate::unloadModule(const QString &moduleId)
+{
+    return true;
+
 }

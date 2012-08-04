@@ -70,7 +70,7 @@ public:
     virtual bool setConfig(QVariant) = 0;
     virtual bool setConfigs(QVariant) = 0;
 
-    virtual QMenu *menu() const = 0;
+    virtual QAction *menu() const = 0;
     virtual QWidget *centralWidget() const = 0;
     virtual QWidget *controlsWidget() const = 0;
     virtual QWidget *additionalWidget() const = 0;

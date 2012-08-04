@@ -52,14 +52,31 @@ public:
 private:
     void setDefaultDock();
     void setDefaultCenterWidget();
+    void setDefaultConfigWidget();
 
+    void initializeMenus();
     void centerWindow();
 
     QMenuBar *m_menuBar;
     QToolBar *m_toolBar;
     QWidget *m_centralWidget;
     QDockWidget *m_dockWidget;
+    QWidget *m_configWidget;
     QMap<QString, QVariant> *m_treeInformation;
+
+    /* Actions */
+    /* File Menu */
+    QMenu *m_fileMenu;
+    QAction *m_newAction;
+    QAction *m_openAction;
+    QAction *m_saveAction;
+    QAction *m_saveAsAction;
+    QAction *m_quitAction;
+
+    /* Tools Menu */
+    QMenu *m_toolsMenu;
+    QAction *m_configAction();
+
 };
 
 #endif // INTERFACEMNGR_P_H

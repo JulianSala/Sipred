@@ -244,7 +244,6 @@ bool PluginMngrPrivate::loadPlugin(const QString &pluginId)
 
     Plugin *plugin = pluginFactory->plugin();
 
-
     if (!plugin)
         return false;
 

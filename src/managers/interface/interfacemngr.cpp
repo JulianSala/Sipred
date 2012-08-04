@@ -34,19 +34,6 @@
 
 #include <QDebug>
 
-InterfaceMngrPrivate::InterfaceMngrPrivate(InterfaceMngr *q) :
-    q_ptr(q), m_mainwindow(0)
-{
-    m_mainwindow = NULL;
-    m_moduleManager = NULL;
-    m_pluginManager = NULL;
-    m_menuBar = NULL;
-    m_toolBar = NULL;
-    m_centralWidget = NULL;
-    m_dockWidget = NULL;
-    m_treeInformation = NULL;
-}
-
 InterfaceMngr::InterfaceMngr(QObject *parent) :
     QObject(parent), d_ptr(new InterfaceMngrPrivate(this))
 {
@@ -59,6 +46,97 @@ InterfaceMngr::~InterfaceMngr()
 
 void InterfaceMngr::createConnections()
 {
+}
+
+void InterfaceMngr::registerModuleManager(ModuleMngr *moduleMngr)
+{
+    Q_D(InterfaceMngr);
+
+    d->m_moduleManager = moduleMngr;
+}
+
+void InterfaceMngr::registerPluginManager(PluginMngr *pluginMngr)
+{
+    Q_D(InterfaceMngr);
+
+    d->m_pluginManager = pluginMngr;
+
+    qDebug() << d->m_pluginManager->avaliablePlugins();
+
+    foreach (QString pluginId, d->m_pluginManager->avaliablePlugins()) {
+        Plugin *p = d->m_pluginManager->plugin(pluginId);
+        d->m_mainwindow->menuBar()->addMenu(p->menu());
+    }
+}
+
+void InterfaceMngr::initInterface()
+{
+    Q_D(InterfaceMngr);
+
+    d->loadMainwindow();
+
+    if (!d->m_mainwindow)
+        d->setDefaultWindow();
+
+    d->centerWindow();
+
+    d->loadDockWidget();
+
+    if (!d->m_dockWidget)
+        d->setDefaultDock();
+
+    d->m_mainwindow->addDockWidget(Qt::LeftDockWidgetArea, d->m_dockWidget);
+
+    d->initializeMenus();
+
+    d->m_mainwindow->show();
+}
+
+void InterfaceMngr::endInterface()
+{
+
+}
+
+void InterfaceMngr::newProject()
+{
+
+}
+
+bool InterfaceMngr::openProject()
+{
+
+}
+
+bool InterfaceMngr::saveProject()
+{
+
+}
+
+bool InterfaceMngr::saveAsProject()
+{
+
+}
+
+void InterfaceMngr::quitApp()
+{
+
+}
+
+/****************************************************************************
+ *                          InterfaceMngrPrivate
+ ***************************************************************************/
+
+InterfaceMngrPrivate::InterfaceMngrPrivate(InterfaceMngr *q) :
+    q_ptr(q), m_mainwindow(0)
+{
+    m_mainwindow = NULL;
+    m_moduleManager = NULL;
+    m_pluginManager = NULL;
+    m_menuBar = NULL;
+    m_toolBar = NULL;
+    m_centralWidget = NULL;
+    m_dockWidget = NULL;
+    m_treeInformation = NULL;
 }
 
 void InterfaceMngrPrivate::loadMainwindow()
@@ -124,53 +202,6 @@ void InterfaceMngrPrivate::setDefaultWindow()
     m_mainwindow->setWindowIcon(icon);
 }
 
-void InterfaceMngr::registerModuleManager(ModuleMngr *moduleMngr)
-{
-    Q_D(InterfaceMngr);
-
-    d->m_moduleManager = moduleMngr;
-}
-
-void InterfaceMngr::registerPluginManager(PluginMngr *pluginMngr)
-{
-    Q_D(InterfaceMngr);
-
-    d->m_pluginManager = pluginMngr;
-
-    qDebug() << d->m_pluginManager->avaliablePlugins();
-
-    foreach (QString pluginId, d->m_pluginManager->avaliablePlugins()) {
-        Plugin *p = d->m_pluginManager->plugin(pluginId);
-        d->m_mainwindow->menuBar()->addMenu(p->menu());
-    }
-}
-
-void InterfaceMngr::initInterface()
-{
-    Q_D(InterfaceMngr);
-
-    d->loadMainwindow();
-
-    if (!d->m_mainwindow)
-        d->setDefaultWindow();
-
-    d->centerWindow();
-
-    d->loadDockWidget();
-
-    if (!d->m_dockWidget)
-        d->setDefaultDock();
-
-    d->m_mainwindow->addDockWidget(Qt::LeftDockWidgetArea, d->m_dockWidget);
-
-    d->m_mainwindow->show();
-}
-
-void InterfaceMngr::endInterface()
-{
-
-}
-
 void InterfaceMngrPrivate::setDefaultDock()
 {
     QFile file(":/ui/dockwidget");
@@ -184,11 +215,85 @@ void InterfaceMngrPrivate::setDefaultDock()
 
     if (!m_dockWidget)
         qFatal("Can't load default dockwidget");
+
+    m_dockWidget->setWindowTitle("Herramientas");
 }
 
 void InterfaceMngrPrivate::setDefaultCenterWidget()
 {
 
+}
+
+void InterfaceMngrPrivate::setDefaultConfigWidget()
+{
+    QFile file(":/ui/configwidget");
+
+    if (!file.open(QIODevice::ReadOnly))
+        qFatal("Can't open default configwidget.ui");
+
+    QUiLoader loader;
+    m_configWidget = qobject_cast<QWidget *>(loader.load(&file, m_mainwindow));
+
+    if (!m_configWidget)
+        qFatal("Can't load default configwidget");
+}
+
+void InterfaceMngrPrivate::initializeMenus()
+{
+    Q_Q(InterfaceMngr);
+
+    if (!m_mainwindow)
+        qFatal("Can't init actions, Mainwindow is not found");
+
+    QList<QAction *> actionList;
+
+    m_newAction = new QAction(m_mainwindow);
+    m_newAction->setText("&Nuevo");
+    m_newAction->setShortcut(QKeySequence::New);
+    m_newAction->setToolTip("Crear un nuevo proyecto desde el gestor.");
+    m_newAction->setStatusTip("Crear nuevo proyecto");
+
+    QObject::connect(m_newAction, SIGNAL(triggered()), q, SLOT(newProject()));
+    actionList.append(m_newAction);
+
+    m_openAction = new QAction(m_mainwindow);
+    m_openAction->setText("&Abrir");
+    m_openAction->setShortcut(QKeySequence::Open);
+    m_openAction->setToolTip("Abrir archivo soportado");
+    m_openAction->setStatusTip("Abriendo archivo...");
+
+    QObject::connect(m_openAction, SIGNAL(triggered()), q, SLOT(openProject()));
+    actionList.append(m_openAction);
+
+    m_saveAction = new QAction(m_mainwindow);
+    m_saveAction->setText("&Guardar");
+    m_saveAction->setShortcut(QKeySequence::Save);
+    m_saveAction->setToolTip("Guardar el actual proyecto");
+    m_saveAction->setStatusTip("Guardando archivo...");
+
+    QObject::connect(m_saveAction, SIGNAL(triggered()), q, SLOT(saveProject()));
+    actionList.append(m_saveAction);
+
+    m_saveAsAction = new QAction(m_mainwindow);
+    m_saveAsAction->setText("Guardar como");
+    m_saveAsAction->setShortcut(QKeySequence::SaveAs);
+    m_saveAsAction->setStatusTip("Guardando el proyecto como...");
+
+    QObject::connect(m_saveAsAction, SIGNAL(triggered()), q, SLOT(saveAsProject()));
+    actionList.append(m_saveAsAction);
+
+    m_quitAction = new QAction(m_mainwindow);
+    m_quitAction->setText("&Salir");
+    m_quitAction->setShortcut(QKeySequence::Quit);
+    m_quitAction->setToolTip("Salir de la aplicación");
+    m_quitAction->setStatusTip("Salir");
+
+    QObject::connect(m_quitAction, SIGNAL(triggered()), q, SLOT(quitApp()));
+
+    QMenu *m_fileMenu = m_mainwindow->menuBar()->addMenu("&Archivo");
+    m_fileMenu->addActions(actionList);
+    m_fileMenu->addSeparator();
+    m_fileMenu->addAction(m_quitAction);
 }
 
 void InterfaceMngrPrivate::centerWindow()

@@ -6,7 +6,7 @@
 **
 *****************************************************************************
 **
-**  modulemngr_p.h is part of Sipred.
+**  sequencer.h is part of Sipred.
 **
 **    Sipred is free software: you can redistribute it and/or modify
 **    it under the terms of the GNU General Public License as published by
@@ -23,46 +23,27 @@
 **
 ****************************************************************************/
 
-#ifndef MODULEMNGR_P_H
-#define MODULEMNGR_P_H
+#ifndef SEQUENCER_H
+#define SEQUENCER_H
 
-#include <QtCore/QtGlobal>
-#include <QList>
-#include <QHash>
+#include <QObject>
 
-class ModuleMngr;
-class ModuleInfo;
-class QPluginLoader;
-class QDir;
-class Module;
+#include "module.h"
 
-class ModuleMngrPrivate
+class Sequencer : public QObject
 {
-    Q_DECLARE_PUBLIC(ModuleMngr)
-
+    Q_OBJECT
 public:
-    ModuleMngrPrivate(ModuleMngr *q);
-    ~ModuleMngrPrivate();
+    Sequencer(QObject *parent);
 
-    void initModuleManager();
-    void loadModules();
-    bool setModulesPath(const QString &);
-    void registerModule(Module *, const QString &);
+    void loadSequence(const QString &id, const QStringList &depIds);
+    int getLevel(const QString &);
+    int higerLevel() const;
 
-    bool resolveDependences(const Module *) const;
-    void setStartSecuence(const Module *);
+private:
+    void insertLowerLevel();
 
-    bool loadModule(const QString &moduleId);
-    bool unloadModule(const QString &moduleId);
-
-    QPluginLoader m_loader;
-    QHash<QString, Module *> m_activeModules;
-    QHash<QString, ModuleInfo> m_modulesInfo;
-    QHash<QString, QVariant> m_modulesConfig;
-    QDir m_modulesDir;
-    QStringList m_startSecuence;
-
-    ModuleMngr * const q_ptr;
+    QMap<QString, QPair<QStringList, int> > m_sequence;
 };
 
-#endif // MODULEMNGR_P_H
+#endif // SEQUENCER_H

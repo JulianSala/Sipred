@@ -2,7 +2,7 @@
 include(../../../sipred.pri)
 include(../../../dependences.pri)
 
-QT += sql gui
+QT += core gui
 
 TEMPLATE = lib
 CONFIG += plugin uitools

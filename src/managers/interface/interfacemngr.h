@@ -48,6 +48,13 @@ public slots:
     void initInterface();
     void endInterface();
 
+    /* File Menu */
+    void newProject();
+    bool openProject();
+    bool saveProject();
+    bool saveAsProject();
+    void quitApp();
+
 protected:
     InterfaceMngr(const InterfaceMngrPrivate &d);
     InterfaceMngrPrivate * const d_ptr;
