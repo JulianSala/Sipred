@@ -33,15 +33,18 @@
 class Sequencer : public QObject
 {
     Q_OBJECT
+
 public:
     Sequencer(QObject *parent);
 
-    void loadSequence(const QString &id, const QStringList &depIds);
+    void insertSequence(const QString &id, const QStringList &depIds);
     int getLevel(const QString &);
     int higerLevel() const;
+    int higerLevel(const QStringList &);
 
 private:
     void insertLowerLevel();
+    void insertLevetAt(int);
 
     QMap<QString, QPair<QStringList, int> > m_sequence;
 };

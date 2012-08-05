@@ -41,6 +41,44 @@ ModuleMngr::~ModuleMngr()
 
 }
 
+bool ModuleMngr::activeModule(const QString &moduleId)
+{
+    return true;
+}
+
+bool ModuleMngr::disableModule(const QString &moduleId)
+{
+    return true;
+}
+
+QStringList ModuleMngr::avaliableModules()
+{
+    Q_D(ModuleMngr);
+
+    QStringList list = d->m_modulesInfo.keys();
+
+    return list;
+}
+
+Module *ModuleMngr::module(const QString &moduleId)
+{
+    Q_D(ModuleMngr);
+
+    if (d->m_activeModules.contains(moduleId))
+        return d->m_activeModules.value(moduleId);
+
+    if (!d->m_modulesInfo.contains(moduleId)) {
+        qWarning() << "Requested module id:" << moduleId << endl
+                   << "is not avaliable.";
+        return NULL;
+    }
+
+    if (d->loadModule(moduleId))
+        return d->m_activeModules.value(moduleId);
+
+    return NULL;
+}
+
 /****************************************************************************
  *                           ModuleMngrPrivate
  ***************************************************************************/
@@ -94,6 +132,7 @@ void ModuleMngrPrivate::loadModules()
             if (!module)
                 continue;
 
+            this->setStartSecuence(module);
             this->registerModule(module, m_modulesDir.absoluteFilePath(fileName));
 
             m_loader.unload();
@@ -182,6 +221,12 @@ bool ModuleMngrPrivate::loadModule(const QString &moduleId)
         return false;
     }
 
+    if (m_activeModules.contains(moduleId)) {
+        qWarning() << "Requested module id:" << moduleId << endl
+                   << "is already loaded.";
+        return false;
+    }
+
     m_loader.setFileName(m_modulesInfo.value(moduleId).fileName());
 
     QObject *moduleInstance = m_loader.instance();
@@ -205,11 +250,32 @@ bool ModuleMngrPrivate::loadModule(const QString &moduleId)
 
     m_activeModules.insert(moduleId, module);
 
+    emit q->moduleLoaded();
+    emit q->moduleLoaded(moduleId);
+    emit q->configChange();
+
     return true;
 }
 
 bool ModuleMngrPrivate::unloadModule(const QString &moduleId)
 {
-    return true;
+    if (!m_activeModules.contains(moduleId)) {
+        qWarning() << "Requested module id:" << moduleId
+                   << "is not loaded.";
+        return false;
+    }
 
+    m_activeModules.value(moduleId)->stop();
+    delete m_activeModules.value(moduleId);
+    m_activeModules.remove(moduleId);
+
+    m_loader.setFileName(m_modulesInfo.value(moduleId).fileName());
+
+    if (!m_loader.unload()) {
+        qWarning() << "Can't unload module id:" << moduleId << endl
+                   << m_loader.errorString();
+        return false;
+    }
+
+    return true;
 }

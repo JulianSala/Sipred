@@ -53,6 +53,8 @@ void InterfaceMngr::registerModuleManager(ModuleMngr *moduleMngr)
     Q_D(InterfaceMngr);
 
     d->m_moduleManager = moduleMngr;
+
+    qDebug() << d->m_moduleManager->avaliableModules();
 }
 
 void InterfaceMngr::registerPluginManager(PluginMngr *pluginMngr)
@@ -60,8 +62,6 @@ void InterfaceMngr::registerPluginManager(PluginMngr *pluginMngr)
     Q_D(InterfaceMngr);
 
     d->m_pluginManager = pluginMngr;
-
-    qDebug() << d->m_pluginManager->avaliablePlugins();
 
     foreach (QString pluginId, d->m_pluginManager->avaliablePlugins()) {
         Plugin *p = d->m_pluginManager->plugin(pluginId);

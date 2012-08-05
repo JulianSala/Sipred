@@ -32,6 +32,7 @@
 class Help : public QObject, public Plugin
 {
     Q_OBJECT
+
 public:
     Help(QObject *parent = 0);
     ~Help();

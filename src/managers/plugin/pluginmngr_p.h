@@ -40,6 +40,7 @@ class QDir;
 class PluginMngrPrivate
 {
     Q_DECLARE_PUBLIC(PluginMngr)
+
 public:
     PluginMngrPrivate(PluginMngr *q);
     ~PluginMngrPrivate();
