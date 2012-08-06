@@ -39,7 +39,7 @@ Help::Help(QObject *parent) :
 
 Help::~Help()
 {
-    stop();
+
 }
 
 QString Help::id() const
@@ -170,11 +170,14 @@ bool Help::start()
 
 bool Help::stop()
 {
-    delete m_menu;
-    delete m_dialog;
+//    if (m_menu)
+//        delete m_menu;
 
-    if (m_menu || m_dialog)
-        return false;
+//    if (m_dialog)
+//        delete m_dialog;
+
+//    if (m_menu || m_dialog)
+//        return false;
 
     return true;
 }

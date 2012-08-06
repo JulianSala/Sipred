@@ -6,7 +6,7 @@
 **
 *****************************************************************************
 **
-**  help.h is part of Sipred.
+**  sqlmodule.h is part of Sipred.
 **
 **    Sipred is free software: you can redistribute it and/or modify
 **    it under the terms of the GNU General Public License as published by
@@ -23,54 +23,66 @@
 **
 ****************************************************************************/
 
-#ifndef HELP_H
-#define HELP_H
+#ifndef SQLMODULE_H
+#define SQLMODULE_H
 
 #include <QObject>
-#include "plugin.h"
+#include "module.h"
 
-class Help : public QObject, public Plugin
+class SqlModule : public QObject, public Module
 {
     Q_OBJECT
 
 public:
-    Help(QObject *parent = 0);
-    ~Help();
+    SqlModule(QObject *parent = 0);
+    ~SqlModule();
 
     QString id() const;
     QString name() const;
     QString version() const;
     QString summary() const;
     QString category() const;
-    QString applyTo() const;
     QString author() const;
     QString mail() const;
     QString webside() const;
-    QString licence() const;
+    QString license() const;
     QIcon icon() const;
 
-    bool isConfigurable() const;
+    ModuleType type() const;
+
+    QVariant dependences() const;
+//    QString instance() const;
+    bool configurable() const;
     QWidget *configDialog() const;
     QHash<QString, QVariant> defaultConfig() const;
+    bool setConfig(QVariant);
     bool setConfigs(QVariant);
-    QStringList configList() const;
-    
-    QMenu *menu();
-    QDialog *dialog();
 
-    void registerPluginManager(PluginMngr *);
+    QAction *menu() const;
+    QWidget *centralWidget() const;
+    QWidget *controlsWidget() const;
+    QWidget *additionalWidget() const;
+    
+    void registerModuleManager(ModuleMngr *);
+
+private:
+    bool loadConfigDialog();
+
 signals:
     
+
 public slots:
     bool start();
     bool stop();
-    void launchDialog();
 
 private:
-    void loadDialog();
-    QMenu *m_menu;
-    QDialog *m_dialog;
-    
+    QWidget *m_configDialog;
+    QWidget *m_centralWidget;
+    QWidget *m_controlsWidget;
+    QWidget *m_additionalWidget;
+    QAction *m_menuAction;
+    QHash<QString, QVariant> m_config;
+    ModuleMngr *m_moduleManger;
 };
 
-#endif // HELP_H
+#endif // SQLMODULE_H

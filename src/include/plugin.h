@@ -28,7 +28,6 @@
 
 #include <QtGui>
 #include "libraryinfo.h"
-//#include "pluginmngr.h"
 
 class PluginMngr;
 

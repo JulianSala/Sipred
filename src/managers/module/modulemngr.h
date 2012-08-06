@@ -37,14 +37,20 @@ class ModuleMngrPrivate;
 class MODULEMNGR_EXPORT ModuleMngr : public QObject
 {
     Q_OBJECT
+
 public:
     ModuleMngr(QObject *parent = 0);
     ~ModuleMngr();
     bool activeModule(const QString &);
     bool disableModule(const QString &);
-    QStringList avaliableModules() const;
+    QStringList avaliableModules();
     Module *module(const QString &);
-            
+
+signals:
+    void moduleLoaded();
+    void moduleLoaded(QString);
+    void configChange();
+
 protected:
     ModuleMngr(const ModuleMngrPrivate &);
     ModuleMngrPrivate * const d_ptr;

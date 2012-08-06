@@ -6,7 +6,7 @@
 **
 *****************************************************************************
 **
-**  modulemngr_p.h is part of Sipred.
+**  sqlmodulefactory.cpp is part of Sipred.
 **
 **    Sipred is free software: you can redistribute it and/or modify
 **    it under the terms of the GNU General Public License as published by
@@ -23,46 +23,11 @@
 **
 ****************************************************************************/
 
-#ifndef MODULEMNGR_P_H
-#define MODULEMNGR_P_H
+#include "../include/sqlmodulefactory.h"
 
-#include <QtCore/QtGlobal>
-#include <QList>
-#include <QHash>
-
-class ModuleMngr;
-class ModuleInfo;
-class QPluginLoader;
-class QDir;
-class Module;
-
-class ModuleMngrPrivate
+Module *SqlModuleFactory::module()
 {
-    Q_DECLARE_PUBLIC(ModuleMngr)
+    return new SqlModule();
+}
 
-public:
-    ModuleMngrPrivate(ModuleMngr *q);
-    ~ModuleMngrPrivate();
-
-    void initModuleManager();
-    void loadModules();
-    bool setModulesPath(const QString &);
-    void registerModule(Module *, const QString &);
-
-    bool resolveDependences(const Module *) const;
-    void setStartSecuence(const Module *);
-
-    bool loadModule(const QString &moduleId);
-    bool unloadModule(const QString &moduleId);
-
-    QPluginLoader m_loader;
-    QHash<QString, Module *> m_activeModules;
-    QHash<QString, ModuleInfo> m_modulesInfo;
-    QHash<QString, QVariant> m_modulesConfig;
-    QDir m_modulesDir;
-    QStringList m_startSecuence;
-
-    ModuleMngr * const q_ptr;
-};
-
-#endif // MODULEMNGR_P_H
+Q_EXPORT_PLUGIN2(sqlmodule, SqlModuleFactory)

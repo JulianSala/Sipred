@@ -13,3 +13,7 @@ for qrc in locate('*.qrc'):
   print qrc
   rcc = qrc.replace('.qrc', '.rcc')
   call(['rcc', '-binary', '-no-compress', qrc , '-o', rcc])
+
+for rcc in locate('*.rcc'):
+  print 'Moving resource file to Sipred-Release/share'
+  call(['mv', rcc, '../Sipred-Release/share'])

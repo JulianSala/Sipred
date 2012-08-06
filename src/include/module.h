@@ -28,35 +28,62 @@
 
 #include <QtGui>
 
+class ModuleMngr;
+
 class Module
 {
 public:
     enum ModuleType {
-        Sql,
-        DataStream,
-        DataVisualizer,
-        Core
+        ModuleTypeUnknow,
+        ModuleTypeSql,
+        ModuleTypeDataStreamer,
+        ModuleTypeDataVisualizer,
+        ModuleTypeCore
     };
 
-    virtual QString id() = 0;
-    virtual QString name() = 0;
-    virtual QString version() = 0;
-    virtual QString summary() = 0;
-    virtual QString category() = 0;
-    virtual QString applyTo() = 0;
-    virtual QString author() = 0;
-    virtual QString mail() = 0;
-    virtual QString webside() = 0;
-    virtual QString license() = 0;
-    virtual QIcon icon() = 0;
+    enum ModuleError {
+        ModuleWarning,
+        ModuleCritical,
+        ModuleFatal
+    };
 
-    virtual ModuleType type() = 0;
+    virtual ~Module() = 0;
 
-    virtual QVariant dependences() = 0;
-    virtual QString instance() = 0;
-    virtual bool configurable() = 0;
+    virtual QString id() const = 0;
+    virtual QString name() const = 0;
+    virtual QString version() const = 0;
+    virtual QString summary() const = 0;
+    virtual QString category() const = 0;
+    virtual QString author() const = 0;
+    virtual QString mail() const = 0;
+    virtual QString webside() const = 0;
+    virtual QString license() const = 0;
+    virtual QIcon icon() const = 0;
+
+    virtual ModuleType type() const = 0;
+
+    virtual QVariant dependences() const = 0;
+//    virtual QString instance() const = 0;
+    virtual bool configurable() const = 0;
+    virtual QWidget *configDialog() const = 0;
+    virtual QHash<QString, QVariant> defaultConfig() const = 0;
+    virtual bool setConfig(QVariant) = 0;
+    virtual bool setConfigs(QVariant) = 0;
+
+    virtual QAction *menu() const = 0;
+    virtual QWidget *centralWidget() const = 0;
+    virtual QWidget *controlsWidget() const = 0;
+    virtual QWidget *additionalWidget() const = 0;
+
+    virtual void registerModuleManager(ModuleMngr *) = 0;
+
+Q_SIGNALS:
+    void error(const QString &message);
+
+
+public Q_SLOTS:
+    virtual bool start() = 0;
+    virtual bool stop() = 0;
 };
-
-//Q_DECLARE_INTERFACE(Module, "interface.module")
 
 #endif // MODULE_H

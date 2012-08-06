@@ -39,9 +39,9 @@
 
 class PluginInfo : public LibraryInfo
 {
-    Q_PROPERTY(QString applyTo READ applyTo WRITE setApplyTo RESET resetApplyTo)
-    Q_PROPERTY(bool configurable READ isConfigurable WRITE setConfigurable RESET resetConfigurable)
-    Q_PROPERTY(QStringList configList READ configList WRITE setConfigList RESET resetConfigList)
+//    Q_PROPERTY(QString applyTo READ applyTo WRITE setApplyTo RESET resetApplyTo)
+//    Q_PROPERTY(bool configurable READ isConfigurable WRITE setConfigurable RESET resetConfigurable)
+//    Q_PROPERTY(QStringList configList READ configList WRITE setConfigList RESET resetConfigList)
 
 public:
     PluginInfo();
@@ -57,7 +57,7 @@ private:
     bool m_configurable;
     QStringList m_configList;
 
-public slots:
+public:
     void setApplyTo(const QString &);
     void setConfigurable(const bool);
     void setConfigList(const QStringList &);
@@ -67,7 +67,6 @@ public slots:
     void resetConfigurable();
     void resetConfigList();
 
-public:
     PluginInfo& operator =(const PluginInfo &);
     bool operator ==(const PluginInfo &) const;
     friend QDataStream& operator <<(QDataStream &, const PluginInfo &);
