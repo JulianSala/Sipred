@@ -38,16 +38,24 @@ ModuleMngr::ModuleMngr(QObject *parent) :
 
 ModuleMngr::~ModuleMngr()
 {
+    Q_D(ModuleMngr);
 
+    foreach (QString moduleId, d->m_activeModules.keys()) {
+        d->unloadModule(moduleId);
+    }
 }
 
 bool ModuleMngr::activeModule(const QString &moduleId)
 {
+    Q_UNUSED(moduleId)
+
     return true;
 }
 
 bool ModuleMngr::disableModule(const QString &moduleId)
 {
+    Q_UNUSED(moduleId)
+
     return true;
 }
 
@@ -208,7 +216,7 @@ bool ModuleMngrPrivate::resolveDependences(const Module *module) const
 
 void ModuleMngrPrivate::setStartSecuence(const Module *module)
 {
-
+    Q_UNUSED(module)
 }
 
 bool ModuleMngrPrivate::loadModule(const QString &moduleId)

@@ -29,7 +29,6 @@
 #include <QHash>
 #include <QDebug>
 
-
 PluginMngr::PluginMngr(QObject *parent) :
     QObject(parent), d_ptr(new PluginMngrPrivate(this))
 {
@@ -250,6 +249,9 @@ bool PluginMngrPrivate::loadPlugin(const QString &pluginId)
     if (!plugin)
         return false;
 
+    plugin->registerPluginManager(q);
+    plugin->start();
+
     m_activePlugins.insert(pluginId, plugin);
 
     emit q->pluginLoaded();
@@ -268,7 +270,7 @@ bool PluginMngrPrivate::unloadPlugin(const QString &pluginId)
     }
 
     m_activePlugins.value(pluginId)->stop();
-    delete m_activePlugins.value(pluginId);
+//    delete m_activePlugins.value(pluginId);
     m_activePlugins.remove(pluginId);
 
     m_loader.setFileName(m_pluginsInfo.value(pluginId).fileName());

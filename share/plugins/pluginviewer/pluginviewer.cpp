@@ -170,7 +170,7 @@ bool PluginViewer::start()
     QTreeView *view = m_dialog->findChild<QTreeView *>();
     view->setModel(m_model);
 
-    connect(pluginManager, SIGNAL(pluginConfigurationChange()),
+    connect(pluginManager, SIGNAL(configChange()),
             this, SLOT(retrieveInformation()));
 
     retrieveInformation();

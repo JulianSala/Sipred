@@ -75,7 +75,7 @@ private:
 
     /* Tools Menu */
     QMenu *m_toolsMenu;
-    QAction *m_configAction();
+    QAction *m_configAction;
 
 };
 

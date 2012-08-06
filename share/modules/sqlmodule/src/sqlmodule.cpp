@@ -26,6 +26,8 @@
 #include "../include/sqlmodule.h"
 #include <modulemngr.h>
 
+#include <QtUiTools>
+
 SqlModule::SqlModule(QObject *parent) :
     QObject(parent)
 {
@@ -98,7 +100,7 @@ Module::ModuleType SqlModule::type() const
 
 QVariant SqlModule::dependences() const
 {
-    return QVariant();
+    return QStringList();
 }
 
 //QString SqlModule::instance() const
@@ -161,10 +163,33 @@ void SqlModule::registerModuleManager(ModuleMngr *modMngr)
 bool SqlModule::start()
 {
     m_menuAction = new QAction("SQL", this);
+    loadConfigDialog();
+
+    connect(m_menuAction, SIGNAL(triggered()), m_configDialog, SLOT(show()));
+
     return true;
 }
 
 bool SqlModule::stop()
 {
+    return true;
+}
+
+bool SqlModule::loadConfigDialog()
+{
+    QFile file(":/ui/sqlmodule_config.ui");
+
+    if (!file.open(QIODevice::ReadOnly)) {
+        qWarning() << "Can't open config sql dialog.";
+        return false;
+    }
+
+    QUiLoader loader;
+
+    m_configDialog = qobject_cast<QWidget *>(loader.load(&file));
+
+    if (!m_configDialog)
+        return false;
+
     return true;
 }

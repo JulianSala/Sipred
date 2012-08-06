@@ -65,6 +65,9 @@ public:
     
     void registerModuleManager(ModuleMngr *);
 
+private:
+    bool loadConfigDialog();
+
 signals:
     
 

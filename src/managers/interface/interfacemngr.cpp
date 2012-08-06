@@ -55,6 +55,11 @@ void InterfaceMngr::registerModuleManager(ModuleMngr *moduleMngr)
     d->m_moduleManager = moduleMngr;
 
     qDebug() << d->m_moduleManager->avaliableModules();
+
+    foreach (QString moduleId, d->m_moduleManager->avaliableModules()) {
+        Module *m = d->m_moduleManager->module(moduleId);
+        d->m_toolsMenu->addAction(m->menu());
+    }
 }
 
 void InterfaceMngr::registerPluginManager(PluginMngr *pluginMngr)
@@ -79,6 +84,8 @@ void InterfaceMngr::initInterface()
         d->setDefaultWindow();
 
     d->centerWindow();
+
+    d->setDefaultConfigWidget();
 
     d->loadDockWidget();
 
@@ -120,6 +127,13 @@ bool InterfaceMngr::saveAsProject()
 void InterfaceMngr::quitApp()
 {
 
+}
+
+void InterfaceMngr::startConfigDialog()
+{
+    Q_D(InterfaceMngr);
+
+    d->m_configWidget->show();
 }
 
 /****************************************************************************
@@ -236,6 +250,8 @@ void InterfaceMngrPrivate::setDefaultConfigWidget()
 
     if (!m_configWidget)
         qFatal("Can't load default configwidget");
+
+    m_configWidget->setWindowFlags(Qt::Dialog);
 }
 
 void InterfaceMngrPrivate::initializeMenus()
@@ -290,10 +306,20 @@ void InterfaceMngrPrivate::initializeMenus()
 
     QObject::connect(m_quitAction, SIGNAL(triggered()), q, SLOT(quitApp()));
 
-    QMenu *m_fileMenu = m_mainwindow->menuBar()->addMenu("&Archivo");
+    m_fileMenu = m_mainwindow->menuBar()->addMenu("&Archivo");
     m_fileMenu->addActions(actionList);
     m_fileMenu->addSeparator();
     m_fileMenu->addAction(m_quitAction);
+
+    m_configAction = new QAction(m_mainwindow);
+    m_configAction->setText("&Configuración");
+    m_configAction->setToolTip("Configurar componentes de Sipred");
+    m_configAction->setStatusTip("Configurar Sipred");
+
+    QObject::connect(m_configAction, SIGNAL(triggered()), q, SLOT(startConfigDialog()));
+
+    m_toolsMenu = m_mainwindow->menuBar()->addMenu("&Herramientas");
+    m_toolsMenu->addAction(m_configAction);
 }
 
 void InterfaceMngrPrivate::centerWindow()
