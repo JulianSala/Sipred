@@ -37,6 +37,7 @@ class InterfaceMngrPrivate;
 class INTERFACEMNGR_EXPORT InterfaceMngr : public QObject
 {
     Q_OBJECT
+
 public:
     InterfaceMngr(QObject *parent = 0);
     ~InterfaceMngr();
@@ -47,6 +48,17 @@ public slots:
     void registerPluginManager(PluginMngr *pluginMngr);
     void initInterface();
     void endInterface();
+
+    /* File Menu */
+    void newProject();
+    bool openProject();
+    bool saveProject();
+    bool saveAsProject();
+    void quitApp();
+
+    /* Tools Menu */
+
+    void startConfigDialog();
 
 protected:
     InterfaceMngr(const InterfaceMngrPrivate &d);

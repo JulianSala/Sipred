@@ -1,12 +1,14 @@
+#
 # Debug database and debug table for Sipred debug control.
 # Run as:
-# $ mysql -e "source _path_to_this_file_/create_dbg.sql"
+# $ mysql < create_dbg.sql"
 #
 # Example test dbg:
 # SET @l_proc_id := 'test_debug';
 # CALL Debug.debug_on(@l_proc_id);
 # CALL Debug.debug_insert(@l_proc_id,'Testing Debug');
 # CALL Debug.debug_off(@l_proc_id);
+#
 
 DROP DATABASE IF EXISTS Debug;
 CREATE DATABASE Debug;
@@ -18,7 +20,7 @@ CREATE TABLE  Debug.debug (
   debug_output TEXT,
   line_id INT(11) NOT NULL auto_increment,
   PRIMARY KEY  (line_id)
-)
+);
 
 DELIMITER %%
 
@@ -39,9 +41,9 @@ END %%
 
 CREATE PROCEDURE Debug.debug_off(IN p_procedure_id VARCHAR(50))
 BEGIN
-  CALL Debug.debug_insert(p_procedure_id, CONCAT('Debug ended at: ', NOW()));;
+  CALL Debug.debug_insert(p_procedure_id, CONCAT('Debug ended at: ', NOW()));
   SELECT debug_output FROM Debug.debug WHERE proc_id = p_procedure_id ORDER BY line_id;
-  DELETE FROM Debug WHERE proc_id = p_procedure_id;
+  DELETE FROM Debug.debug WHERE proc_id = p_procedure_id;
 END %%
 
 DELIMITER ;

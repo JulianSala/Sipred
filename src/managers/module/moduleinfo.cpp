@@ -25,21 +25,13 @@
 
 #include "moduleinfo.h"
 
-ModuleInfo::ModuleInfo() :
-    QObject(0)
+ModuleInfo::ModuleInfo()
 {
     this->resetAll();
 }
 
 ModuleInfo::ModuleInfo(const ModuleInfo &object) :
-    QObject(object.parent()),
     LibraryInfo(object)
-{
-    this->resetAll();
-}
-
-ModuleInfo::ModuleInfo(QObject *parent) :
-    QObject(parent)
 {
     this->resetAll();
 }
@@ -47,6 +39,11 @@ ModuleInfo::ModuleInfo(QObject *parent) :
 ModuleInfo::~ModuleInfo()
 {
 
+}
+
+QVariant ModuleInfo::dependences() const
+{
+    return m_dependences;
 }
 
 QString ModuleInfo::instance() const
@@ -59,6 +56,16 @@ bool ModuleInfo::isConfigurable() const
     return m_configurable;
 }
 
+Module::ModuleType ModuleInfo::type() const
+{
+    return m_type;
+}
+
+void ModuleInfo::setDependences(const QVariant &dependences)
+{
+    m_dependences = dependences;
+}
+
 void ModuleInfo::setInstance(const QString &inst)
 {
     m_instance = inst;
@@ -69,11 +76,23 @@ void ModuleInfo::setConfigurable(bool conf)
     m_configurable = conf;
 }
 
+void ModuleInfo::setType(const Module::ModuleType &type)
+{
+    m_type = type;
+}
+
 void ModuleInfo::resetAll()
 {
     this->resetBasicInfo();
+    this->resetDependences();
     this->resetInstance();
     this->resetConfigurable();
+    this->resetType();
+}
+
+void ModuleInfo::resetDependences()
+{
+    m_dependences = QVariant();
 }
 
 void ModuleInfo::resetInstance()
@@ -86,12 +105,18 @@ void ModuleInfo::resetConfigurable()
     m_configurable = false;
 }
 
+void ModuleInfo::resetType()
+{
+    m_type = Module::ModuleTypeUnknow;
+}
+
 ModuleInfo& ModuleInfo::operator =(const ModuleInfo &info)
 {
     if (this != &info) {
         this->m_info = info.m_info;
         this->m_configurable = info.m_configurable;
         this->m_instance = info.m_instance;
+        this->m_type = info.m_type;
     }
 
     return *this;
@@ -106,6 +131,25 @@ QDebug& operator <<(QDebug dbg, const ModuleInfo &info)
         dbg << "Configurable:" << "yes" << endl;
     else
         dbg << "Configurable:" << "no" << endl;
+
+    dbg << "Type:";
+    switch (info.type()) {
+    case Module::ModuleTypeSql:
+        dbg << "SQL";
+        break;
+    case Module::ModuleTypeDataStreamer:
+        dbg << "Data Streamer";
+        break;
+    case Module::ModuleTypeDataVisualizer:
+        dbg << "Data Visualizer";
+        break;
+    case Module::ModuleTypeCore:
+        dbg << "Core";
+        break;
+    default:
+        dbg << "Unknow";
+        break;
+    }
 
     return dbg.maybeSpace();
 }

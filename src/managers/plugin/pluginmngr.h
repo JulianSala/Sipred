@@ -47,7 +47,9 @@ public:
     Plugin * plugin(const QString &);
 
 signals:
-    void pluginConfigurationChange();
+    void pluginLoaded();
+    void pluginLoaded(QString);
+    void configChange();
 
 protected:
     PluginMngr(const PluginMngrPrivate &);

@@ -29,7 +29,6 @@
 #include <QHash>
 #include <QDebug>
 
-
 PluginMngr::PluginMngr(QObject *parent) :
     QObject(parent), d_ptr(new PluginMngrPrivate(this))
 {
@@ -38,7 +37,11 @@ PluginMngr::PluginMngr(QObject *parent) :
 
 PluginMngr::~PluginMngr()
 {
+    Q_D(PluginMngr);
 
+    foreach (QString pluginId, d->m_activePlugins.keys()) {
+        d->unloadPlugin(pluginId);
+    }
 }
 
 bool PluginMngr::activePlugin(const QString &pluginId)
@@ -72,9 +75,21 @@ PluginInfo PluginMngr::pluginInfo(const QString &pluginId)
     return d->m_pluginsInfo.value(pluginId, PluginInfo());
 }
 
+QStringList PluginMngr::avaliablePlugins()
+{
+    Q_D(PluginMngr);
+
+    QStringList list = d->m_pluginsInfo.keys();
+
+    return list;
+}
+
 Plugin* PluginMngr::plugin(const QString &pluginId)
 {
     Q_D(PluginMngr);
+
+    if (d->m_activePlugins.contains(pluginId))
+        return d->m_activePlugins.value(pluginId);
 
     if (!d->m_pluginsInfo.contains(pluginId)) {
         qWarning() << "Requested plugin id:" << pluginId
@@ -82,29 +97,10 @@ Plugin* PluginMngr::plugin(const QString &pluginId)
         return NULL;
     }
 
-    d->m_loader.setFileName(d->m_pluginsInfo.value(pluginId).fileName());
+    if (d->loadPlugin(pluginId))
+        return d->m_activePlugins.value(pluginId);
 
-    QObject *pluginInstance = d->m_loader.instance();
-
-    if (!pluginInstance)
-        return NULL;
-
-    PluginFactory *pluginFactory = qobject_cast<PluginFactory *>(pluginInstance);
-
-    if (!pluginInstance)
-        return NULL;
-
-    Plugin *plugin = pluginFactory->plugin();
-
-    d->m_activePlugins.insert(pluginId, plugin);
-
-    if (!plugin)
-        return NULL;
-
-    plugin->registerPluginManager(this);
-    plugin->start();
-
-    return plugin;
+    return NULL;
 }
 
 
@@ -119,15 +115,14 @@ PluginMngrPrivate::PluginMngrPrivate(PluginMngr *parent) :
     loadPlugins();
 }
 
-void PluginMngrPrivate::initPluginManager()
-{
-    setPluginsPath("../lib/plugins");
-    qDebug() << "Plugin path is:" << m_pluginsDir.path();
-}
-
 PluginMngrPrivate::~PluginMngrPrivate()
 {
 
+}
+
+void PluginMngrPrivate::initPluginManager()
+{
+    setPluginsPath("../lib/plugins");
 }
 
 void PluginMngrPrivate::loadPlugins()
@@ -180,7 +175,7 @@ bool PluginMngrPrivate::setPluginsPath(const QString &path)
     QDir dir(path);
 
     if (!dir.exists()) {
-        qWarning() << "Path" << path << "doesn't exist";
+        qWarning() << "Plugin path" << path << "doesn't exist";
         return false;
     }
 
@@ -217,7 +212,7 @@ void PluginMngrPrivate::registerPlugin(Plugin *plugin,
 
     m_pluginsInfo.insert(info.id(), info);
 
-    qDebug() << "Register info:";
+    qDebug() << "Register plugin:";
     qDebug() << info;
 }
 
@@ -228,6 +223,12 @@ bool PluginMngrPrivate::loadPlugin(const QString &pluginId)
     if (!m_pluginsInfo.contains(pluginId)) {
         qWarning() << "Requested plugin id:" << pluginId << endl
                    << "is not avaliable.";
+        return false;
+    }
+
+    if (m_activePlugins.contains(pluginId)) {
+        qWarning() << "Requested plugin id:" << pluginId << endl
+                   << "is already loaded.";
         return false;
     }
 
@@ -245,13 +246,17 @@ bool PluginMngrPrivate::loadPlugin(const QString &pluginId)
 
     Plugin *plugin = pluginFactory->plugin();
 
-
     if (!plugin)
         return false;
 
+    plugin->registerPluginManager(q);
+    plugin->start();
+
     m_activePlugins.insert(pluginId, plugin);
 
-    emit q->pluginConfigurationChange();
+    emit q->pluginLoaded();
+    emit q->pluginLoaded(pluginId);
+    emit q->configChange();
 
     return true;
 }
@@ -264,25 +269,17 @@ bool PluginMngrPrivate::unloadPlugin(const QString &pluginId)
         return false;
     }
 
-    delete m_activePlugins.value(pluginId);
+    m_activePlugins.value(pluginId)->stop();
+//    delete m_activePlugins.value(pluginId);
+    m_activePlugins.remove(pluginId);
 
     m_loader.setFileName(m_pluginsInfo.value(pluginId).fileName());
-    m_loader.unload();
 
-    if (m_loader.isLoaded()) {
+    if (!m_loader.unload()) {
         qWarning() << "Can't unload plugin id:" << pluginId << endl
                    << m_loader.errorString();
         return false;
     }
 
     return true;
-}
-
-QStringList PluginMngr::avaliablePlugins()
-{
-    Q_D(PluginMngr);
-
-    QStringList list = d->m_pluginsInfo.keys();
-
-    return list;
 }

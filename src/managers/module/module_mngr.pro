@@ -15,10 +15,12 @@ HEADERS += \
     modulemngr_p.h \
     moduleinfo.h \
     modulemngr.h \
+    sequencer.h
 
 SOURCES += \
     modulemngr.cpp \
-    moduleinfo.cpp
+    moduleinfo.cpp \
+    sequencer.cpp
 
 DEFINES += \
     MODULEMNGRLIB_LIBRARY
