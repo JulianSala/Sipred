@@ -1,0 +1,10 @@
+# Script for create initial DB for Sipred
+# Must pass the parameter _db_name_ using 
+# $ mysql -u root -p -e "SET @_db_name_:='Sipred'; source _path_to_this_file_/create_db.sql;"
+
+SET @l_proc_id := 'create_main_db'
+CALL Debug.debug_on(@l_proc_id)
+
+SET @_main_db_exists_ := (SELECT IF(EXISTS(SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = @_db_name_), 'yes', 'no'));
+
+CALL Debug.debug_insert(@l_proc_id, CONCAT('Main db already exist: ', @_main_db_exists_));

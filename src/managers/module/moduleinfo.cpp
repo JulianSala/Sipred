@@ -31,9 +31,11 @@ ModuleInfo::ModuleInfo()
 }
 
 ModuleInfo::ModuleInfo(const ModuleInfo &object) :
-    LibraryInfo(object)
+    LibraryInfo(object),
+    m_configurable(object.m_configurable),
+    m_dependences(object.m_dependences)
 {
-    this->resetAll();
+    m_info = object.basicInfo();
 }
 
 ModuleInfo::~ModuleInfo()
@@ -122,34 +124,7 @@ ModuleInfo& ModuleInfo::operator =(const ModuleInfo &info)
     return *this;
 }
 
-QDebug& operator <<(QDebug dbg, const ModuleInfo &info)
-{
-    dbg << "Module information" << endl;
-    dbg << info;
-    dbg << "Instance:" << info.instance() << endl;
-    if (info.isConfigurable())
-        dbg << "Configurable:" << "yes" << endl;
-    else
-        dbg << "Configurable:" << "no" << endl;
+//QDebug& operator <<(QDebug dbg, const ModuleInfo &info)
+//{
 
-    dbg << "Type:";
-    switch (info.type()) {
-    case Module::ModuleTypeSql:
-        dbg << "SQL";
-        break;
-    case Module::ModuleTypeDataStreamer:
-        dbg << "Data Streamer";
-        break;
-    case Module::ModuleTypeDataVisualizer:
-        dbg << "Data Visualizer";
-        break;
-    case Module::ModuleTypeCore:
-        dbg << "Core";
-        break;
-    default:
-        dbg << "Unknow";
-        break;
-    }
-
-    return dbg.maybeSpace();
-}
+//}

@@ -119,7 +119,6 @@ void ModuleMngrPrivate::loadModules()
             if (!QLibrary::isLibrary(fileName))
                 continue;
 
-
             QString filePath = m_modulesDir.absoluteFilePath(fileName);
 
             m_loader.setFileName(filePath);
@@ -274,7 +273,7 @@ bool ModuleMngrPrivate::unloadModule(const QString &moduleId)
     }
 
     m_activeModules.value(moduleId)->stop();
-    delete m_activeModules.value(moduleId);
+//    delete m_activeModules.value(moduleId);
     m_activeModules.remove(moduleId);
 
     m_loader.setFileName(m_modulesInfo.value(moduleId).fileName());

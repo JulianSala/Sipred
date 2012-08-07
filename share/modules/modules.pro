@@ -2,4 +2,5 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
-    sqlmodule
+    sqlmodule \
+    configmodule

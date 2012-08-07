@@ -58,7 +58,8 @@ void InterfaceMngr::registerModuleManager(ModuleMngr *moduleMngr)
 
     foreach (QString moduleId, d->m_moduleManager->avaliableModules()) {
         Module *m = d->m_moduleManager->module(moduleId);
-        d->m_toolsMenu->addAction(m->menu());
+        d->addConfigPage(m->configDialog());
+//        d->m_toolsMenu->addAction(m->menu());
     }
 }
 
@@ -214,6 +215,17 @@ void InterfaceMngrPrivate::setDefaultWindow()
 
     QIcon icon(":/logo/logo_sipred");
     m_mainwindow->setWindowIcon(icon);
+}
+
+void InterfaceMngrPrivate::addConfigPage(QWidget *widget)
+{
+    if (!widget)
+        return;
+
+    QStackedWidget *staked = m_configWidget->findChild<QStackedWidget *>();
+    staked->addWidget(widget);
+
+
 }
 
 void InterfaceMngrPrivate::setDefaultDock()

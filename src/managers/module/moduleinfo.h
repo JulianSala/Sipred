@@ -71,6 +71,10 @@ public:
 
 Q_DECLARE_METATYPE(ModuleInfo)
 
-QDebug& operator <<(QDebug dbg, const ModuleInfo &info);
+inline QDebug& operator <<(QDebug dbg, const ModuleInfo &info)
+{
+    dbg << info;
+    return dbg.maybeSpace();
+}
 
 #endif // MODULEINFO_H

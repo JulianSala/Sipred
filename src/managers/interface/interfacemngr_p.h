@@ -43,6 +43,8 @@ public:
     void loadDockWidget();
     void setDefaultWindow();
 
+    void addConfigPage(QWidget *);
+
     InterfaceMngr * const q_ptr;
 
     QMainWindow *m_mainwindow;

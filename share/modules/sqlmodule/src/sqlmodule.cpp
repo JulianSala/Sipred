@@ -115,7 +115,7 @@ bool SqlModule::configurable() const
 
 QWidget* SqlModule::configDialog() const
 {
-    return NULL;
+    return m_configDialog;
 }
 
 QHash<QString, QVariant> SqlModule::defaultConfig() const
