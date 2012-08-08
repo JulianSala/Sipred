@@ -54,13 +54,19 @@ void InterfaceMngr::registerModuleManager(ModuleMngr *moduleMngr)
 
     d->m_moduleManager = moduleMngr;
 
-    qDebug() << d->m_moduleManager->avaliableModules();
+    qDebug() << d->m_moduleManager->avaliableModules(Module::ModuleTypeCore);
 
-    foreach (QString moduleId, d->m_moduleManager->avaliableModules()) {
-        Module *m = d->m_moduleManager->module(moduleId);
-        d->addConfigPage(m->configDialog());
-//        d->m_toolsMenu->addAction(m->menu());
+    foreach (QString moduleId, d->m_moduleManager->avaliableModules(Module::ModuleTypeCore)) {
+        Module *module = d->m_moduleManager->module(moduleId);
+        if (module->menu())
+            d->m_mainwindow->menuBar()->addMenu(module->menu());
     }
+
+//    foreach (QString moduleId, d->m_moduleManager->avaliableModules()) {
+//        Module *m = d->m_moduleManager->module(moduleId);
+////        d->addConfigPage(m->configDialog());
+////        d->m_toolsMenu->addAction(m->menu());
+//    }
 }
 
 void InterfaceMngr::registerPluginManager(PluginMngr *pluginMngr)
@@ -128,13 +134,6 @@ bool InterfaceMngr::saveAsProject()
 void InterfaceMngr::quitApp()
 {
 
-}
-
-void InterfaceMngr::startConfigDialog()
-{
-    Q_D(InterfaceMngr);
-
-    d->m_configWidget->show();
 }
 
 /****************************************************************************
@@ -217,17 +216,6 @@ void InterfaceMngrPrivate::setDefaultWindow()
     m_mainwindow->setWindowIcon(icon);
 }
 
-void InterfaceMngrPrivate::addConfigPage(QWidget *widget)
-{
-    if (!widget)
-        return;
-
-    QStackedWidget *staked = m_configWidget->findChild<QStackedWidget *>();
-    staked->addWidget(widget);
-
-
-}
-
 void InterfaceMngrPrivate::setDefaultDock()
 {
     QFile file(":/ui/dockwidget");
@@ -252,18 +240,7 @@ void InterfaceMngrPrivate::setDefaultCenterWidget()
 
 void InterfaceMngrPrivate::setDefaultConfigWidget()
 {
-    QFile file(":/ui/configwidget");
 
-    if (!file.open(QIODevice::ReadOnly))
-        qFatal("Can't open default configwidget.ui");
-
-    QUiLoader loader;
-    m_configWidget = qobject_cast<QWidget *>(loader.load(&file, m_mainwindow));
-
-    if (!m_configWidget)
-        qFatal("Can't load default configwidget");
-
-    m_configWidget->setWindowFlags(Qt::Dialog);
 }
 
 void InterfaceMngrPrivate::initializeMenus()
@@ -328,10 +305,7 @@ void InterfaceMngrPrivate::initializeMenus()
     m_configAction->setToolTip("Configurar componentes de Sipred");
     m_configAction->setStatusTip("Configurar Sipred");
 
-    QObject::connect(m_configAction, SIGNAL(triggered()), q, SLOT(startConfigDialog()));
-
-    m_toolsMenu = m_mainwindow->menuBar()->addMenu("&Herramientas");
-    m_toolsMenu->addAction(m_configAction);
+//    QObject::connect(m_configAction, SIGNAL(triggered()), q, SLOT(startConfigDialog()));
 }
 
 void InterfaceMngrPrivate::centerWindow()

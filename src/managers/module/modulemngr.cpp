@@ -68,6 +68,21 @@ QStringList ModuleMngr::avaliableModules()
     return list;
 }
 
+QStringList ModuleMngr::avaliableModules(const Module::ModuleType &type)
+{
+    Q_D(ModuleMngr);
+
+    QStringList list;
+
+    foreach (QString moduleId, d->m_modulesInfo.keys()) {
+        qDebug() << d->m_modulesInfo.value(moduleId).type();
+        if (d->m_modulesInfo.value(moduleId).type() == type)
+            list.append(moduleId);
+    }
+
+    return list;
+}
+
 Module *ModuleMngr::module(const QString &moduleId)
 {
     Q_D(ModuleMngr);

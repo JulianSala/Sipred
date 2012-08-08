@@ -58,7 +58,7 @@ public:
     bool setConfig(QVariant);
     bool setConfigs(QVariant);
 
-    QAction *menu() const;
+    QMenu *menu() const;
     QWidget *centralWidget() const;
     QWidget *controlsWidget() const;
     QWidget *additionalWidget() const;
@@ -80,7 +80,7 @@ private:
     QWidget *m_centralWidget;
     QWidget *m_controlsWidget;
     QWidget *m_additionalWidget;
-    QAction *m_menuAction;
+    QMenu *m_menu;
     QHash<QString, QVariant> m_config;
     ModuleMngr *m_moduleManger;
 };

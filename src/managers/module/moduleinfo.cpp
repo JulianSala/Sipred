@@ -33,6 +33,7 @@ ModuleInfo::ModuleInfo()
 ModuleInfo::ModuleInfo(const ModuleInfo &object) :
     LibraryInfo(object),
     m_configurable(object.m_configurable),
+    m_type(object.m_type),
     m_dependences(object.m_dependences)
 {
     m_info = object.basicInfo();
@@ -123,8 +124,3 @@ ModuleInfo& ModuleInfo::operator =(const ModuleInfo &info)
 
     return *this;
 }
-
-//QDebug& operator <<(QDebug dbg, const ModuleInfo &info)
-//{
-
-//}

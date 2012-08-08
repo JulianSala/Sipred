@@ -35,6 +35,7 @@ class ConfigModule : public QObject, public Module
 
 public:
     ConfigModule(QObject *parent = 0);
+    ~ConfigModule();
     
     QString id() const;
     QString name() const;
@@ -56,7 +57,7 @@ public:
     bool setConfig(QVariant);
     bool setConfigs(QVariant);
 
-    QAction *menu() const;
+    QMenu *menu() const;
     QWidget *centralWidget() const;
     QWidget *controlsWidget() const;
     QWidget *additionalWidget() const;
@@ -70,11 +71,15 @@ public slots:
     bool stop();
 
     void okButtonClicked();
+    void applyButtonClicked();
+    void cancelButtonClucked();
 
 private:
     bool loadDialog();
+    void initMenu();
 
-    QAction *m_menu;
+    QSignalMapper *signalMapper;
+    QMenu *m_menu;
     QWidget *m_widget;
 
     ModuleMngr *m_moduleMngr;

@@ -43,7 +43,7 @@ public:
     void loadDockWidget();
     void setDefaultWindow();
 
-    void addConfigPage(QWidget *);
+//    void addConfigPage(QWidget *);
 
     InterfaceMngr * const q_ptr;
 
@@ -63,7 +63,6 @@ private:
     QToolBar *m_toolBar;
     QWidget *m_centralWidget;
     QDockWidget *m_dockWidget;
-    QWidget *m_configWidget;
     QMap<QString, QVariant> *m_treeInformation;
 
     /* Actions */
@@ -76,7 +75,6 @@ private:
     QAction *m_quitAction;
 
     /* Tools Menu */
-    QMenu *m_toolsMenu;
     QAction *m_configAction;
 
 };

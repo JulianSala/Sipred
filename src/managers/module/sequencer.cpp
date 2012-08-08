@@ -36,10 +36,10 @@ Sequencer::Sequencer(QObject *parent) :
 void Sequencer::insertSequence(const QString &id, const QStringList &depIds)
 {
     if (depIds.isEmpty()) {
-        QPair<QStringList, int> pair;
-        pair.first = depIds;
+        QPair<QString, int> pair;
+        pair.first = id;
         pair.second = 0;
-        m_sequence.insert(id, pair);
+        m_sequence.insert(pair, depIds);
     }
 
     int depLevel = higerLevel(depIds);

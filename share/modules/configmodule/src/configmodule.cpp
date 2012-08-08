@@ -33,6 +33,11 @@ ConfigModule::ConfigModule(QObject *parent) :
 {
 }
 
+ConfigModule::~ConfigModule()
+{
+    stop();
+}
+
 QString ConfigModule::id() const
 {
     return QString("core.configModule");
@@ -121,7 +126,7 @@ bool ConfigModule::setConfigs(QVariant /*values*/)
     return true;
 }
 
-QAction* ConfigModule::menu() const
+QMenu *ConfigModule::menu() const
 {
     return m_menu;
 }
@@ -148,6 +153,12 @@ void ConfigModule::registerModuleManager(ModuleMngr *moduleMngr)
 
 bool ConfigModule::start()
 {
+    signalMapper = new QSignalMapper(this);
+
+    if (!loadDialog())
+        return false;
+    initMenu();
+
     return true;
 }
 
@@ -157,6 +168,16 @@ bool ConfigModule::stop()
 }
 
 void ConfigModule::okButtonClicked()
+{
+
+}
+
+void ConfigModule::applyButtonClicked()
+{
+
+}
+
+void ConfigModule::cancelButtonClucked()
 {
 
 }
@@ -179,12 +200,43 @@ bool ConfigModule::loadDialog()
         return false;
     }
 
+    m_widget->setWindowTitle("Configuración General");
+
     QPushButton *okButton = m_widget->findChild<QPushButton *>("okPushButton");
-    connect(okButton, SIGNAL(clicked()), this, SLOT(okButtonClicked()));
-    connect(okButton, SIGNAL(clicked()), m_widget, SLOT(close()));
+    if (okButton) {
+        connect(okButton, SIGNAL(clicked()), this, SLOT(okButtonClicked()));
+        connect(okButton, SIGNAL(clicked()), m_widget, SLOT(close()));
+    } else {
+        qWarning() << "ConfigModule: Can't find ok button.";
+    }
 
     QPushButton *applyButton = m_widget->findChild<QPushButton *>("applyPushButton");
-    connect(applyButton, SIGNAL(clicked()),
+    if (applyButton) {
+        connect(applyButton, SIGNAL(clicked()), this, SLOT(applyButtonClicked()));
+    } else {
+        qWarning() << "ConfigModule: Can't find apply button.";
+    }
+
+    QPushButton *cancelButton = m_widget->findChild<QPushButton *>("cancelPushButton");
+    if (cancelButton) {
+        connect(cancelButton, SIGNAL(clicked()), this, SLOT(cancelButtonClucked()));
+        connect(cancelButton, SIGNAL(clicked()), m_widget, SLOT(close()));
+    } else {
+        qWarning() << "ConfigModule: Can't find cancel button.";
+    }
+
+    QListView *listView = m_widget->findChild<QListView *>();
+    if (listView) {
+//        connect(listView, SIGNAL(pressed(QModelIndex)), this, SLOT());
+    } else {
+        qWarning() << "ConfigModule: Can't find list view.";
+    }
 
     return true;
+}
+
+void ConfigModule::initMenu()
+{
+    m_menu = new QMenu("&Herramientas", m_widget);
+    m_menu->addAction("Configuración", m_widget, SLOT(show()));
 }

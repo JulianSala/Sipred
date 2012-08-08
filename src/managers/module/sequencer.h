@@ -46,7 +46,7 @@ private:
     void insertLowerLevel();
     void insertLevetAt(int);
 
-    QMap<QString, QPair<QStringList, int> > m_sequence;
+    QMap<QPair<QString, int>, QStringList> m_sequence;
 };
 
 #endif // SEQUENCER_H

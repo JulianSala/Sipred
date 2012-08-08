@@ -44,6 +44,7 @@ public:
     bool activeModule(const QString &);
     bool disableModule(const QString &);
     QStringList avaliableModules();
+    QStringList avaliableModules(const Module::ModuleType &);
     Module *module(const QString &);
 
 signals:

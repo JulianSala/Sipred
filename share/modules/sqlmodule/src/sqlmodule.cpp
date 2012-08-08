@@ -35,7 +35,7 @@ SqlModule::SqlModule(QObject *parent) :
     m_centralWidget = NULL;
     m_controlsWidget = NULL;
     m_additionalWidget = NULL;
-    m_menuAction = NULL;
+    m_menu = NULL;
 }
 
 SqlModule::~SqlModule()
@@ -133,9 +133,9 @@ bool SqlModule::setConfigs(QVariant)
     return true;
 }
 
-QAction *SqlModule::menu() const
+QMenu *SqlModule::menu() const
 {
-    return m_menuAction;
+    return m_menu;
 }
 
 QWidget* SqlModule::centralWidget() const
@@ -162,10 +162,12 @@ void SqlModule::registerModuleManager(ModuleMngr *modMngr)
 
 bool SqlModule::start()
 {
-    m_menuAction = new QAction("SQL", this);
-    loadConfigDialog();
+    if (!loadConfigDialog())
+        return false;
 
-    connect(m_menuAction, SIGNAL(triggered()), m_configDialog, SLOT(show()));
+    m_menu = new QMenu("SQL", m_configDialog);
+
+    connect(m_menu->menuAction(), SIGNAL(triggered()), m_configDialog, SLOT(show()));
 
     return true;
 }

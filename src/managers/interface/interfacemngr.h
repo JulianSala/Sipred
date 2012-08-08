@@ -58,8 +58,6 @@ public slots:
 
     /* Tools Menu */
 
-    void startConfigDialog();
-
 protected:
     InterfaceMngr(const InterfaceMngrPrivate &d);
     InterfaceMngrPrivate * const d_ptr;
