@@ -36,13 +36,14 @@ Sequencer::Sequencer(QObject *parent) :
 void Sequencer::insertSequence(const QString &id, const QStringList &depIds)
 {
     if (depIds.isEmpty()) {
-        QPair<QString, int> pair;
-        pair.first = id;
-        pair.second = 0;
-        m_sequence.insert(pair, depIds);
+        m_sequence.insert(id, qMakePair(depIds, 0));
+        return;
     }
 
-    int depLevel = higerLevel(depIds);
+    int maxDep = higerLevel(depIds);
+    int newLevel = maxDep + 1;
+    insertLevetAt(newLevel);
+    m_sequence.insert(id, qMakePair(depIds, newLevel));
 }
 
 int Sequencer::getLevel(const QString &id)
@@ -51,6 +52,28 @@ int Sequencer::getLevel(const QString &id)
         return 0;
 
     return m_sequence.value(id).second;
+}
+
+QStringList Sequencer::getListAtLevel(const int &level)
+{
+    if (level > higerLevel() || level < 0)
+        return QStringList();
+
+    QStringList list;
+    foreach (QString id, m_sequence.keys()) {
+        if (m_sequence.value(id).second == level)
+            list.append(id);
+    }
+
+    return list;
+}
+
+QStringList Sequencer::getDependences(const QString &id)
+{
+    if (!m_sequence.contains(id))
+        return QStringList();
+
+    return m_sequence.value(id).first;
 }
 
 int Sequencer::higerLevel() const
@@ -71,8 +94,9 @@ int Sequencer::higerLevel(const QStringList &list)
     int max = 0;
 
     foreach (QString id, list) {
-        if (max < getLevel(id))
-            max = getLevel(id);
+        int lev = getLevel(id);
+        if (max < lev)
+            max = lev;
     }
 
     return max;
@@ -89,7 +113,7 @@ void Sequencer::insertLevetAt(int lev)
         return;
 
     foreach (QString id, m_sequence.keys()) {
-        if (lev > m_sequence.value(id).second)
+        if (lev >= m_sequence.value(id).second)
             continue;
 
         QPair<QStringList, int> pair = m_sequence.value(id);

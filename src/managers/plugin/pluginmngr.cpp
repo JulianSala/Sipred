@@ -213,7 +213,7 @@ void PluginMngrPrivate::registerPlugin(Plugin *plugin,
     m_pluginsInfo.insert(info.id(), info);
 
     qDebug() << "Register plugin:";
-    qDebug() << info;
+//    qDebug() << info;
 }
 
 bool PluginMngrPrivate::loadPlugin(const QString &pluginId)

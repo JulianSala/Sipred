@@ -26,6 +26,7 @@
 #include "modulemngr.h"
 #include "modulemngr_p.h"
 #include "moduleinfo.h"
+#include "sequencer.h"
 
 #include <QStringListIterator>
 #include <QDebug>
@@ -75,7 +76,6 @@ QStringList ModuleMngr::avaliableModules(const Module::ModuleType &type)
     QStringList list;
 
     foreach (QString moduleId, d->m_modulesInfo.keys()) {
-        qDebug() << d->m_modulesInfo.value(moduleId).type();
         if (d->m_modulesInfo.value(moduleId).type() == type)
             list.append(moduleId);
     }
@@ -120,7 +120,11 @@ ModuleMngrPrivate::~ModuleMngrPrivate()
 
 void ModuleMngrPrivate::initModuleManager()
 {
+    Q_Q(ModuleMngr);
+
     this->setModulesPath("../lib/modules");
+
+    m_startSecuence = new Sequencer(q);
 }
 
 void ModuleMngrPrivate::loadModules()
@@ -230,7 +234,8 @@ bool ModuleMngrPrivate::resolveDependences(const Module *module) const
 
 void ModuleMngrPrivate::setStartSecuence(const Module *module)
 {
-    Q_UNUSED(module)
+    m_startSecuence->insertSequence(module->id(),
+                                    module->dependences().toStringList());
 }
 
 bool ModuleMngrPrivate::loadModule(const QString &moduleId)

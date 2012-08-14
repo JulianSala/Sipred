@@ -35,6 +35,7 @@ class ModuleInfo;
 class QPluginLoader;
 class QDir;
 class Module;
+class Sequencer;
 
 class ModuleMngrPrivate
 {
@@ -60,7 +61,7 @@ public:
     QHash<QString, ModuleInfo> m_modulesInfo;
     QHash<QString, QVariant> m_modulesConfig;
     QDir m_modulesDir;
-    QStringList m_startSecuence;
+    Sequencer *m_startSecuence;
 
     ModuleMngr * const q_ptr;
 };

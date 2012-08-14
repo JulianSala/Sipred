@@ -55,8 +55,8 @@ public:
     bool configurable() const;
     QWidget *configDialog() const;
     QHash<QString, QVariant> defaultConfig() const;
-    bool setConfig(QVariant);
-    bool setConfigs(QVariant);
+    bool setConfig(const QVariant &);
+//    bool setConfigs(const QVariant &);
 
     QMenu *menu() const;
     QWidget *centralWidget() const;
@@ -67,6 +67,7 @@ public:
 
 private:
     bool loadConfigDialog();
+    bool loadCentralWidget();
 
 signals:
     
@@ -74,6 +75,8 @@ signals:
 public slots:
     bool start();
     bool stop();
+    bool createConnection();
+    void saveConfig(const QVariant &);
 
 private:
     QWidget *m_configDialog;

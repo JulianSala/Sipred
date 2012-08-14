@@ -24,6 +24,7 @@
 ****************************************************************************/
 
 #include "../include/configmodule.h"
+#include "modulemngr.h"
 
 #include <QtUiTools>
 #include <QDebug>
@@ -153,10 +154,11 @@ void ConfigModule::registerModuleManager(ModuleMngr *moduleMngr)
 
 bool ConfigModule::start()
 {
-    signalMapper = new QSignalMapper(this);
+    m_signalMapper = new QSignalMapper(this);
 
     if (!loadDialog())
         return false;
+
     initMenu();
 
     return true;
@@ -165,6 +167,37 @@ bool ConfigModule::start()
 bool ConfigModule::stop()
 {
     return true;
+}
+
+void ConfigModule::currentDialogChange(int page)
+{
+    QStackedWidget *stacked = m_widget->findChild<QStackedWidget *>();
+    if (!stacked)
+        return;
+}
+
+void ConfigModule::loadConfigDialogs()
+{
+    QStackedWidget *stacked = m_widget->findChild<QStackedWidget *>();
+    if (!stacked)
+        return;
+
+    QListView *listView = m_widget->findChild<QListView *>();
+    if (!listView)
+        return;
+
+    foreach (QString id, m_moduleMngr->avaliableModules()) {
+        Module *module = m_moduleMngr->module(id);
+        if (module->configDialog()) {
+            int page = stacked->addWidget(module->configDialog());
+            QStandardItemModel *model = qobject_cast<QStandardItemModel *>(listView->model());
+            QStandardItem *item = new QStandardItem(module->icon(), module->name());
+            item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+            model->appendRow(item);
+//            connect(listView, SIGNAL(activated(QModelIndex)), m_signalMapper, SLOT(map()));
+//            m_signalMapper->setMapping(listView, );
+        }
+    }
 }
 
 void ConfigModule::okButtonClicked()
@@ -201,6 +234,7 @@ bool ConfigModule::loadDialog()
     }
 
     m_widget->setWindowTitle("Configuración General");
+    m_widget->setWindowModality(Qt::WindowModal);
 
     QPushButton *okButton = m_widget->findChild<QPushButton *>("okPushButton");
     if (okButton) {
@@ -227,9 +261,19 @@ bool ConfigModule::loadDialog()
 
     QListView *listView = m_widget->findChild<QListView *>();
     if (listView) {
+        listView->setMinimumSize(150, 200);
+        listView->setModel(new QStandardItemModel(this));
+        listView->setIconSize(QSize(30, 30));
 //        connect(listView, SIGNAL(pressed(QModelIndex)), this, SLOT());
     } else {
         qWarning() << "ConfigModule: Can't find list view.";
+    }
+
+    QStackedWidget *stacked = m_widget->findChild<QStackedWidget *>();
+    if (stacked) {
+//        connect(stacked, SIGNAL(currentChanged(int)), this, SLOT());
+    } else {
+        qWarning() << "ConfigModule: Can't find staked widget.";
     }
 
     return true;
@@ -238,5 +282,6 @@ bool ConfigModule::loadDialog()
 void ConfigModule::initMenu()
 {
     m_menu = new QMenu("&Herramientas", m_widget);
-    m_menu->addAction("Configuración", m_widget, SLOT(show()));
+    QAction *menuAct = m_menu->addAction("Configuración", m_widget, SLOT(show()));
+    connect(menuAct, SIGNAL(triggered()), this, SLOT(loadConfigDialogs()));
 }

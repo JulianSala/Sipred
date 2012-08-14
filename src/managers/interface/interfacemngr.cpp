@@ -60,13 +60,11 @@ void InterfaceMngr::registerModuleManager(ModuleMngr *moduleMngr)
         Module *module = d->m_moduleManager->module(moduleId);
         if (module->menu())
             d->m_mainwindow->menuBar()->addMenu(module->menu());
-    }
 
-//    foreach (QString moduleId, d->m_moduleManager->avaliableModules()) {
-//        Module *m = d->m_moduleManager->module(moduleId);
-////        d->addConfigPage(m->configDialog());
-////        d->m_toolsMenu->addAction(m->menu());
-//    }
+        if (module->centralWidget()) {
+            d->m_mainwindow->setCentralWidget(module->centralWidget());
+        }
+    }
 }
 
 void InterfaceMngr::registerPluginManager(PluginMngr *pluginMngr)

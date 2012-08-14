@@ -70,6 +70,9 @@ public slots:
     bool start();
     bool stop();
 
+    void currentDialogChange(int);
+    void loadConfigDialogs();
+
     void okButtonClicked();
     void applyButtonClicked();
     void cancelButtonClucked();
@@ -78,7 +81,7 @@ private:
     bool loadDialog();
     void initMenu();
 
-    QSignalMapper *signalMapper;
+    QSignalMapper *m_signalMapper;
     QMenu *m_menu;
     QWidget *m_widget;
 

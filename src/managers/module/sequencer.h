@@ -39,6 +39,8 @@ public:
 
     void insertSequence(const QString &id, const QStringList &depIds);
     int getLevel(const QString &);
+    QStringList getListAtLevel(const int &);
+    QStringList getDependences(const QString &);
     int higerLevel() const;
     int higerLevel(const QStringList &);
 
@@ -46,7 +48,7 @@ private:
     void insertLowerLevel();
     void insertLevetAt(int);
 
-    QMap<QPair<QString, int>, QStringList> m_sequence;
+    QMap<QString, QPair<QStringList, int> > m_sequence;
 };
 
 #endif // SEQUENCER_H

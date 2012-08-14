@@ -49,43 +49,117 @@ public:
         ModuleFatal
     };
 
-    virtual ~Module() = 0;
+    virtual ~Module() {
 
-    virtual QString id() const = 0;
-    virtual QString name() const = 0;
-    virtual QString version() const = 0;
-    virtual QString summary() const = 0;
-    virtual QString category() const = 0;
-    virtual QString author() const = 0;
-    virtual QString mail() const = 0;
-    virtual QString webside() const = 0;
-    virtual QString license() const = 0;
-    virtual QIcon icon() const = 0;
+    }
 
-    virtual ModuleType type() const = 0;
+    virtual QString id() const {
+        return QString();
+    }
 
-    virtual QVariant dependences() const = 0;
+    virtual QString name() const {
+        return QString();
+    }
+
+    virtual QString version() const {
+        return QString();
+    }
+
+    virtual QString summary() const {
+        return QString();
+    }
+
+    virtual QString category() const {
+        return QString();
+    }
+
+    virtual QString author() const {
+        return QString();
+    }
+
+    virtual QString mail() const {
+        return QString();
+    }
+
+    virtual QString webside() const {
+        return QString();
+    }
+
+    virtual QString license() const {
+        return QString();
+    }
+
+    virtual QIcon icon() const {
+        return QIcon();
+    }
+
+    virtual ModuleType type() const {
+        return ModuleTypeUnknow;
+    }
+
+    virtual QVariant dependences() const {
+        return QVariant();
+    }
+
 //    virtual QString instance() const = 0;
-    virtual bool configurable() const = 0;
-    virtual QWidget *configDialog() const = 0;
-    virtual QHash<QString, QVariant> defaultConfig() const = 0;
-    virtual bool setConfig(QVariant) = 0;
-    virtual bool setConfigs(QVariant) = 0;
+    virtual bool configurable() const {
+        return false;
+    }
 
-    virtual QMenu *menu() const = 0;
-    virtual QWidget *centralWidget() const = 0;
-    virtual QWidget *controlsWidget() const = 0;
-    virtual QWidget *additionalWidget() const = 0;
+    virtual QWidget *configDialog() const {
+        return NULL;
+    }
 
-    virtual void registerModuleManager(ModuleMngr *) = 0;
+    virtual QHash<QString, QVariant> defaultConfig() const {
+        QHash<QString, QVariant> conf;
+        return conf;
+    }
+
+    virtual bool setConfig(const QVariant &) {
+        return false;
+    }
+
+//    virtual bool setConfigs(const QVariant &) = 0;
+
+    virtual QMenu *menu() const {
+        return NULL;
+    }
+
+    virtual QWidget *centralWidget() const {
+        return NULL;
+    }
+
+    virtual QWidget *controlsWidget() const {
+        return NULL;
+    }
+
+    virtual QWidget *additionalWidget() const {
+        return NULL;
+    }
+
+    virtual void registerModuleManager(ModuleMngr *) {
+
+    }
 
 Q_SIGNALS:
     void error(const QString &message);
+    void configChange(QVariant);
 
 
 public Q_SLOTS:
-    virtual bool start() = 0;
-    virtual bool stop() = 0;
+    virtual bool start() {
+        return false;
+    }
+
+    virtual bool stop() {
+        return false;
+    }
+
+    virtual void applyConfig() {
+
+    }
 };
+
+Q_DECLARE_METATYPE(Module)
 
 #endif // MODULE_H
