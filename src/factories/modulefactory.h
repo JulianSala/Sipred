@@ -26,7 +26,8 @@
 #ifndef MODULEFACTORY_H
 #define MODULEFACTORY_H
 
-class Module;
+#include <QtPlugin>
+#include "module.h"
 
 class ModuleFactory
 {

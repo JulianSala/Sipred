@@ -45,6 +45,7 @@ public:
     void run();
     
 private slots:
+    void unregisterResources();
 
 private:
     PluginMngr *m_pluginManager;

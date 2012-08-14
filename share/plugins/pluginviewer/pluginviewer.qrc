@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/ui">
+        <file alias="pluginviewer.ui">plugindialog.ui</file>
+    </qresource>
+    <qresource prefix="/icons">
+        <file alias="d_pluginviewer.png">dart_1.png</file>
+        <file alias="e_pluginviewer.png">dart_3.png</file>
+    </qresource>
+</RCC>

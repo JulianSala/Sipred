@@ -40,16 +40,21 @@ class QDir;
 class PluginMngrPrivate
 {
     Q_DECLARE_PUBLIC(PluginMngr)
+
 public:
     PluginMngrPrivate(PluginMngr *q);
+    ~PluginMngrPrivate();
 
     void initPluginManager();
     void loadPlugins();
     bool setPluginsPath(const QString &);
     void registerPlugin(Plugin *, const QString &);
 
+    bool loadPlugin(const QString &pluginId);
+    bool unloadPlugin(const QString &pluginId);
+
     QPluginLoader m_loader;
-    QList<Plugin *> m_activePlugins;
+    QHash<QString, Plugin *> m_activePlugins;
     QHash<QString, PluginInfo> m_pluginsInfo;
     QHash<QString, QVariant> m_pluginConfig;
     QDir m_pluginsDir;

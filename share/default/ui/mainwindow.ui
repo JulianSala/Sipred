@@ -14,6 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget"/>
+  <widget class="QStatusBar" name="statusbar"/>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
@@ -23,27 +24,7 @@
      <height>20</height>
     </rect>
    </property>
-   <widget class="QMenu" name="fileMenu">
-    <property name="title">
-     <string>&amp;Archivo</string>
-    </property>
-    <addaction name="openAction"/>
-    <addaction name="saveAction"/>
-    <addaction name="saveAsAction"/>
-    <addaction name="separator"/>
-    <addaction name="quitAction"/>
-   </widget>
-   <widget class="QMenu" name="toolsMenu">
-    <property name="title">
-     <string>&amp;Herramientas</string>
-    </property>
-    <addaction name="separator"/>
-    <addaction name="confAction"/>
-   </widget>
-   <addaction name="fileMenu"/>
-   <addaction name="toolsMenu"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
   <action name="openAction">
    <property name="text">
     <string>Abrir</string>
@@ -91,6 +72,21 @@
    </property>
    <property name="toolTip">
     <string>Panel de configuración de módulos</string>
+   </property>
+  </action>
+  <action name="actionAgregar">
+   <property name="text">
+    <string>Agregar</string>
+   </property>
+  </action>
+  <action name="actionEliminar">
+   <property name="text">
+    <string>Eliminar</string>
+   </property>
+  </action>
+  <action name="actionDisponibles">
+   <property name="text">
+    <string>Disponibles</string>
    </property>
   </action>
  </widget>

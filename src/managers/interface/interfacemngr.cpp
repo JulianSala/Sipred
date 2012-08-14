@@ -26,15 +26,13 @@
 #include "interfacemngr.h"
 #include "interfacemngr_p.h"
 
+#include "pluginmngr.h"
+#include "modulemngr.h"
+
 #include <QtUiTools>
 #include <QScreen>
 
 #include <QDebug>
-
-InterfaceMngrPrivate::InterfaceMngrPrivate(InterfaceMngr *q) :
-    q_ptr(q), m_mainwindow(0)
-{
-}
 
 InterfaceMngr::InterfaceMngr(QObject *parent) :
     QObject(parent), d_ptr(new InterfaceMngrPrivate(this))
@@ -46,51 +44,8 @@ InterfaceMngr::~InterfaceMngr()
 
 }
 
-void InterfaceMngrPrivate::loadMainwindow()
+void InterfaceMngr::createConnections()
 {
-    QFile file("../share/mainwindow.ui");
-    if (!file.open(QIODevice::ReadOnly)) {
-        qWarning() << "Can't find mainwindow.ui";
-        return;
-    }
-
-    QUiLoader uiLoader;
-
-    m_mainwindow = qobject_cast<QMainWindow *>(uiLoader.load(&file));
-    file.close();
-}
-
-void InterfaceMngrPrivate::setDefaultWindow()
-{
-    QFile file(":/ui/mainwindow.ui");
-
-    if (!file.open(QIODevice::ReadOnly)) {
-        qWarning() << "Can't find mainwindow.ui";
-        return;
-    }
-
-    QUiLoader loader;
-
-    m_mainwindow = qobject_cast<QMainWindow *>(loader.load(&file));
-
-    file.close();
-
-    if (!m_mainwindow)
-        qFatal("Can't open default window.");
-
-    QIcon icon(":/logo/logo_sipred");
-    m_mainwindow->setWindowIcon(icon);
-
-    foreach (QAction *p, m_mainwindow->menuWidget()->actions()) {
-        qDebug() << p->text();
-
-        foreach (QAction *a, p->menu()->actions()) {
-            QString actText = a->text();
-            if (actText == "Salir")
-                a->setIcon(QIcon(":/icons_enable/quit"));
-        }
-
-    }
 }
 
 void InterfaceMngr::registerModuleManager(ModuleMngr *moduleMngr)
@@ -98,6 +53,18 @@ void InterfaceMngr::registerModuleManager(ModuleMngr *moduleMngr)
     Q_D(InterfaceMngr);
 
     d->m_moduleManager = moduleMngr;
+
+    qDebug() << d->m_moduleManager->avaliableModules(Module::ModuleTypeCore);
+
+    foreach (QString moduleId, d->m_moduleManager->avaliableModules(Module::ModuleTypeCore)) {
+        Module *module = d->m_moduleManager->module(moduleId);
+        if (module->menu())
+            d->m_mainwindow->menuBar()->addMenu(module->menu());
+
+        if (module->centralWidget()) {
+            d->m_mainwindow->setCentralWidget(module->centralWidget());
+        }
+    }
 }
 
 void InterfaceMngr::registerPluginManager(PluginMngr *pluginMngr)
@@ -105,6 +72,11 @@ void InterfaceMngr::registerPluginManager(PluginMngr *pluginMngr)
     Q_D(InterfaceMngr);
 
     d->m_pluginManager = pluginMngr;
+
+    foreach (QString pluginId, d->m_pluginManager->avaliablePlugins()) {
+        Plugin *p = d->m_pluginManager->plugin(pluginId);
+        d->m_mainwindow->menuBar()->addMenu(p->menu());
+    }
 }
 
 void InterfaceMngr::initInterface()
@@ -117,6 +89,18 @@ void InterfaceMngr::initInterface()
         d->setDefaultWindow();
 
     d->centerWindow();
+
+    d->setDefaultConfigWidget();
+
+    d->loadDockWidget();
+
+    if (!d->m_dockWidget)
+        d->setDefaultDock();
+
+    d->m_mainwindow->addDockWidget(Qt::LeftDockWidgetArea, d->m_dockWidget);
+
+    d->initializeMenus();
+
     d->m_mainwindow->show();
 }
 
@@ -125,14 +109,201 @@ void InterfaceMngr::endInterface()
 
 }
 
-void InterfaceMngrPrivate::setDefaultDock()
+void InterfaceMngr::newProject()
 {
 
+}
+
+bool InterfaceMngr::openProject()
+{
+
+}
+
+bool InterfaceMngr::saveProject()
+{
+
+}
+
+bool InterfaceMngr::saveAsProject()
+{
+
+}
+
+void InterfaceMngr::quitApp()
+{
+
+}
+
+/****************************************************************************
+ *                          InterfaceMngrPrivate
+ ***************************************************************************/
+
+InterfaceMngrPrivate::InterfaceMngrPrivate(InterfaceMngr *q) :
+    q_ptr(q), m_mainwindow(0)
+{
+    m_mainwindow = NULL;
+    m_moduleManager = NULL;
+    m_pluginManager = NULL;
+    m_menuBar = NULL;
+    m_toolBar = NULL;
+    m_centralWidget = NULL;
+    m_dockWidget = NULL;
+    m_treeInformation = NULL;
+}
+
+void InterfaceMngrPrivate::loadMainwindow()
+{
+    QFile file("../share/mainwindow.ui");
+    if (!file.open(QIODevice::ReadOnly)) {
+        qWarning() << "Can't open mainwindow.ui";
+        qWarning() << file.errorString();
+        return;
+    }
+
+    QUiLoader uiLoader;
+
+    m_mainwindow = qobject_cast<QMainWindow *>(uiLoader.load(&file));
+
+    file.close();
+
+    if (!m_mainwindow)
+        qWarning() << "Can't load mainwindow.ui";
+}
+
+void InterfaceMngrPrivate::loadDockWidget()
+{
+    QFile file("../share/dockwidget.ui");
+
+    if (!file.open(QIODevice::ReadOnly)) {
+        qWarning() << "Can't open dockwidget.ui";
+        qWarning() << file.errorString();
+        return;
+    }
+
+    QUiLoader loader;
+
+    m_dockWidget = qobject_cast<QDockWidget *>(loader.load(&file));
+
+    file.close();
+
+    if (!m_dockWidget)
+        qWarning() << "Can't load dockwidget.ui";
+}
+
+void InterfaceMngrPrivate::setDefaultWindow()
+{
+    QFile file(":/ui/mainwindow");
+
+    if (!file.open(QIODevice::ReadOnly)) {
+        qWarning(file.errorString().toLatin1());
+        qFatal("Can't open default mainwindow.ui");
+    }
+
+    QUiLoader loader;
+
+    m_mainwindow = qobject_cast<QMainWindow *>(loader.load(&file));
+
+    file.close();
+
+    if (!m_mainwindow) {
+        qWarning() << file.errorString().toLatin1();
+        qFatal("Can't load default mainwindow.");
+    }
+
+    QIcon icon(":/logo/logo_sipred");
+    m_mainwindow->setWindowIcon(icon);
+}
+
+void InterfaceMngrPrivate::setDefaultDock()
+{
+    QFile file(":/ui/dockwidget");
+
+    if (!file.open(QIODevice::ReadOnly))
+        qFatal("Can't open default dockwidget.ui");
+
+    QUiLoader loader;
+
+    m_dockWidget = qobject_cast<QDockWidget *>(loader.load(&file, m_mainwindow));
+
+    if (!m_dockWidget)
+        qFatal("Can't load default dockwidget");
+
+    m_dockWidget->setWindowTitle("Herramientas");
 }
 
 void InterfaceMngrPrivate::setDefaultCenterWidget()
 {
 
+}
+
+void InterfaceMngrPrivate::setDefaultConfigWidget()
+{
+
+}
+
+void InterfaceMngrPrivate::initializeMenus()
+{
+    Q_Q(InterfaceMngr);
+
+    if (!m_mainwindow)
+        qFatal("Can't init actions, Mainwindow is not found");
+
+    QList<QAction *> actionList;
+
+    m_newAction = new QAction(m_mainwindow);
+    m_newAction->setText("&Nuevo");
+    m_newAction->setShortcut(QKeySequence::New);
+    m_newAction->setToolTip("Crear un nuevo proyecto desde el gestor.");
+    m_newAction->setStatusTip("Crear nuevo proyecto");
+
+    QObject::connect(m_newAction, SIGNAL(triggered()), q, SLOT(newProject()));
+    actionList.append(m_newAction);
+
+    m_openAction = new QAction(m_mainwindow);
+    m_openAction->setText("&Abrir");
+    m_openAction->setShortcut(QKeySequence::Open);
+    m_openAction->setToolTip("Abrir archivo soportado");
+    m_openAction->setStatusTip("Abriendo archivo...");
+
+    QObject::connect(m_openAction, SIGNAL(triggered()), q, SLOT(openProject()));
+    actionList.append(m_openAction);
+
+    m_saveAction = new QAction(m_mainwindow);
+    m_saveAction->setText("&Guardar");
+    m_saveAction->setShortcut(QKeySequence::Save);
+    m_saveAction->setToolTip("Guardar el actual proyecto");
+    m_saveAction->setStatusTip("Guardando archivo...");
+
+    QObject::connect(m_saveAction, SIGNAL(triggered()), q, SLOT(saveProject()));
+    actionList.append(m_saveAction);
+
+    m_saveAsAction = new QAction(m_mainwindow);
+    m_saveAsAction->setText("Guardar como");
+    m_saveAsAction->setShortcut(QKeySequence::SaveAs);
+    m_saveAsAction->setStatusTip("Guardando el proyecto como...");
+
+    QObject::connect(m_saveAsAction, SIGNAL(triggered()), q, SLOT(saveAsProject()));
+    actionList.append(m_saveAsAction);
+
+    m_quitAction = new QAction(m_mainwindow);
+    m_quitAction->setText("&Salir");
+    m_quitAction->setShortcut(QKeySequence::Quit);
+    m_quitAction->setToolTip("Salir de la aplicación");
+    m_quitAction->setStatusTip("Salir");
+
+    QObject::connect(m_quitAction, SIGNAL(triggered()), q, SLOT(quitApp()));
+
+    m_fileMenu = m_mainwindow->menuBar()->addMenu("&Archivo");
+    m_fileMenu->addActions(actionList);
+    m_fileMenu->addSeparator();
+    m_fileMenu->addAction(m_quitAction);
+
+    m_configAction = new QAction(m_mainwindow);
+    m_configAction->setText("&Configuración");
+    m_configAction->setToolTip("Configurar componentes de Sipred");
+    m_configAction->setStatusTip("Configurar Sipred");
+
+//    QObject::connect(m_configAction, SIGNAL(triggered()), q, SLOT(startConfigDialog()));
 }
 
 void InterfaceMngrPrivate::centerWindow()

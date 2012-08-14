@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/ui">
+        <file alias="configmodule_widget.ui">share/configmodule_widget.ui</file>
+    </qresource>
+</RCC>
