@@ -35,6 +35,7 @@ class ModuleInfo;
 class QPluginLoader;
 class QDir;
 class Module;
+class Sequencer;
 
 class ModuleMngrPrivate
 {
@@ -42,17 +43,25 @@ class ModuleMngrPrivate
 
 public:
     ModuleMngrPrivate(ModuleMngr *q);
+    ~ModuleMngrPrivate();
 
     void initModuleManager();
     void loadModules();
     bool setModulesPath(const QString &);
     void registerModule(Module *, const QString &);
 
+    bool resolveDependences(const Module *) const;
+    void setStartSecuence(const Module *);
+
+    bool loadModule(const QString &moduleId);
+    bool unloadModule(const QString &moduleId);
+
     QPluginLoader m_loader;
-    QList<Module *> m_activeModules;
+    QHash<QString, Module *> m_activeModules;
     QHash<QString, ModuleInfo> m_modulesInfo;
     QHash<QString, QVariant> m_modulesConfig;
     QDir m_modulesDir;
+    Sequencer *m_startSecuence;
 
     ModuleMngr * const q_ptr;
 };

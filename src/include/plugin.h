@@ -27,29 +27,41 @@
 #define PLUGIN_H
 
 #include <QtGui>
+#include "libraryinfo.h"
+
+class PluginMngr;
 
 class Plugin
 {
 public:
-    virtual QString id() = 0;
-    virtual QString name() = 0;
-    virtual QString version() = 0;
-    virtual QString summary() = 0;
-    virtual QString category() = 0;
-    virtual QString applyTo() = 0;
-    virtual QString author() = 0;
-    virtual QString mail() = 0;
-    virtual QString webside() = 0;
-    virtual QString license() = 0;
-    virtual QIcon icon() = 0;
+    virtual ~Plugin() = 0;
 
-    virtual bool isConfigurable() = 0;
-    virtual QWidget *configDialog() = 0;
-    virtual QHash<QString, QVariant> defaultConfig() = 0;
+    virtual QString id() const = 0;
+    virtual QString name() const = 0;
+    virtual QString version() const = 0;
+    virtual QString summary() const = 0;
+    virtual QString category() const = 0;
+    virtual QString applyTo() const = 0;
+    virtual QString author() const = 0;
+    virtual QString mail() const = 0;
+    virtual QString webside() const = 0;
+    virtual QString licence() const = 0;
+    virtual QIcon icon() const = 0;
+
+    virtual bool isConfigurable() const = 0;
+    virtual QWidget *configDialog() const = 0;
+    virtual QHash<QString, QVariant> defaultConfig() const = 0;
     virtual bool setConfigs(QVariant) = 0;
-    virtual QStringList configList() = 0;
-};
+    virtual QStringList configList() const = 0;
 
-//Q_DECLARE_INTERFACE(Plugin, "interface.plugin")
+    virtual QMenu *menu() = 0;
+    virtual QDialog *dialog() = 0;
+
+    virtual void registerPluginManager(PluginMngr *) = 0;
+
+public Q_SLOTS:
+    virtual bool start() = 0;
+    virtual bool stop() = 0;
+};
 
 #endif // PLUGIN_H

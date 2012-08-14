@@ -34,19 +34,19 @@ inline void registerResources(const QString &resourcesDir)
     QDir dir(resourcesDir);
 
     if (!dir.exists())
-        qWarning() << "Resources dir doesn't exist.\n"
+        qWarning() << "Resources dir doesn't exist." << endl
                    << "Please verify the folder" << dir.absolutePath();
 
     QStringList filter;
     filter << "*.rcc" << "*.sip";
     dir.setNameFilters(filter);
 
-    qDebug() << "Registering resource...";
+    qDebug() << "Registering resources...";
     foreach (QString resource, dir.entryList(QDir::Files)) {
         if (!QResource::registerResource(dir.absoluteFilePath(resource)))
-            qWarning() << "Can't register resource" << resource;
+            qWarning() << "Can't register resource file" << resource;
         else
-            qDebug() << "Resource" << resource << "have been register.";
+            qDebug() << "Resource file" << resource << "have been register.";
     }
 }
 
@@ -57,17 +57,19 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
-    registerResources("../share");
+    registerResources(RESOURCES_PATH);
 
-//    QPixmap logo(":/logo/logo_sipred", "PNG");
-//    QSplashScreen splash(logo);
-//    splash.setAutoFillBackground(true);
+    QPixmap logo(":/thumbnail/logo_sipred", "PNG");
+    QSplashScreen splash(logo);
+    splash.setAutoFillBackground(true);
 
-//    QTimer::singleShot(3500, &splash, SLOT(close()));
-//    splash.show();
+    QTimer::singleShot(3500, &splash, SLOT(close()));
+    splash.show();
 
     Core core;
     core.run();
+
+    QObject::connect(qApp, SIGNAL(lastWindowClosed()), &core, SLOT(unregisterResources()));
 
     return app.exec();
 }

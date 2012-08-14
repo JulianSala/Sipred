@@ -1,0 +1,114 @@
+<RCC>
+    <qresource prefix="/icons_enable">
+        <file>icons/acces_3a.png</file>
+        <file>icons/acrobat_3a.png</file>
+        <file>icons/aim_3.png</file>
+        <file>icons/bsplayer_3.png</file>
+        <file>icons/control_3a.png</file>
+        <file>icons/cs_3.png</file>
+        <file>icons/dart_3.png</file>
+        <file>icons/desktop_3a.png</file>
+        <file>icons/docs_3a.png</file>
+        <file>icons/dream_3a.png</file>
+        <file>icons/excel_3a.png</file>
+        <file>icons/explorer_3a.png</file>
+        <file>icons/favs_3a.png</file>
+        <file>icons/firefox_3a.png</file>
+        <file>icons/flash_3a.png</file>
+        <file>icons/foobar_3.png</file>
+        <file>icons/frontpage_3a.png</file>
+        <file>icons/golive_3a.png</file>
+        <file>icons/gtalk_3.png</file>
+        <file>icons/hl2_3.png</file>
+        <file>icons/icq_3.png</file>
+        <file>icons/illus_3a.png</file>
+        <file>icons/indesign_3a.png</file>
+        <file>icons/miranda_3.png</file>
+        <file>icons/msn_3.png</file>
+        <file>icons/music_3a.png</file>
+        <file>icons/nero_3.png</file>
+        <file>icons/net_3a.png</file>
+        <file>icons/opera_3a.png</file>
+        <file>icons/outlook_3a.png</file>
+        <file>icons/painter_3a.png</file>
+        <file>icons/pictures_3a.png</file>
+        <file>icons/pidgin_3.png</file>
+        <file>icons/powerpoint_3a.png</file>
+        <file>icons/ps_3a.png</file>
+        <file>icons/quicktime_3.png</file>
+        <file>icons/real_3.png</file>
+        <file>icons/rss_3a.png</file>
+        <file>icons/skype_3.png</file>
+        <file>icons/star_3.png</file>
+        <file>icons/system_3a.png</file>
+        <file>icons/thunder_3a.png</file>
+        <file>icons/trash_3a.png</file>
+        <file>icons/trillian_3.png</file>
+        <file>icons/videos_3a.png</file>
+        <file>icons/vlc_3.png</file>
+        <file>icons/winamp_3.png</file>
+        <file>icons/wmp_3.png</file>
+        <file>icons/word_3a.png</file>
+        <file>icons/yahoo_3.png</file>
+    </qresource>
+    <qresource prefix="/iconst_disable">
+        <file>icons/acces_1a.png</file>
+        <file>icons/acrobat_1a.png</file>
+        <file>icons/aim_1.png</file>
+        <file>icons/bsplayer_1.png</file>
+        <file>icons/control_1a.png</file>
+        <file>icons/cs_1.png</file>
+        <file>icons/dart_1.png</file>
+        <file>icons/desktop_1a.png</file>
+        <file>icons/docs_1a.png</file>
+        <file>icons/dream_1a.png</file>
+        <file>icons/excel_1a.png</file>
+        <file>icons/explorer_1a.png</file>
+        <file>icons/favs_1a.png</file>
+        <file>icons/firefox_1a.png</file>
+        <file>icons/flash_1a.png</file>
+        <file>icons/foobar_1.png</file>
+        <file>icons/frontpage_1a.png</file>
+        <file>icons/golive_1a.png</file>
+        <file>icons/gtalk_1.png</file>
+        <file>icons/hl2_1.png</file>
+        <file>icons/icq_1.png</file>
+        <file>icons/illus_1a.png</file>
+        <file>icons/indesign_1a.png</file>
+        <file>icons/miranda_1.png</file>
+        <file>icons/msn_1.png</file>
+        <file>icons/music_1a.png</file>
+        <file>icons/nero_1.png</file>
+        <file>icons/net_1a.png</file>
+        <file>icons/opera_1a.png</file>
+        <file>icons/outlook_1a.png</file>
+        <file>icons/painter_1a.png</file>
+        <file>icons/pictures_1a.png</file>
+        <file>icons/pidgin_1.png</file>
+        <file>icons/powerpoint_1a.png</file>
+        <file>icons/ps_1a.png</file>
+        <file>icons/quicktime_1.png</file>
+        <file>icons/real_1.png</file>
+        <file>icons/rss_1a.png</file>
+        <file>icons/skype_1.png</file>
+        <file>icons/star_1.png</file>
+        <file>icons/system_1a.png</file>
+        <file>icons/thunder_1a.png</file>
+        <file>icons/trash_1a.png</file>
+        <file>icons/trillian_1.png</file>
+        <file>icons/videos_1a.png</file>
+        <file>icons/vlc_1.png</file>
+        <file>icons/winamp_1.png</file>
+        <file>icons/wmp_1.png</file>
+        <file>icons/word_1a.png</file>
+        <file>icons/yahoo_1.png</file>
+    </qresource>
+    <qresource prefix="/thumbnail">
+        <file alias="logo_sipred">icons/Logo_Sipred.png</file>
+    </qresource>
+    <qresource prefix="/ui">
+        <file alias="mainwindow">ui/mainwindow.ui</file>
+        <file alias="dockwidget">ui/dockwidget.ui</file>
+        <file alias="configwidget">ui/configwidget.ui</file>
+    </qresource>
+</RCC>

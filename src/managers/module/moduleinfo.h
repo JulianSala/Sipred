@@ -26,38 +26,44 @@
 #ifndef MODULEINFO_H
 #define MODULEINFO_H
 
-#include <QObject>
+#include <QMetaType>
 #include <QDebug>
+#include <QtGui>
+
 #include "libraryinfo.h"
+#include "module.h"
 
-class ModuleInfo :public QObject, public LibraryInfo
+class ModuleInfo : public LibraryInfo
 {
-    Q_OBJECT
-
-    Q_PROPERTY(QString instance READ instance WRITE setInstance RESET resetInstance)
-    Q_PROPERTY(bool configurable READ isConfigurable WRITE setConfigurable RESET resetConfigurable)
+//    Q_PROPERTY(QString instance READ instance WRITE setInstance RESET resetInstance)
+//    Q_PROPERTY(bool configurable READ isConfigurable WRITE setConfigurable RESET resetConfigurable)
 
 public:
     ModuleInfo();
     ModuleInfo(const ModuleInfo &);
     ~ModuleInfo();
 
-    ModuleInfo(QObject *parent);
-
+    QVariant dependences() const;
     QString instance() const;
     bool isConfigurable() const;
+    Module::ModuleType type() const;
+
+    void setDependences(const QVariant &);
+    void setInstance(const QString &);
+    void setConfigurable(bool);
+    void setType(const Module::ModuleType &);
+
+    void resetAll();
+    void resetDependences();
+    void resetInstance();
+    void resetConfigurable();
+    void resetType();
 
 private:
     QString m_instance;
     bool m_configurable;
-
-public slots:
-    void setInstance(const QString &);
-    void setConfigurable(bool);
-
-    void resetAll();
-    void resetInstance();
-    void resetConfigurable();
+    Module::ModuleType m_type;
+    QVariant m_dependences;
 
 public:
     ModuleInfo& operator =(const ModuleInfo &);
@@ -65,6 +71,10 @@ public:
 
 Q_DECLARE_METATYPE(ModuleInfo)
 
-QDebug& operator <<(QDebug dbg, const ModuleInfo &info);
+inline QDebug& operator <<(QDebug dbg, const ModuleInfo &info)
+{
+    dbg << info;
+    return dbg.maybeSpace();
+}
 
 #endif // MODULEINFO_H

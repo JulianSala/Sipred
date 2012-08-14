@@ -26,27 +26,27 @@
 #ifndef PLUGININFO_H
 #define PLUGININFO_H
 
-#include <QObject>
 #include <QMetaType>
 #include <QDebug>
 #include <QtGui>
 
 #include "libraryinfo.h"
 
-class PluginInfo : public QObject, public LibraryInfo
-{
-    Q_OBJECT
+/*
+ * TODO: Fix 'qDebug() <<' operator, currently don't print all information
+ *       requested.
+ */
 
-    Q_PROPERTY(QString applyTo READ applyTo WRITE setApplyTo RESET resetApplyTo)
-    Q_PROPERTY(bool configurable READ isConfigurable WRITE setConfigurable RESET resetConfigurable)
-    Q_PROPERTY(QStringList configList READ configList WRITE setConfigList RESET resetConfigList)
+class PluginInfo : public LibraryInfo
+{
+//    Q_PROPERTY(QString applyTo READ applyTo WRITE setApplyTo RESET resetApplyTo)
+//    Q_PROPERTY(bool configurable READ isConfigurable WRITE setConfigurable RESET resetConfigurable)
+//    Q_PROPERTY(QStringList configList READ configList WRITE setConfigList RESET resetConfigList)
 
 public:
     PluginInfo();
-    ~PluginInfo();
     PluginInfo(const PluginInfo &);
-
-    PluginInfo(QObject *parent);
+    ~PluginInfo();
 
     QString applyTo() const;
     bool isConfigurable() const;
@@ -57,7 +57,7 @@ private:
     bool m_configurable;
     QStringList m_configList;
 
-public slots:
+public:
     void setApplyTo(const QString &);
     void setConfigurable(const bool);
     void setConfigList(const QStringList &);
@@ -67,7 +67,6 @@ public slots:
     void resetConfigurable();
     void resetConfigList();
 
-public:
     PluginInfo& operator =(const PluginInfo &);
     bool operator ==(const PluginInfo &) const;
     friend QDataStream& operator <<(QDataStream &, const PluginInfo &);
@@ -77,6 +76,25 @@ public:
 
 Q_DECLARE_METATYPE(PluginInfo)
 
-QDebug operator <<(QDebug dbg, const PluginInfo &info);
+inline QDebug& operator <<(QDebug &dbg, const PluginInfo &info) {
+    dbg << "Plugin Information" << endl;
+    dbg << info;
+    dbg << "Apply to:" << info.applyTo() << endl;
+    if (info.isConfigurable())
+        dbg << "Configurable:" << "yes" << endl;
+    else
+        dbg << "Configurable:" << "no" << endl;
+
+    dbg << "Config List:";
+
+    if (!info.configList().isEmpty() && info.isConfigurable()) {
+        foreach (QString var, info.configList())
+            dbg << endl << "    " << var;
+    } else {
+        dbg << "empty";
+    }
+
+    return dbg.maybeSpace();
+}
 
 #endif // PLUGININFO_H

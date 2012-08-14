@@ -42,8 +42,14 @@ public:
     ~PluginMngr();
     bool activePlugin(const QString &);
     bool disablePlugin(const QString &);
+    PluginInfo pluginInfo(const QString &);
     QStringList avaliablePlugins();
     Plugin * plugin(const QString &);
+
+signals:
+    void pluginLoaded();
+    void pluginLoaded(QString);
+    void configChange();
 
 protected:
     PluginMngr(const PluginMngrPrivate &);

@@ -1,5 +1,6 @@
 include(../../sipred.pri)
 include(../../dependences.pri)
+include(../../resources.pri)
 include(corelibs.pri)
 
 !contains(CONFIG, uitools) {

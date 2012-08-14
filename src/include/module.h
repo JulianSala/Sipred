@@ -28,35 +28,138 @@
 
 #include <QtGui>
 
+class ModuleMngr;
+
 class Module
 {
+//    Q_ENUMS(ModuleType)
+
 public:
     enum ModuleType {
-        Sql,
-        DataStream,
-        DataVisualizer,
-        Core
+        ModuleTypeUnknow,
+        ModuleTypeSql,
+        ModuleTypeDataStreamer,
+        ModuleTypeDataVisualizer,
+        ModuleTypeCore
     };
 
-    virtual QString id() = 0;
-    virtual QString name() = 0;
-    virtual QString version() = 0;
-    virtual QString summary() = 0;
-    virtual QString category() = 0;
-    virtual QString applyTo() = 0;
-    virtual QString author() = 0;
-    virtual QString mail() = 0;
-    virtual QString webside() = 0;
-    virtual QString license() = 0;
-    virtual QIcon icon() = 0;
+    enum ModuleError {
+        ModuleWarning,
+        ModuleCritical,
+        ModuleFatal
+    };
 
-    virtual ModuleType type() = 0;
+    virtual ~Module() {
 
-    virtual QVariant dependences() = 0;
-    virtual QString instance() = 0;
-    virtual bool configurable() = 0;
+    }
+
+    virtual QString id() const {
+        return QString();
+    }
+
+    virtual QString name() const {
+        return QString();
+    }
+
+    virtual QString version() const {
+        return QString();
+    }
+
+    virtual QString summary() const {
+        return QString();
+    }
+
+    virtual QString category() const {
+        return QString();
+    }
+
+    virtual QString author() const {
+        return QString();
+    }
+
+    virtual QString mail() const {
+        return QString();
+    }
+
+    virtual QString webside() const {
+        return QString();
+    }
+
+    virtual QString license() const {
+        return QString();
+    }
+
+    virtual QIcon icon() const {
+        return QIcon();
+    }
+
+    virtual ModuleType type() const {
+        return ModuleTypeUnknow;
+    }
+
+    virtual QVariant dependences() const {
+        return QVariant();
+    }
+
+//    virtual QString instance() const = 0;
+    virtual bool configurable() const {
+        return false;
+    }
+
+    virtual QWidget *configDialog() const {
+        return NULL;
+    }
+
+    virtual QHash<QString, QVariant> defaultConfig() const {
+        QHash<QString, QVariant> conf;
+        return conf;
+    }
+
+    virtual bool setConfig(const QVariant &) {
+        return false;
+    }
+
+//    virtual bool setConfigs(const QVariant &) = 0;
+
+    virtual QMenu *menu() const {
+        return NULL;
+    }
+
+    virtual QWidget *centralWidget() const {
+        return NULL;
+    }
+
+    virtual QWidget *controlsWidget() const {
+        return NULL;
+    }
+
+    virtual QWidget *additionalWidget() const {
+        return NULL;
+    }
+
+    virtual void registerModuleManager(ModuleMngr *) {
+
+    }
+
+Q_SIGNALS:
+    void error(const QString &message);
+    void configChange(QVariant);
+
+
+public Q_SLOTS:
+    virtual bool start() {
+        return false;
+    }
+
+    virtual bool stop() {
+        return false;
+    }
+
+    virtual void applyConfig() {
+
+    }
 };
 
-//Q_DECLARE_INTERFACE(Module, "interface.module")
+Q_DECLARE_METATYPE(Module)
 
 #endif // MODULE_H

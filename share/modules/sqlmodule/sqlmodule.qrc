@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/ui">
+        <file alias="sqlmodule_config.ui">share/sqlmodule_config.ui</file>
+        <file alias="sqlmodule_central.ui">share/sqlmodule_central.ui</file>
+    </qresource>
+    <qresource prefix="/icons">
+        <file alias="d_sqlmodule.png">share/indesign_1a.png</file>
+        <file alias="e_sqlmodule.png">share/indesign_3a.png</file>
+    </qresource>
+</RCC>
