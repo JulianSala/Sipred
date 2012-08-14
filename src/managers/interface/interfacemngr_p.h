@@ -61,7 +61,7 @@ private:
 
     QMenuBar *m_menuBar;
     QToolBar *m_toolBar;
-    QWidget *m_centralWidget;
+    QStackedWidget *m_centralWidget;
     QDockWidget *m_dockWidget;
     QMap<QString, QVariant> *m_treeInformation;
 

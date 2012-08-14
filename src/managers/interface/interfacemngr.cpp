@@ -56,13 +56,19 @@ void InterfaceMngr::registerModuleManager(ModuleMngr *moduleMngr)
 
     qDebug() << d->m_moduleManager->avaliableModules(Module::ModuleTypeCore);
 
-    foreach (QString moduleId, d->m_moduleManager->avaliableModules(Module::ModuleTypeCore)) {
+    foreach (QString moduleId, d->m_moduleManager->avaliableModules()) {
         Module *module = d->m_moduleManager->module(moduleId);
         if (module->menu())
             d->m_mainwindow->menuBar()->addMenu(module->menu());
 
         if (module->centralWidget()) {
-            d->m_mainwindow->setCentralWidget(module->centralWidget());
+            d->m_centralWidget->addWidget(module->centralWidget());
+        }
+
+        if (module->controlsWidget()) {
+            QToolBox *toolBox = d->m_dockWidget->findChild<QToolBox *>();
+            if (toolBox)
+                toolBox->addItem(module->controlsWidget(), module->name());
         }
     }
 }
@@ -93,6 +99,8 @@ void InterfaceMngr::initInterface()
     d->setDefaultConfigWidget();
 
     d->loadDockWidget();
+
+    d->setDefaultCenterWidget();
 
     if (!d->m_dockWidget)
         d->setDefaultDock();
@@ -233,7 +241,8 @@ void InterfaceMngrPrivate::setDefaultDock()
 
 void InterfaceMngrPrivate::setDefaultCenterWidget()
 {
-
+    m_centralWidget = new QStackedWidget(m_mainwindow);
+    m_mainwindow->setCentralWidget(m_centralWidget);
 }
 
 void InterfaceMngrPrivate::setDefaultConfigWidget()

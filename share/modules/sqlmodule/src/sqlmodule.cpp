@@ -27,7 +27,9 @@
 #include <modulemngr.h>
 
 #include <QtUiTools>
+#include <QSqlTableModel>
 #include <QSqlDatabase>
+#include <QSqlQuery>
 #include <QSqlError>
 
 SqlModule::SqlModule(QObject *parent) :
@@ -186,6 +188,9 @@ bool SqlModule::start()
     if (!loadCentralWidget())
         return false;
 
+    if (!loadControlWidget())
+        return false;
+
     m_menu = new QMenu("SQL", m_configDialog);
 
     connect(m_menu->menuAction(), SIGNAL(triggered()), m_configDialog, SLOT(show()));
@@ -267,6 +272,83 @@ void SqlModule::saveConfig(const QVariant &values)
 
 }
 
+void SqlModule::runScript()
+{
+    QTextEdit *textEdit = m_centralWidget->findChild<QTextEdit *>();
+    QTableView *tableView = m_centralWidget->findChild<QTableView *>();
+    QPlainTextEdit *plainTextEdit = m_centralWidget->findChild<QPlainTextEdit *>();
+
+    if (!textEdit) {
+        qWarning() << "SqlModule: Can't find text edit widget.";
+        return;
+    } else if (!tableView) {
+        qWarning() << "SqlModule: Can't find table view widget.";
+        return;
+    } else if (!plainTextEdit) {
+        qWarning() << "SqlModule: Can't find plain text edit widget.";
+        return;
+    }
+
+    QString script = textEdit->toPlainText();
+    QSqlQueryModel *model = qobject_cast<QSqlQueryModel *>(tableView->model());
+//    QSqlQuery query(script, QSqlDatabase::database("SipredConnection"));
+    model->setQuery(script, QSqlDatabase::database("SipredConnection"));
+}
+
+void SqlModule::setEditMode(bool edit)
+{
+    QTextEdit *textEdit = m_centralWidget->findChild<QTextEdit *>();
+
+    if (!textEdit) {
+        qWarning() << "SqlModule: Can't find text edit widget.";
+        return;
+    }
+
+    textEdit->setReadOnly(!edit);
+}
+
+void SqlModule::openSqlScript(QModelIndex index)
+{
+    if (!index.isValid())
+        return;
+
+    QTreeView *treeView = m_centralWidget->findChild<QTreeView *>();
+    if (!treeView) {
+        qWarning() << "SqlModule: Can't find list view.";
+        return;
+    }
+
+    QFileSystemModel *model = qobject_cast<QFileSystemModel *>(treeView->model());
+    QString filePath = model->filePath(index);
+
+    QFile file(filePath);
+
+    if (!file.open(QIODevice::ReadWrite)) {
+        QMessageBox::warning(treeView, "Error de Archivo",
+                             QString("Error al abrir el archivo:\n%1\n%2").arg(
+                                 file.fileName(), file.errorString()));
+        return;
+    }
+
+    QTextStream stream(&file);
+    QString text = stream.readAll();
+
+    file.close();
+
+    QTextEdit *textEdit = m_centralWidget->findChild<QTextEdit *>();
+
+    if (!textEdit) {
+        qWarning() << "SqlModule: Can't find text edit widget.";
+        return;
+    }
+
+    textEdit->setText(text);
+//    setEditMode(false);
+
+    QPushButton *editButton = m_centralWidget->findChild<QPushButton *>("editPushButton");
+    editButton->setChecked(false);
+}
+
 bool SqlModule::loadConfigDialog()
 {
     QFile file(":/ui/sqlmodule_config.ui");
@@ -304,6 +386,38 @@ bool SqlModule::loadConfigDialog()
     return true;
 }
 
+bool SqlModule::loadControlWidget()
+{
+    QFile file(":/ui/sqlmodule_control.ui");
+
+    if (!file.open(QIODevice::ReadOnly)) {
+        qWarning() << "SqlModule: Can't open control widget.";
+        return false;
+    }
+
+    QUiLoader loader;
+
+    m_controlsWidget = qobject_cast<QWidget *>(loader.load(&file));
+
+    if (!m_controlsWidget)
+        return false;
+
+    QList<QLabel *> labels = m_controlsWidget->findChildren<QLabel *>();
+    foreach (QLabel *l, labels) {
+        if (l->objectName() == "userName") {
+            l->setText(m_config.value("userLabel").toString());
+        } else if (l->objectName() == "hostLabel") {
+            l->setText(m_config.value("hostName").toString());
+        } else if (l->objectName() == "portLabel") {
+            l->setText(m_config.value("portNumber").toString());
+        } else if (l->objectName() == "tyoeLabel") {
+            l->setText("Administrador");
+        }
+    }
+
+    return true;
+}
+
 bool SqlModule::loadCentralWidget()
 {
     QFile file(":/ui/sqlmodule_central.ui");
@@ -320,13 +434,50 @@ bool SqlModule::loadCentralWidget()
     if (!m_centralWidget)
         return false;
 
-    QListView *listView = m_centralWidget->findChild<QListView *>("listView");
-    if (!listView) {
+    QTreeView *treeView = m_centralWidget->findChild<QTreeView *>();
+    if (!treeView) {
         qWarning() << "SqlModule: Can't find list view.";
     } else {
         QFileSystemModel *model = new QFileSystemModel(this);
-        model->setRootPath(QDir::currentPath());
-        listView->setModel(model);
+        QDir dir(QApplication::applicationDirPath());
+        dir.cdUp();
+        dir.cd("share/scripts/mysql");
+        model->setRootPath(QDir::rootPath());
+        treeView->setModel(model);
+        treeView->setRootIndex(model->index(dir.absolutePath()));
+        connect(treeView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(openSqlScript(QModelIndex)));
+    }
+
+    QPlainTextEdit *plainTextEdit = m_centralWidget->findChild<QPlainTextEdit *>();
+    if (!plainTextEdit) {
+        qWarning() << "SqlModule: Can't find plain text edit.";
+    } else {
+        plainTextEdit->setReadOnly(true);
+        plainTextEdit->setPlainText(">>");
+        plainTextEdit->setLineWrapMode(QPlainTextEdit::NoWrap);
+    }
+
+    QTableView *tableView = m_centralWidget->findChild<QTableView *>();
+    if (!tableView) {
+        qWarning() << "SqlModule: Can't find table view.";
+    } else {
+        tableView->setModel(new QSqlQueryModel(this));
+    }
+
+    QList<QPushButton *> buttons = m_centralWidget->findChildren<QPushButton *>();
+    if (buttons.isEmpty()) {
+        qWarning() << "SqlModule: Can't find push buttons";
+    } else {
+        foreach (QPushButton *p, buttons) {
+            if (p->objectName() == "editPushButton") {
+                p->setCheckable(true);
+                p->setChecked(false);
+                connect(p, SIGNAL(toggled(bool)), this, SLOT(setEditMode(bool)));
+                setEditMode(p->isChecked());
+            } else if (p->objectName() == "runPushButton"){
+                connect(p, SIGNAL(clicked()), this, SLOT(runScript()));
+            }
+        }
     }
 
     return true;
