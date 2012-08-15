@@ -28,6 +28,7 @@
 
 #include <QtUiTools>
 #include <QSqlTableModel>
+#include <QSqlRecord>
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlError>
@@ -291,8 +292,42 @@ void SqlModule::runScript()
 
     QString script = textEdit->toPlainText();
     QSqlQueryModel *model = qobject_cast<QSqlQueryModel *>(tableView->model());
-//    QSqlQuery query(script, QSqlDatabase::database("SipredConnection"));
-    model->setQuery(script, QSqlDatabase::database("SipredConnection"));
+    QSqlQuery query(script, QSqlDatabase::database("SipredConnection"));
+    model->setQuery(query);
+    if (model->lastError().isValid()) {
+        QString error;
+        error.insert(0, "&gt;&gt; <B><font color=\"red\">Query Error</font></B><br>");
+        error.append("&gt;&gt; Error numero: <font color=\"red\">");
+        error.append(QString::number(model->lastError().number()));
+        error.append("</font><br>");
+        error.append("&gt;&gt; <font color=\"red\">");
+        error.append(model->lastError().text());
+        error.append("</font><br>");
+        plainTextEdit->appendHtml(error);
+    } else {
+        QString message;
+        message.insert(0, "&gt;&gt; <B><font color=\"green\">Query OK");
+        message.append("</font></B>");
+        plainTextEdit->appendHtml(message);
+    }
+
+    if (model->query().numRowsAffected() != -1 && !model->query().isSelect()) {
+        QString message = QString::number(model->query().numRowsAffected());
+        message.insert(0, "&gt;&gt; Numero de filas afectadas: <font color=\"green\">");
+        message.append("</font>");
+        plainTextEdit->appendHtml(message);
+    }
+
+    if (model->query().isSelect() && !model->lastError().isValid()) {
+        QString message;
+        message.insert(0, "&gt;&gt; Numero de records: <font color=\"green\">");
+        message.append(QString::number(model->query().size()));
+        message.append("</font><br>");
+        message.append("&gt;&gt; Numero de columnas: <font color=\"green\">");
+        message.append(QString::number(model->query().record().count()));
+        message.append("</font>");
+        plainTextEdit->appendHtml(message);
+    }
 }
 
 void SqlModule::setEditMode(bool edit)
