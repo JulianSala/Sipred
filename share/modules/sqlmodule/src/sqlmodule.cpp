@@ -140,9 +140,18 @@ bool SqlModule::setConfig(const QVariant &value)
     QHash<QString, QVariant> config = value.toHash();
 
     foreach (QString val, config.keys()) {
-        if (m_config.contains(val) && config.value(val).isValid() &&
-                m_config.value(val).typeName() == config.value(val).typeName()) {
-            m_config[val] = config.value(val);
+        if (val == "userName") {
+            m_config["userName"] = config.value(val);
+
+        } else if (val == "hostName") {
+            m_config["hostName"] = config.value(val);
+
+        } else if (val == "portNumber") {
+            m_config["portNumber"] = config.value(val);
+
+        } else if (val == "pwd") {
+            m_config["pwd"] = config.value(val);
+
         }
     }
 
@@ -294,6 +303,7 @@ void SqlModule::runScript()
     QSqlQueryModel *model = qobject_cast<QSqlQueryModel *>(tableView->model());
     QSqlQuery query(script, QSqlDatabase::database("SipredConnection"));
     model->setQuery(query);
+
     if (model->lastError().isValid()) {
         QString error;
         error.insert(0, "&gt;&gt; <B><font color=\"red\">Query Error</font></B><br>");
@@ -302,8 +312,20 @@ void SqlModule::runScript()
         error.append("</font><br>");
         error.append("&gt;&gt; <font color=\"red\">");
         error.append(model->lastError().text());
-        error.append("</font><br>");
+        error.append("</font>");
         plainTextEdit->appendHtml(error);
+
+    } else if (QSqlDatabase::database("SipredConnection").lastError().isValid()) {
+        QString error;
+        error.insert(0, "&gt;&gt; <B><font color=\"red\">Query Error</font></B><br>");
+        error.append("&gt;&gt; Error numero: <font color=\"red\">");
+        error.append(QString::number(QSqlDatabase::database("SipredConnection").lastError().number()));
+        error.append("</font><br>");
+        error.append("&gt;&gt; <font color=\"red\">");
+        error.append(QSqlDatabase::database("SipredConnection").lastError().text());
+        error.append("</font>");
+        plainTextEdit->appendHtml(error);
+
     } else {
         QString message;
         message.insert(0, "&gt;&gt; <B><font color=\"green\">Query OK");
