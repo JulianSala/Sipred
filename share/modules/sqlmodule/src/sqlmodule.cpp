@@ -45,7 +45,7 @@ SqlModule::SqlModule(QObject *parent) :
     m_moduleManger = NULL;
 
     m_config["userName"] = QVariant(QString(""));
-    m_config["hostName"] = QVariant(QString(""));
+    m_config["hostName"] = QVariant(QString("localHost"));
     m_config["portNumber"] = QVariant(3306);
     m_config["pwd"] = QVariant(QString(""));
 }
@@ -206,6 +206,8 @@ bool SqlModule::start()
     connect(m_menu->menuAction(), SIGNAL(triggered()), m_configDialog, SLOT(show()));
     createConnection();
 
+    connect(this, SIGNAL(configChange()), this, SLOT(loadConfig()));
+
     return true;
 }
 
@@ -349,6 +351,27 @@ void SqlModule::runScript()
         message.append(QString::number(model->query().record().count()));
         message.append("</font>");
         plainTextEdit->appendHtml(message);
+    }
+}
+
+void SqlModule::loadConfig()
+{
+    if (!m_configDialog)
+        return;
+
+    QList<QLineEdit *> lineEditList = m_configDialog->findChildren<QLineEdit *>();
+
+    foreach (QLineEdit *l, lineEditList) {
+        QString objName = l->objectName();
+        if (objName == "userLineEdit") {
+            l->setText(m_config.value("userName").toString());
+        } else if (objName == "hostLineEdit") {
+            l->setText(m_config.value("hostName").toString());
+        } else if (objName == "portLineEdit") {
+            l->setText(m_config.value("portNumber").toInt());
+        } else if (objName == "pwdLineEdit") {
+            l->setText(m_config.value("pwd").toString());
+        }
     }
 }
 
