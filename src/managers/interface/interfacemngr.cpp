@@ -67,12 +67,21 @@ void InterfaceMngr::registerModuleManager(ModuleMngr *moduleMngr)
 
         if (module->controlsWidget()) {
             QToolBox *toolBox = d->m_dockWidget->findChild<QToolBox *>();
-            if (toolBox)
-                toolBox->addItem(module->controlsWidget(), module->name());
+            if (toolBox) {
+                if (toolBox->count() == 1 &&
+                    toolBox->itemText(toolBox->currentIndex()).isEmpty()) {
+                    toolBox->addItem(module->controlsWidget(),
+                                     module->icon(),
+                                     module->name());
+                    toolBox->removeItem(0);
+                } else {
+                    toolBox->addItem(module->controlsWidget(),
+                                     module->icon(),
+                                     module->name());
+                }
+            }
         }
     }
-
-    d->m_centralWidget->setCurrentIndex(1);
 }
 
 void InterfaceMngr::registerPluginManager(PluginMngr *pluginMngr)
@@ -220,8 +229,9 @@ void InterfaceMngrPrivate::setDefaultWindow()
         qFatal("Can't load default mainwindow.");
     }
 
-    QIcon icon(":/logo/logo_sipred");
+    QIcon icon(":/thumbnail/logo_sipred");
     m_mainwindow->setWindowIcon(icon);
+    setWindowTitle("Dismet");
 }
 
 void InterfaceMngrPrivate::setDefaultDock()
@@ -238,7 +248,28 @@ void InterfaceMngrPrivate::setDefaultDock()
     if (!m_dockWidget)
         qFatal("Can't load default dockwidget");
 
+    QToolBox *toolBox = m_dockWidget->findChild<QToolBox *>();
+
+    if (!toolBox)
+        qFatal("Can't find tool box.");
+
+    QObject::connect(toolBox, SIGNAL(currentChanged(int)), m_centralWidget, SLOT(setCurrentIndex(int)));
+    toolBox->setCurrentIndex(0);
+
     m_dockWidget->setWindowTitle("Herramientas");
+}
+
+void InterfaceMngrPrivate::setWindowTitle(QString title)
+{
+    if (!m_mainwindow)
+        return;
+
+    if (title.isEmpty())
+        title.append("Sipred");
+    else
+        title.append(" - Sipred");
+
+    m_mainwindow->setWindowTitle(title);
 }
 
 void InterfaceMngrPrivate::setDefaultCenterWidget()

@@ -6,7 +6,7 @@
 **
 *****************************************************************************
 **
-**  modulemngr.h is part of Sipred.
+**  configwidget.cpp is part of Sipred.
 **
 **    Sipred is free software: you can redistribute it and/or modify
 **    it under the terms of the GNU General Public License as published by
@@ -23,44 +23,20 @@
 **
 ****************************************************************************/
 
-#ifndef MODULEMNGR_H
-#define MODULEMNGR_H
+#include "../include/configwidget.h"
 
-#include <QObject>
-
-#include "modulemngr_global.h"
-#include "modulefactory.h"
-#include "module.h"
-
-class ModuleMngrPrivate;
-
-class MODULEMNGR_EXPORT ModuleMngr : public QObject
+ConfigWidget::ConfigWidget(QObject *parent) :
+    QObject(parent)
 {
-    Q_OBJECT
+    m_widget = NULL;
+}
 
-public:
-    ModuleMngr(QObject *parent = 0);
-    ~ModuleMngr();
-    bool activeModule(const QString &);
-    bool disableModule(const QString &);
-    QStringList avaliableModules();
-    QStringList avaliableModules(const Module::ModuleType &);
-    Module *module(const QString &);
+bool ConfigWidget::loadWidget()
+{
+    return true;
+}
 
-public slots:
-    void saveModuleConfig();
-
-signals:
-    void moduleLoaded();
-    void moduleLoaded(QString);
-    void configChange();
-
-protected:
-    ModuleMngr(const ModuleMngrPrivate &);
-    ModuleMngrPrivate * const d_ptr;
-
-private:
-    Q_DECLARE_PRIVATE(ModuleMngr)
-};
-
-#endif // MODULEMNGR_H
+QWidget* ConfigWidget::widget() const
+{
+    return m_widget;
+}

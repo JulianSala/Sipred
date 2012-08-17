@@ -69,7 +69,6 @@ private:
     bool loadConfigDialog();
     bool loadControlWidget();
     bool loadCentralWidget();
-    void loadConfig();
 
 signals:
     void configChange();
@@ -78,6 +77,7 @@ public slots:
     bool start();
     bool stop();
     void applyConfig();
+    void loadConfig();
     bool createConnection();
     void runScript();
 

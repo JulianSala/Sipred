@@ -36,7 +36,6 @@ public:
     CentralWidget(QObject *parent = 0);
     bool loadWidget();
     QWidget *widget() const;
-
     
 private:
     QWidget *m_widget;

@@ -30,6 +30,7 @@
 #include <module.h>
 
 class CentralWidget;
+class ControlWidget;
 class ModuleMngr;
 
 class BudgetPlanner : public QObject, public Module
@@ -77,6 +78,7 @@ private:
     QHash<QString, QVariant> m_config;
     ModuleMngr *m_moduleMngr;
     CentralWidget *m_centralWidget;
+    ControlWidget *m_controlWidget;
 };
 
 #endif // BUDGETPLANNER_H

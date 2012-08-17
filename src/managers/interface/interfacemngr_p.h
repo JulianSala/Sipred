@@ -43,6 +43,8 @@ public:
     void loadDockWidget();
     void setDefaultWindow();
 
+    void setWindowTitle(QString title = QString());
+
 //    void addConfigPage(QWidget *);
 
     InterfaceMngr * const q_ptr;

@@ -34,7 +34,7 @@
 ModuleMngr::ModuleMngr(QObject *parent) :
     QObject(parent), d_ptr(new ModuleMngrPrivate(this))
 {
-
+    connect(this, SIGNAL(configChange()), this, SLOT(saveModuleConfig()));
 }
 
 ModuleMngr::~ModuleMngr()
@@ -102,6 +102,15 @@ Module *ModuleMngr::module(const QString &moduleId)
     return NULL;
 }
 
+void ModuleMngr::saveModuleConfig()
+{
+    Q_D(ModuleMngr);
+
+    QSettings settings;
+
+    settings.setValue("modulesConfig", QVariant(d->m_modulesConfig));
+}
+
 /****************************************************************************
  *                           ModuleMngrPrivate
  ***************************************************************************/
@@ -109,6 +118,9 @@ Module *ModuleMngr::module(const QString &moduleId)
 ModuleMngrPrivate::ModuleMngrPrivate(ModuleMngr *q) :
     q_ptr(q)
 {
+    QSettings settings;
+    m_modulesConfig = settings.value("modulesConfig").toHash();
+
     this->initModuleManager();
     this->loadModules();
 }
@@ -145,8 +157,8 @@ void ModuleMngrPrivate::loadModules()
             QObject *moduleInstance = m_loader.instance();
             if (!moduleInstance)
                 continue;
-            qDebug() << fileName;
 
+            qDebug() << fileName;
 
             ModuleFactory *moduleFactory = qobject_cast<ModuleFactory *>(moduleInstance);
 
@@ -208,6 +220,9 @@ void ModuleMngrPrivate::registerModule(Module *module, const QString &fileName)
 //    info.setInstance(module->instance());
     info.setConfigurable(module->configurable());
     info.setType(module->type());
+
+    if (!m_modulesConfig.contains(info.id()) && info.isConfigurable())
+        m_modulesConfig.insert(info.id(), module->defaultConfig());
 
     m_modulesInfo.insert(info.id(), info);
 
@@ -274,6 +289,9 @@ bool ModuleMngrPrivate::loadModule(const QString &moduleId)
 //    resolveDependences(module);
     module->registerModuleManager(q);
     module->start();
+
+    if (m_modulesConfig.contains(moduleId))
+        module->setConfig(m_modulesConfig.value(moduleId));
 
     m_activeModules.insert(moduleId, module);
 

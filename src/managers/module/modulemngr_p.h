@@ -64,6 +64,7 @@ public:
     Sequencer *m_startSecuence;
 
     ModuleMngr * const q_ptr;
+
 };
 
 #endif // MODULEMNGR_P_H

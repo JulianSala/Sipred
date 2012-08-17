@@ -161,6 +161,8 @@ bool SqlModule::setConfig(const QVariant &value)
         }
     }
 
+    loadConfig();
+
     return true;
 }
 
@@ -254,6 +256,42 @@ void SqlModule::applyConfig()
         }
     }
     createConnection();
+}
+
+void SqlModule::loadConfig()
+{
+    if (!m_configDialog)
+        return;
+
+    QList<QLineEdit *> lineEditList = m_configDialog->findChildren<QLineEdit *>();
+    foreach (QLineEdit *l, lineEditList) {
+        QString objName = l->objectName();
+        if (objName == "userLineEdit") {
+            l->setText(m_config.value("userName").toString());
+        } else if (objName == "hostLineEdit") {
+            l->setText(m_config.value("hostName").toString());
+        } else if (objName == "portLineEdit") {
+            l->setText(QString::number(m_config.value("portNumber").toInt()));
+        } else if (objName == "pwdLineEdit") {
+            l->setText(m_config.value("pwd").toString());
+        }
+    }
+
+    if (!m_controlsWidget)
+        return;
+
+    QList<QLabel *> labels = m_controlsWidget->findChildren<QLabel *>();
+    foreach (QLabel *l, labels) {
+        if (l->objectName() == "userLabel") {
+            l->setText(m_config.value("userName").toString());
+        } else if (l->objectName() == "hostLabel") {
+            l->setText(m_config.value("hostName").toString());
+        } else if (l->objectName() == "portLabel") {
+            l->setText(m_config.value("portNumber").toString());
+        } else if (l->objectName() == "typeLabel") {
+            l->setText("Administrador");
+        }
+    }
 }
 
 bool SqlModule::createConnection()
@@ -566,40 +604,4 @@ bool SqlModule::loadCentralWidget()
     }
 
     return true;
-}
-
-void SqlModule::loadConfig()
-{
-    if (!m_configDialog)
-        return;
-
-    QList<QLineEdit *> lineEditList = m_configDialog->findChildren<QLineEdit *>();
-    foreach (QLineEdit *l, lineEditList) {
-        QString objName = l->objectName();
-        if (objName == "userLineEdit") {
-            l->setText(m_config.value("userName").toString());
-        } else if (objName == "hostLineEdit") {
-            l->setText(m_config.value("hostName").toString());
-        } else if (objName == "portLineEdit") {
-            l->setText(QString::number(m_config.value("portNumber").toInt()));
-        } else if (objName == "pwdLineEdit") {
-            l->setText(m_config.value("pwd").toString());
-        }
-    }
-
-    if (!m_controlsWidget)
-        return;
-
-    QList<QLabel *> labels = m_controlsWidget->findChildren<QLabel *>();
-    foreach (QLabel *l, labels) {
-        if (l->objectName() == "userLabel") {
-            l->setText(m_config.value("userName").toString());
-        } else if (l->objectName() == "hostLabel") {
-            l->setText(m_config.value("hostName").toString());
-        } else if (l->objectName() == "portLabel") {
-            l->setText(m_config.value("portNumber").toString());
-        } else if (l->objectName() == "typeLabel") {
-            l->setText("Administrador");
-        }
-    }
 }

@@ -24,6 +24,7 @@
 ****************************************************************************/
 
 #include "../include/budgetplanner.h"
+#include "../include/controlwidget.h"
 #include "../include/centralwidget.h"
 #include "modulemngr.h"
 
@@ -132,7 +133,7 @@ QWidget* BudgetPlanner::centralWidget() const
 
 QWidget* BudgetPlanner::controlsWidget() const
 {
-    return NULL;
+    return m_controlWidget->widget();
 }
 
 QWidget* BudgetPlanner::additionalWidget() const
@@ -148,6 +149,7 @@ void BudgetPlanner::registerModuleManager(ModuleMngr *moduleMngr)
 bool BudgetPlanner::start()
 {
     m_centralWidget = new CentralWidget(this);
+    m_controlWidget = new ControlWidget(this);
 
     return true;
 }
