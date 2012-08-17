@@ -71,6 +71,8 @@ void InterfaceMngr::registerModuleManager(ModuleMngr *moduleMngr)
                 toolBox->addItem(module->controlsWidget(), module->name());
         }
     }
+
+    d->m_centralWidget->setCurrentIndex(1);
 }
 
 void InterfaceMngr::registerPluginManager(PluginMngr *pluginMngr)

@@ -69,6 +69,7 @@ private:
     bool loadConfigDialog();
     bool loadControlWidget();
     bool loadCentralWidget();
+    void loadConfig();
 
 signals:
     void configChange();
@@ -76,10 +77,9 @@ signals:
 public slots:
     bool start();
     bool stop();
+    void applyConfig();
     bool createConnection();
-    void saveConfig(const QVariant &);
     void runScript();
-    void loadConfig();
 
 private slots:
     void openSqlScript(QModelIndex);

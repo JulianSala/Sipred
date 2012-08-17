@@ -44,10 +44,10 @@ SqlModule::SqlModule(QObject *parent) :
     m_config.clear();
     m_moduleManger = NULL;
 
-    m_config["userName"] = QVariant(QString(""));
+    m_config["userName"] = QVariant(QString("root"));
     m_config["hostName"] = QVariant(QString("localHost"));
     m_config["portNumber"] = QVariant(3306);
-    m_config["pwd"] = QVariant(QString(""));
+    m_config["pwd"] = QVariant(QString("123456"));
 }
 
 SqlModule::~SqlModule()
@@ -62,7 +62,7 @@ QString SqlModule::id() const
 
 QString SqlModule::name() const
 {
-    return QString("Sql Module");
+    return QString("Modulo Sql");
 }
 
 QString SqlModule::version() const
@@ -137,7 +137,13 @@ QHash<QString, QVariant> SqlModule::defaultConfig() const
 
 bool SqlModule::setConfig(const QVariant &value)
 {
+    if (!value.isValid() || value.isNull())
+        return false;
+
     QHash<QString, QVariant> config = value.toHash();
+
+    if (config.isEmpty())
+        return false;
 
     foreach (QString val, config.keys()) {
         if (val == "userName") {
@@ -201,8 +207,9 @@ bool SqlModule::start()
     if (!loadControlWidget())
         return false;
 
-    m_menu = new QMenu("SQL", m_configDialog);
+    m_menu = new QMenu("Modulo SQL", m_configDialog);
 
+    loadConfig();
     connect(m_menu->menuAction(), SIGNAL(triggered()), m_configDialog, SLOT(show()));
     createConnection();
 
@@ -216,6 +223,39 @@ bool SqlModule::stop()
     return true;
 }
 
+void SqlModule::applyConfig()
+{
+    QList<QLineEdit *> lineEditList = m_configDialog->findChildren<QLineEdit *>();
+
+    foreach (QLineEdit *l, lineEditList) {
+        QString objName = l->objectName();
+
+        if (objName == "userLabel")
+            m_config["userName"] = QVariant(l->text());
+        else if (objName == "hostLineEdit")
+            m_config["hostName"] = QVariant(l->text());
+        else if (objName == "portLineEdit")
+            m_config["portNumber"] = QVariant(l->text().toInt());
+        else if (objName == "pwdLineEdit")
+            m_config["pwd"] = QVariant(l->text());
+
+    }
+
+    QList<QLabel *> labels = m_controlsWidget->findChildren<QLabel *>();
+    foreach (QLabel *l, labels) {
+        if (l->objectName() == "userLabel") {
+            l->setText(m_config.value("userName").toString());
+        } else if (l->objectName() == "hostLabel") {
+            l->setText(m_config.value("hostName").toString());
+        } else if (l->objectName() == "portLabel") {
+            l->setText(m_config.value("portNumber").toString());
+        } else if (l->objectName() == "typeLabel") {
+            l->setText("Administrador");
+        }
+    }
+    createConnection();
+}
+
 bool SqlModule::createConnection()
 {
     if (!QSqlDatabase::isDriverAvailable("QMYSQL")) {
@@ -224,34 +264,26 @@ bool SqlModule::createConnection()
         return false;
     }
 
-    QHash<QString, QVariant> config;
     QSqlDatabase database = QSqlDatabase::addDatabase("QMYSQL", "SipredConnection");
     QList<QLineEdit *> lineEditList = m_configDialog->findChildren<QLineEdit *>();
     QCheckBox *checkBox = m_configDialog->findChild<QCheckBox *>();
 
     foreach (QLineEdit *l, lineEditList) {
         QString objName = l->objectName();
-        if (objName == "userLineEdit") {
+        if (objName == "userLineEdit")
             database.setUserName(l->text());
-            config.insert("userName", QVariant(database.userName()));
-        } else if (objName == "hostLineEdit") {
+        else if (objName == "hostLineEdit")
             database.setHostName(l->text());
-            config.insert("hostName", QVariant(database.hostName()));
-        } else if (objName == "portLineEdit") {
+        else if (objName == "portLineEdit")
             database.setPort(l->text().toInt());
-            config.insert("portNumber", QVariant(database.port()));
-        } else if (objName == "pwdLineEdit") {
+        else if (objName == "pwdLineEdit")
             database.setPassword(l->text());
-            config.insert("pwd", QVariant(database.password()));
-        } else if (objName == "socketLineEdit" && checkBox->isChecked()) {
+        else if (objName == "socketLineEdit" && checkBox->isChecked())
             database.setConnectOptions();
-        }
+
     }
 
     if (database.open()) {
-        m_config.clear();
-        m_config = config;
-
         QLabel *pixmapLabel = m_configDialog->findChild<QLabel *>("pixmapLabel");
 
         if (!pixmapLabel) {
@@ -277,11 +309,6 @@ bool SqlModule::createConnection()
     }
 
     return true;
-}
-
-void SqlModule::saveConfig(const QVariant &values)
-{
-
 }
 
 void SqlModule::runScript()
@@ -354,27 +381,6 @@ void SqlModule::runScript()
     }
 }
 
-void SqlModule::loadConfig()
-{
-    if (!m_configDialog)
-        return;
-
-    QList<QLineEdit *> lineEditList = m_configDialog->findChildren<QLineEdit *>();
-
-    foreach (QLineEdit *l, lineEditList) {
-        QString objName = l->objectName();
-        if (objName == "userLineEdit") {
-            l->setText(m_config.value("userName").toString());
-        } else if (objName == "hostLineEdit") {
-            l->setText(m_config.value("hostName").toString());
-        } else if (objName == "portLineEdit") {
-            l->setText(m_config.value("portNumber").toInt());
-        } else if (objName == "pwdLineEdit") {
-            l->setText(m_config.value("pwd").toString());
-        }
-    }
-}
-
 void SqlModule::setEditMode(bool edit)
 {
     QTextEdit *textEdit = m_centralWidget->findChild<QTextEdit *>();
@@ -423,7 +429,6 @@ void SqlModule::openSqlScript(QModelIndex index)
     }
 
     textEdit->setText(text);
-//    setEditMode(false);
 
     QPushButton *editButton = m_centralWidget->findChild<QPushButton *>("editPushButton");
     editButton->setChecked(false);
@@ -485,12 +490,12 @@ bool SqlModule::loadControlWidget()
     QList<QLabel *> labels = m_controlsWidget->findChildren<QLabel *>();
     foreach (QLabel *l, labels) {
         if (l->objectName() == "userName") {
-            l->setText(m_config.value("userLabel").toString());
+            l->setText(m_config.value("userName").toString());
         } else if (l->objectName() == "hostLabel") {
             l->setText(m_config.value("hostName").toString());
         } else if (l->objectName() == "portLabel") {
             l->setText(m_config.value("portNumber").toString());
-        } else if (l->objectName() == "tyoeLabel") {
+        } else if (l->objectName() == "typeLabel") {
             l->setText("Administrador");
         }
     }
@@ -554,11 +559,47 @@ bool SqlModule::loadCentralWidget()
                 p->setChecked(false);
                 connect(p, SIGNAL(toggled(bool)), this, SLOT(setEditMode(bool)));
                 setEditMode(p->isChecked());
-            } else if (p->objectName() == "runPushButton"){
+            } else if (p->objectName() == "runPushButton") {
                 connect(p, SIGNAL(clicked()), this, SLOT(runScript()));
             }
         }
     }
 
     return true;
+}
+
+void SqlModule::loadConfig()
+{
+    if (!m_configDialog)
+        return;
+
+    QList<QLineEdit *> lineEditList = m_configDialog->findChildren<QLineEdit *>();
+    foreach (QLineEdit *l, lineEditList) {
+        QString objName = l->objectName();
+        if (objName == "userLineEdit") {
+            l->setText(m_config.value("userName").toString());
+        } else if (objName == "hostLineEdit") {
+            l->setText(m_config.value("hostName").toString());
+        } else if (objName == "portLineEdit") {
+            l->setText(QString::number(m_config.value("portNumber").toInt()));
+        } else if (objName == "pwdLineEdit") {
+            l->setText(m_config.value("pwd").toString());
+        }
+    }
+
+    if (!m_controlsWidget)
+        return;
+
+    QList<QLabel *> labels = m_controlsWidget->findChildren<QLabel *>();
+    foreach (QLabel *l, labels) {
+        if (l->objectName() == "userLabel") {
+            l->setText(m_config.value("userName").toString());
+        } else if (l->objectName() == "hostLabel") {
+            l->setText(m_config.value("hostName").toString());
+        } else if (l->objectName() == "portLabel") {
+            l->setText(m_config.value("portNumber").toString());
+        } else if (l->objectName() == "typeLabel") {
+            l->setText("Administrador");
+        }
+    }
 }
