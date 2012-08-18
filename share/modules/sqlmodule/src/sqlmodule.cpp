@@ -162,6 +162,7 @@ bool SqlModule::setConfig(const QVariant &value)
     }
 
     loadConfig();
+    applyConfig();
 
     return true;
 }
@@ -213,7 +214,7 @@ bool SqlModule::start()
 
     loadConfig();
     connect(m_menu->menuAction(), SIGNAL(triggered()), m_configDialog, SLOT(show()));
-    createConnection();
+//    createConnection();
 
     connect(this, SIGNAL(configChange()), this, SLOT(loadConfig()));
 
@@ -232,7 +233,7 @@ void SqlModule::applyConfig()
     foreach (QLineEdit *l, lineEditList) {
         QString objName = l->objectName();
 
-        if (objName == "userLabel")
+        if (objName == "userLineEdit")
             m_config["userName"] = QVariant(l->text());
         else if (objName == "hostLineEdit")
             m_config["hostName"] = QVariant(l->text());

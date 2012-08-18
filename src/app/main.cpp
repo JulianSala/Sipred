@@ -55,6 +55,10 @@ inline void registerResources(const QString &resourcesDir)
 
 int main(int argc, char *argv[])
 {
+    QCoreApplication::setOrganizationName("Dismet");
+    QCoreApplication::setOrganizationDomain("www.dismet.com");
+    QCoreApplication::setApplicationName("Sipred");
+
     QApplication app(argc, argv);
 
     registerResources(RESOURCES_PATH);

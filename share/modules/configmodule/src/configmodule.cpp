@@ -221,14 +221,15 @@ void ConfigModule::loadConfigDialogs()
 
 void ConfigModule::okButtonClicked()
 {
-    foreach (QString id, m_moduleMngr->avaliableModules())
-        m_moduleMngr->module(id)->applyConfig();
+    applyButtonClicked();
 }
 
 void ConfigModule::applyButtonClicked()
 {
     foreach (QString id, m_moduleMngr->avaliableModules())
         m_moduleMngr->module(id)->applyConfig();
+
+    m_moduleMngr->saveModuleConfig();
 }
 
 void ConfigModule::cancelButtonClucked()

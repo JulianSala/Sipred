@@ -2,6 +2,7 @@
     <qresource prefix="/ui">
         <file alias="budgetplanner_central.ui">share/budgetplanner_central.ui</file>
         <file alias="budgetplanner_control.ui">share/budgetplanner_control.ui</file>
+        <file alias="budgetplanner_config.ui">share/budgetplanner_config.ui</file>
     </qresource>
     <qresource prefix="/icons">
         <file alias="d_budgetplanner.png">share/nero_1.png</file>

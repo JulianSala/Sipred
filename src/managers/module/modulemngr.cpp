@@ -108,7 +108,12 @@ void ModuleMngr::saveModuleConfig()
 
     QSettings settings;
 
-    settings.setValue("modulesConfig", QVariant(d->m_modulesConfig));
+    foreach (QString moduleId, d->m_modulesConfig.keys()) {
+        Module *m = module(moduleId);
+        d->m_modulesConfig.insert(moduleId, m->defaultConfig());
+    }
+
+    settings.setValue("modulesConfig", d->m_modulesConfig);
 }
 
 /****************************************************************************
@@ -297,7 +302,7 @@ bool ModuleMngrPrivate::loadModule(const QString &moduleId)
 
     emit q->moduleLoaded();
     emit q->moduleLoaded(moduleId);
-    emit q->configChange();
+//    emit q->configChange();
 
     return true;
 }
