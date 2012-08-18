@@ -6,114 +6,92 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>553</width>
-    <height>341</height>
+    <width>605</width>
+    <height>588</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0" rowspan="3">
-    <layout class="QVBoxLayout" name="verticalLayout_2">
-     <item>
-      <widget class="QListView" name="listView">
-       <property name="maximumSize">
-        <size>
-         <width>200</width>
-         <height>16777215</height>
-        </size>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0" rowspan="6">
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="1" column="0">
+      <widget class="QPushButton" name="addPushButton">
+       <property name="text">
+        <string>Agregar</string>
        </property>
       </widget>
      </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QPushButton" name="addPushButton">
-         <property name="text">
-          <string>Agregar</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="deletePushButton">
-         <property name="text">
-          <string>Eliminar</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
+     <item row="1" column="1">
+      <widget class="QPushButton" name="deletePushButton">
+       <property name="text">
+        <string>Eliminar</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0" colspan="2">
+      <widget class="QTreeView" name="treeView"/>
      </item>
     </layout>
    </item>
-   <item row="0" column="1">
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QTextEdit" name="textEdit"/>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
-        <widget class="QPushButton" name="savePushButton">
-         <property name="text">
-          <string>Guardar</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="runPushButton">
-         <property name="text">
-          <string>Correr</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="cancelPushButton">
-         <property name="text">
-          <string>Cancelar</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </item>
-    </layout>
+   <item row="2" column="2">
+    <widget class="QPushButton" name="runPushButton">
+     <property name="text">
+      <string>Correr</string>
+     </property>
+    </widget>
    </item>
-   <item row="1" column="1">
-    <widget class="QTableView" name="tableView"/>
+   <item row="0" column="2">
+    <widget class="QPushButton" name="savePushButton">
+     <property name="text">
+      <string>Guardar</string>
+     </property>
+    </widget>
    </item>
-   <item row="2" column="1">
-    <widget class="QPlainTextEdit" name="plainTextEdit">
-     <property name="maximumSize">
+   <item row="3" column="2">
+    <widget class="QPushButton" name="cancelPushButton">
+     <property name="text">
+      <string>Cancelar</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="2">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
       <size>
-       <width>16777215</width>
-       <height>200</height>
+       <width>20</width>
+       <height>81</height>
       </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="0" column="1" rowspan="5">
+    <widget class="QTextEdit" name="textEdit"/>
+   </item>
+   <item row="5" column="1" colspan="2">
+    <widget class="QSplitter" name="splitter">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <widget class="QTableView" name="tableView"/>
+     <widget class="QPlainTextEdit" name="plainTextEdit">
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>200</height>
+       </size>
+      </property>
+     </widget>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="QPushButton" name="editPushButton">
+     <property name="text">
+      <string>Editar</string>
      </property>
     </widget>
    </item>

@@ -169,11 +169,26 @@ bool ConfigModule::stop()
     return true;
 }
 
-void ConfigModule::currentDialogChange(int page)
+void ConfigModule::currentDialogChange(const QModelIndex &index)
 {
+    QListView *listView = m_widget->findChild<QListView *>();
+    if (!listView)
+        return;
+
+    QStandardItemModel *model = qobject_cast<QStandardItemModel *>(listView->model());
+    QStandardItem *item = model->itemFromIndex(index);
+
     QStackedWidget *stacked = m_widget->findChild<QStackedWidget *>();
     if (!stacked)
         return;
+
+    stacked->setCurrentIndex(item->row());
+
+    QLabel *label = m_widget->findChild<QLabel *>();
+    if (!label)
+        return;
+
+    label->setText(item->text());
 }
 
 void ConfigModule::loadConfigDialogs()
@@ -189,25 +204,32 @@ void ConfigModule::loadConfigDialogs()
     foreach (QString id, m_moduleMngr->avaliableModules()) {
         Module *module = m_moduleMngr->module(id);
         if (module->configDialog()) {
-            int page = stacked->addWidget(module->configDialog());
+            stacked->addWidget(module->configDialog());
             QStandardItemModel *model = qobject_cast<QStandardItemModel *>(listView->model());
             QStandardItem *item = new QStandardItem(module->icon(), module->name());
             item->setFlags(item->flags() & ~Qt::ItemIsEditable);
             model->appendRow(item);
+
 //            connect(listView, SIGNAL(activated(QModelIndex)), m_signalMapper, SLOT(map()));
 //            m_signalMapper->setMapping(listView, );
         }
     }
+
+    listView->setCurrentIndex(listView->model()->index(0, 0));
+    currentDialogChange(listView->currentIndex());
 }
 
 void ConfigModule::okButtonClicked()
 {
-
+    applyButtonClicked();
 }
 
 void ConfigModule::applyButtonClicked()
 {
+    foreach (QString id, m_moduleMngr->avaliableModules())
+        m_moduleMngr->module(id)->applyConfig();
 
+    m_moduleMngr->saveModuleConfig();
 }
 
 void ConfigModule::cancelButtonClucked()
@@ -264,7 +286,7 @@ bool ConfigModule::loadDialog()
         listView->setMinimumSize(150, 200);
         listView->setModel(new QStandardItemModel(this));
         listView->setIconSize(QSize(30, 30));
-//        connect(listView, SIGNAL(pressed(QModelIndex)), this, SLOT());
+        connect(listView, SIGNAL(pressed(QModelIndex)), this, SLOT(currentDialogChange(QModelIndex)));
     } else {
         qWarning() << "ConfigModule: Can't find list view.";
     }

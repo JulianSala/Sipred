@@ -6,7 +6,7 @@
 **
 *****************************************************************************
 **
-**  configmodule.h is part of Sipred.
+**  budgetplanner.h is part of Sipred.
 **
 **    Sipred is free software: you can redistribute it and/or modify
 **    it under the terms of the GNU General Public License as published by
@@ -23,19 +23,23 @@
 **
 ****************************************************************************/
 
-#ifndef CONFIGMODULE_H
-#define CONFIGMODULE_H
+#ifndef BUDGETPLANNER_H
+#define BUDGETPLANNER_H
 
 #include <QObject>
-#include "module.h"
+#include <module.h>
 
-class ConfigModule : public QObject, public Module
+class CentralWidget;
+class ControlWidget;
+class ModuleMngr;
+
+class BudgetPlanner : public QObject, public Module
 {
     Q_OBJECT
 
 public:
-    ConfigModule(QObject *parent = 0);
-    ~ConfigModule();
+    BudgetPlanner(QObject *parent = 0);
+    ~BudgetPlanner();
     
     QString id() const;
     QString name() const;
@@ -47,15 +51,13 @@ public:
     QString webside() const;
     QString license() const;
     QIcon icon() const;
-
     ModuleType type() const;
-
     QVariant dependences() const;
+
     bool configurable() const;
     QWidget *configDialog() const;
     QHash<QString, QVariant> defaultConfig() const;
-    bool setConfig(QVariant);
-    bool setConfigs(QVariant);
+    bool setConfig(const QVariant &);
 
     QMenu *menu() const;
     QWidget *centralWidget() const;
@@ -70,22 +72,13 @@ public slots:
     bool start();
     bool stop();
 
-    void currentDialogChange(const QModelIndex &);
-    void loadConfigDialogs();
-
-    void okButtonClicked();
-    void applyButtonClicked();
-    void cancelButtonClucked();
+    void applyConfig();
 
 private:
-    bool loadDialog();
-    void initMenu();
-
-    QSignalMapper *m_signalMapper;
-    QMenu *m_menu;
-    QWidget *m_widget;
-
+    QHash<QString, QVariant> m_config;
     ModuleMngr *m_moduleMngr;
+    CentralWidget *m_centralWidget;
+    ControlWidget *m_controlWidget;
 };
 
-#endif // CONFIGMODULE_H
+#endif // BUDGETPLANNER_H

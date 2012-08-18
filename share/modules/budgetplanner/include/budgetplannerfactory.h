@@ -6,7 +6,7 @@
 **
 *****************************************************************************
 **
-**  modulemngr.h is part of Sipred.
+**  budgetplannerfactory.h is part of Sipred.
 **
 **    Sipred is free software: you can redistribute it and/or modify
 **    it under the terms of the GNU General Public License as published by
@@ -23,44 +23,23 @@
 **
 ****************************************************************************/
 
-#ifndef MODULEMNGR_H
-#define MODULEMNGR_H
+#ifndef BUDGETPLANNERFACTORY_H
+#define BUDGETPLANNERFACTORY_H
 
+#include <QtPlugin>
 #include <QObject>
 
-#include "modulemngr_global.h"
-#include "modulefactory.h"
+#include "../include/budgetplanner.h"
 #include "module.h"
+#include "modulefactory.h"
 
-class ModuleMngrPrivate;
-
-class MODULEMNGR_EXPORT ModuleMngr : public QObject
+class BudgetPlannerFactory : public QObject, public ModuleFactory
 {
     Q_OBJECT
+    Q_INTERFACES(ModuleFactory)
 
 public:
-    ModuleMngr(QObject *parent = 0);
-    ~ModuleMngr();
-    bool activeModule(const QString &);
-    bool disableModule(const QString &);
-    QStringList avaliableModules();
-    QStringList avaliableModules(const Module::ModuleType &);
-    Module *module(const QString &);
-
-public slots:
-    void saveModuleConfig();
-
-signals:
-    void moduleLoaded();
-    void moduleLoaded(QString);
-    void configChange();
-
-protected:
-    ModuleMngr(const ModuleMngrPrivate &);
-    ModuleMngrPrivate * const d_ptr;
-
-private:
-    Q_DECLARE_PRIVATE(ModuleMngr)
+    Module *module();
 };
 
-#endif // MODULEMNGR_H
+#endif // BUDGETPLANNERFACTORY_H
