@@ -55,10 +55,6 @@ void Core::configure()
 
 void Core::run()
 {
-    QCoreApplication::setOrganizationName("Dismet");
-    QCoreApplication::setOrganizationDomain("www.dismet.com");
-    QCoreApplication::setApplicationName("Sipred");
-
     m_interfaceManager->initInterface();
     m_interfaceManager->registerModuleManager(m_moduleManager);
     m_interfaceManager->registerPluginManager(m_pluginManager);
