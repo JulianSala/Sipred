@@ -6,7 +6,7 @@
 **
 *****************************************************************************
 **
-**  modulemngr.h is part of Sipred.
+**  centralwidget.cpp is part of Sipred.
 **
 **    Sipred is free software: you can redistribute it and/or modify
 **    it under the terms of the GNU General Public License as published by
@@ -23,44 +23,38 @@
 **
 ****************************************************************************/
 
-#ifndef MODULEMNGR_H
-#define MODULEMNGR_H
+#include "../include/centralwidget.h"
 
-#include <QObject>
+#include <QtGui>
+#include <QtUiTools>
 
-#include "modulemngr_global.h"
-#include "modulefactory.h"
-#include "module.h"
-
-class ModuleMngrPrivate;
-
-class MODULEMNGR_EXPORT ModuleMngr : public QObject
+CentralWidget::CentralWidget(QObject *parent) :
+    QObject(parent)
 {
-    Q_OBJECT
+    m_widget = NULL;
+    loadWidget();
+}
 
-public:
-    ModuleMngr(QObject *parent = 0);
-    ~ModuleMngr();
-    bool activeModule(const QString &);
-    bool disableModule(const QString &);
-    QStringList avaliableModules();
-    QStringList avaliableModules(const Module::ModuleType &);
-    Module *module(const QString &);
+bool CentralWidget::loadWidget()
+{
+    QFile file(":/ui/budgetplanner_central.ui");
 
-public slots:
-    void saveModuleConfig();
+    if (!file.open(QIODevice::ReadOnly)) {
+        qWarning() << "BudgetPlanner: Can't open central widget";
+        return false;
+    }
 
-signals:
-    void moduleLoaded();
-    void moduleLoaded(QString);
-    void configChange();
+    QUiLoader loader;
 
-protected:
-    ModuleMngr(const ModuleMngrPrivate &);
-    ModuleMngrPrivate * const d_ptr;
+    m_widget = qobject_cast<QWidget *>(loader.load(&file));
 
-private:
-    Q_DECLARE_PRIVATE(ModuleMngr)
-};
+    if (!m_widget)
+        return false;
 
-#endif // MODULEMNGR_H
+    return true;
+}
+
+QWidget* CentralWidget::widget() const
+{
+    return m_widget;
+}

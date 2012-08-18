@@ -67,16 +67,23 @@ public:
 
 private:
     bool loadConfigDialog();
+    bool loadControlWidget();
     bool loadCentralWidget();
 
 signals:
-    
+    void configChange();
 
 public slots:
     bool start();
     bool stop();
+    void applyConfig();
+    void loadConfig();
     bool createConnection();
-    void saveConfig(const QVariant &);
+    void runScript();
+
+private slots:
+    void openSqlScript(QModelIndex);
+    void setEditMode(bool);
 
 private:
     QWidget *m_configDialog;

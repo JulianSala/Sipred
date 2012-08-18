@@ -27,7 +27,10 @@
 #include <modulemngr.h>
 
 #include <QtUiTools>
+#include <QSqlTableModel>
+#include <QSqlRecord>
 #include <QSqlDatabase>
+#include <QSqlQuery>
 #include <QSqlError>
 
 SqlModule::SqlModule(QObject *parent) :
@@ -41,10 +44,10 @@ SqlModule::SqlModule(QObject *parent) :
     m_config.clear();
     m_moduleManger = NULL;
 
-    m_config["userName"] = QVariant(QString(""));
-    m_config["hostName"] = QVariant(QString(""));
+    m_config["userName"] = QVariant(QString("root"));
+    m_config["hostName"] = QVariant(QString("localHost"));
     m_config["portNumber"] = QVariant(3306);
-    m_config["pwd"] = QVariant(QString(""));
+    m_config["pwd"] = QVariant(QString("123456"));
 }
 
 SqlModule::~SqlModule()
@@ -59,7 +62,7 @@ QString SqlModule::id() const
 
 QString SqlModule::name() const
 {
-    return QString("Sql Module");
+    return QString("Modulo Sql");
 }
 
 QString SqlModule::version() const
@@ -134,14 +137,32 @@ QHash<QString, QVariant> SqlModule::defaultConfig() const
 
 bool SqlModule::setConfig(const QVariant &value)
 {
+    if (!value.isValid() || value.isNull())
+        return false;
+
     QHash<QString, QVariant> config = value.toHash();
 
+    if (config.isEmpty())
+        return false;
+
     foreach (QString val, config.keys()) {
-        if (m_config.contains(val) && config.value(val).isValid() &&
-                m_config.value(val).typeName() == config.value(val).typeName()) {
-            m_config[val] = config.value(val);
+        if (val == "userName") {
+            m_config["userName"] = config.value(val);
+
+        } else if (val == "hostName") {
+            m_config["hostName"] = config.value(val);
+
+        } else if (val == "portNumber") {
+            m_config["portNumber"] = config.value(val);
+
+        } else if (val == "pwd") {
+            m_config["pwd"] = config.value(val);
+
         }
     }
+
+    loadConfig();
+    applyConfig();
 
     return true;
 }
@@ -186,10 +207,16 @@ bool SqlModule::start()
     if (!loadCentralWidget())
         return false;
 
-    m_menu = new QMenu("SQL", m_configDialog);
+    if (!loadControlWidget())
+        return false;
 
+    m_menu = new QMenu("Modulo SQL", m_configDialog);
+
+    loadConfig();
     connect(m_menu->menuAction(), SIGNAL(triggered()), m_configDialog, SLOT(show()));
-    createConnection();
+//    createConnection();
+
+    connect(this, SIGNAL(configChange()), this, SLOT(loadConfig()));
 
     return true;
 }
@@ -197,6 +224,75 @@ bool SqlModule::start()
 bool SqlModule::stop()
 {
     return true;
+}
+
+void SqlModule::applyConfig()
+{
+    QList<QLineEdit *> lineEditList = m_configDialog->findChildren<QLineEdit *>();
+
+    foreach (QLineEdit *l, lineEditList) {
+        QString objName = l->objectName();
+
+        if (objName == "userLineEdit")
+            m_config["userName"] = QVariant(l->text());
+        else if (objName == "hostLineEdit")
+            m_config["hostName"] = QVariant(l->text());
+        else if (objName == "portLineEdit")
+            m_config["portNumber"] = QVariant(l->text().toInt());
+        else if (objName == "pwdLineEdit")
+            m_config["pwd"] = QVariant(l->text());
+
+    }
+
+    QList<QLabel *> labels = m_controlsWidget->findChildren<QLabel *>();
+    foreach (QLabel *l, labels) {
+        if (l->objectName() == "userLabel") {
+            l->setText(m_config.value("userName").toString());
+        } else if (l->objectName() == "hostLabel") {
+            l->setText(m_config.value("hostName").toString());
+        } else if (l->objectName() == "portLabel") {
+            l->setText(m_config.value("portNumber").toString());
+        } else if (l->objectName() == "typeLabel") {
+            l->setText("Administrador");
+        }
+    }
+    createConnection();
+}
+
+void SqlModule::loadConfig()
+{
+    if (!m_configDialog)
+        return;
+
+    QList<QLineEdit *> lineEditList = m_configDialog->findChildren<QLineEdit *>();
+    foreach (QLineEdit *l, lineEditList) {
+        QString objName = l->objectName();
+        if (objName == "userLineEdit") {
+            l->setText(m_config.value("userName").toString());
+        } else if (objName == "hostLineEdit") {
+            l->setText(m_config.value("hostName").toString());
+        } else if (objName == "portLineEdit") {
+            l->setText(QString::number(m_config.value("portNumber").toInt()));
+        } else if (objName == "pwdLineEdit") {
+            l->setText(m_config.value("pwd").toString());
+        }
+    }
+
+    if (!m_controlsWidget)
+        return;
+
+    QList<QLabel *> labels = m_controlsWidget->findChildren<QLabel *>();
+    foreach (QLabel *l, labels) {
+        if (l->objectName() == "userLabel") {
+            l->setText(m_config.value("userName").toString());
+        } else if (l->objectName() == "hostLabel") {
+            l->setText(m_config.value("hostName").toString());
+        } else if (l->objectName() == "portLabel") {
+            l->setText(m_config.value("portNumber").toString());
+        } else if (l->objectName() == "typeLabel") {
+            l->setText("Administrador");
+        }
+    }
 }
 
 bool SqlModule::createConnection()
@@ -207,34 +303,26 @@ bool SqlModule::createConnection()
         return false;
     }
 
-    QHash<QString, QVariant> config;
     QSqlDatabase database = QSqlDatabase::addDatabase("QMYSQL", "SipredConnection");
     QList<QLineEdit *> lineEditList = m_configDialog->findChildren<QLineEdit *>();
     QCheckBox *checkBox = m_configDialog->findChild<QCheckBox *>();
 
     foreach (QLineEdit *l, lineEditList) {
         QString objName = l->objectName();
-        if (objName == "userLineEdit") {
+        if (objName == "userLineEdit")
             database.setUserName(l->text());
-            config.insert("userName", QVariant(database.userName()));
-        } else if (objName == "hostLineEdit") {
+        else if (objName == "hostLineEdit")
             database.setHostName(l->text());
-            config.insert("hostName", QVariant(database.hostName()));
-        } else if (objName == "portLineEdit") {
+        else if (objName == "portLineEdit")
             database.setPort(l->text().toInt());
-            config.insert("portNumber", QVariant(database.port()));
-        } else if (objName == "pwdLineEdit") {
+        else if (objName == "pwdLineEdit")
             database.setPassword(l->text());
-            config.insert("pwd", QVariant(database.password()));
-        } else if (objName == "socketLineEdit" && checkBox->isChecked()) {
+        else if (objName == "socketLineEdit" && checkBox->isChecked())
             database.setConnectOptions();
-        }
+
     }
 
     if (database.open()) {
-        m_config.clear();
-        m_config = config;
-
         QLabel *pixmapLabel = m_configDialog->findChild<QLabel *>("pixmapLabel");
 
         if (!pixmapLabel) {
@@ -262,9 +350,127 @@ bool SqlModule::createConnection()
     return true;
 }
 
-void SqlModule::saveConfig(const QVariant &values)
+void SqlModule::runScript()
 {
+    QTextEdit *textEdit = m_centralWidget->findChild<QTextEdit *>();
+    QTableView *tableView = m_centralWidget->findChild<QTableView *>();
+    QPlainTextEdit *plainTextEdit = m_centralWidget->findChild<QPlainTextEdit *>();
 
+    if (!textEdit) {
+        qWarning() << "SqlModule: Can't find text edit widget.";
+        return;
+    } else if (!tableView) {
+        qWarning() << "SqlModule: Can't find table view widget.";
+        return;
+    } else if (!plainTextEdit) {
+        qWarning() << "SqlModule: Can't find plain text edit widget.";
+        return;
+    }
+
+    QString script = textEdit->toPlainText();
+    QSqlQueryModel *model = qobject_cast<QSqlQueryModel *>(tableView->model());
+    QSqlQuery query(script, QSqlDatabase::database("SipredConnection"));
+    model->setQuery(query);
+
+    if (model->lastError().isValid()) {
+        QString error;
+        error.insert(0, "&gt;&gt; <B><font color=\"red\">Query Error</font></B><br>");
+        error.append("&gt;&gt; Error numero: <font color=\"red\">");
+        error.append(QString::number(model->lastError().number()));
+        error.append("</font><br>");
+        error.append("&gt;&gt; <font color=\"red\">");
+        error.append(model->lastError().text());
+        error.append("</font>");
+        plainTextEdit->appendHtml(error);
+
+    } else if (QSqlDatabase::database("SipredConnection").lastError().isValid()) {
+        QString error;
+        error.insert(0, "&gt;&gt; <B><font color=\"red\">Query Error</font></B><br>");
+        error.append("&gt;&gt; Error numero: <font color=\"red\">");
+        error.append(QString::number(QSqlDatabase::database("SipredConnection").lastError().number()));
+        error.append("</font><br>");
+        error.append("&gt;&gt; <font color=\"red\">");
+        error.append(QSqlDatabase::database("SipredConnection").lastError().text());
+        error.append("</font>");
+        plainTextEdit->appendHtml(error);
+
+    } else {
+        QString message;
+        message.insert(0, "&gt;&gt; <B><font color=\"green\">Query OK");
+        message.append("</font></B>");
+        plainTextEdit->appendHtml(message);
+    }
+
+    if (model->query().numRowsAffected() != -1 && !model->query().isSelect()) {
+        QString message = QString::number(model->query().numRowsAffected());
+        message.insert(0, "&gt;&gt; Numero de filas afectadas: <font color=\"green\">");
+        message.append("</font>");
+        plainTextEdit->appendHtml(message);
+    }
+
+    if (model->query().isSelect() && !model->lastError().isValid()) {
+        QString message;
+        message.insert(0, "&gt;&gt; Numero de records: <font color=\"green\">");
+        message.append(QString::number(model->query().size()));
+        message.append("</font><br>");
+        message.append("&gt;&gt; Numero de columnas: <font color=\"green\">");
+        message.append(QString::number(model->query().record().count()));
+        message.append("</font>");
+        plainTextEdit->appendHtml(message);
+    }
+}
+
+void SqlModule::setEditMode(bool edit)
+{
+    QTextEdit *textEdit = m_centralWidget->findChild<QTextEdit *>();
+
+    if (!textEdit) {
+        qWarning() << "SqlModule: Can't find text edit widget.";
+        return;
+    }
+
+    textEdit->setReadOnly(!edit);
+}
+
+void SqlModule::openSqlScript(QModelIndex index)
+{
+    if (!index.isValid())
+        return;
+
+    QTreeView *treeView = m_centralWidget->findChild<QTreeView *>();
+    if (!treeView) {
+        qWarning() << "SqlModule: Can't find list view.";
+        return;
+    }
+
+    QFileSystemModel *model = qobject_cast<QFileSystemModel *>(treeView->model());
+    QString filePath = model->filePath(index);
+
+    QFile file(filePath);
+
+    if (!file.open(QIODevice::ReadWrite)) {
+        QMessageBox::warning(treeView, "Error de Archivo",
+                             QString("Error al abrir el archivo:\n%1\n%2").arg(
+                                 file.fileName(), file.errorString()));
+        return;
+    }
+
+    QTextStream stream(&file);
+    QString text = stream.readAll();
+
+    file.close();
+
+    QTextEdit *textEdit = m_centralWidget->findChild<QTextEdit *>();
+
+    if (!textEdit) {
+        qWarning() << "SqlModule: Can't find text edit widget.";
+        return;
+    }
+
+    textEdit->setText(text);
+
+    QPushButton *editButton = m_centralWidget->findChild<QPushButton *>("editPushButton");
+    editButton->setChecked(false);
 }
 
 bool SqlModule::loadConfigDialog()
@@ -304,6 +510,38 @@ bool SqlModule::loadConfigDialog()
     return true;
 }
 
+bool SqlModule::loadControlWidget()
+{
+    QFile file(":/ui/sqlmodule_control.ui");
+
+    if (!file.open(QIODevice::ReadOnly)) {
+        qWarning() << "SqlModule: Can't open control widget.";
+        return false;
+    }
+
+    QUiLoader loader;
+
+    m_controlsWidget = qobject_cast<QWidget *>(loader.load(&file));
+
+    if (!m_controlsWidget)
+        return false;
+
+    QList<QLabel *> labels = m_controlsWidget->findChildren<QLabel *>();
+    foreach (QLabel *l, labels) {
+        if (l->objectName() == "userName") {
+            l->setText(m_config.value("userName").toString());
+        } else if (l->objectName() == "hostLabel") {
+            l->setText(m_config.value("hostName").toString());
+        } else if (l->objectName() == "portLabel") {
+            l->setText(m_config.value("portNumber").toString());
+        } else if (l->objectName() == "typeLabel") {
+            l->setText("Administrador");
+        }
+    }
+
+    return true;
+}
+
 bool SqlModule::loadCentralWidget()
 {
     QFile file(":/ui/sqlmodule_central.ui");
@@ -320,13 +558,50 @@ bool SqlModule::loadCentralWidget()
     if (!m_centralWidget)
         return false;
 
-    QListView *listView = m_centralWidget->findChild<QListView *>("listView");
-    if (!listView) {
+    QTreeView *treeView = m_centralWidget->findChild<QTreeView *>();
+    if (!treeView) {
         qWarning() << "SqlModule: Can't find list view.";
     } else {
         QFileSystemModel *model = new QFileSystemModel(this);
-        model->setRootPath(QDir::currentPath());
-        listView->setModel(model);
+        QDir dir(QApplication::applicationDirPath());
+        dir.cdUp();
+        dir.cd("share/scripts/mysql");
+        model->setRootPath(QDir::rootPath());
+        treeView->setModel(model);
+        treeView->setRootIndex(model->index(dir.absolutePath()));
+        connect(treeView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(openSqlScript(QModelIndex)));
+    }
+
+    QPlainTextEdit *plainTextEdit = m_centralWidget->findChild<QPlainTextEdit *>();
+    if (!plainTextEdit) {
+        qWarning() << "SqlModule: Can't find plain text edit.";
+    } else {
+        plainTextEdit->setReadOnly(true);
+        plainTextEdit->setPlainText(">>");
+        plainTextEdit->setLineWrapMode(QPlainTextEdit::NoWrap);
+    }
+
+    QTableView *tableView = m_centralWidget->findChild<QTableView *>();
+    if (!tableView) {
+        qWarning() << "SqlModule: Can't find table view.";
+    } else {
+        tableView->setModel(new QSqlQueryModel(this));
+    }
+
+    QList<QPushButton *> buttons = m_centralWidget->findChildren<QPushButton *>();
+    if (buttons.isEmpty()) {
+        qWarning() << "SqlModule: Can't find push buttons";
+    } else {
+        foreach (QPushButton *p, buttons) {
+            if (p->objectName() == "editPushButton") {
+                p->setCheckable(true);
+                p->setChecked(false);
+                connect(p, SIGNAL(toggled(bool)), this, SLOT(setEditMode(bool)));
+                setEditMode(p->isChecked());
+            } else if (p->objectName() == "runPushButton") {
+                connect(p, SIGNAL(clicked()), this, SLOT(runScript()));
+            }
+        }
     }
 
     return true;
