@@ -26,6 +26,7 @@
 #include "../include/budgetplanner.h"
 #include "../include/controlwidget.h"
 #include "../include/centralwidget.h"
+#include "../include/configwidget.h"
 #include "modulemngr.h"
 
 BudgetPlanner::BudgetPlanner(QObject *parent) :
@@ -33,6 +34,7 @@ BudgetPlanner::BudgetPlanner(QObject *parent) :
 {
     m_moduleMngr = NULL;
     m_centralWidget = NULL;
+    m_configWidget = NULL;
     m_config.clear();
 }
 
@@ -88,7 +90,7 @@ QString BudgetPlanner::license() const
 
 QIcon BudgetPlanner::icon() const
 {
-    return QIcon();
+    return QIcon(":/icons/e_budgetplanner.png");
 }
 
 Module::ModuleType BudgetPlanner::type() const
@@ -108,7 +110,7 @@ bool BudgetPlanner::configurable() const
 
 QWidget* BudgetPlanner::configDialog() const
 {
-    return NULL;
+    return m_configWidget->widget();
 }
 
 QHash<QString, QVariant> BudgetPlanner::defaultConfig() const
@@ -150,6 +152,7 @@ bool BudgetPlanner::start()
 {
     m_centralWidget = new CentralWidget(this);
     m_controlWidget = new ControlWidget(this);
+    m_configWidget = new ConfigWidget(this);
 
     return true;
 }

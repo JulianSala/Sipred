@@ -16,16 +16,19 @@ SET @l_proc_id := 'Creating tables';
 CALL Debug.debug_on(@l_proc_id);
 CALL Debug.debug_insert(@l_proc_id, 'Creating table Unidades');
 
+################################################################################
+
 CREATE TABLE Unidades (id_unidad INT(4) ZEROFILL AUTO_INCREMENT NOT NULL,
 descripcion VARCHAR(30) NOT NULL,
 simbolo VARCHAR(16) NOT NULL,
 PRIMARY KEY (id_unidad))
 COMMENT = 'Designación de las unidades para las distintas tablas' ENGINE=InnoDB;
 
+################################################################################
 
 CALL Debug.debug_insert(@l_proc_id, 'Creating table Esp_1');
 
-CREATE TABLE Esp_1 (id_esp_a VARCHAR(5) NOT NULL,
+CREATE TABLE Esp_1 (id_esp_1 VARCHAR(5) NOT NULL,
 especificacion VARCHAR(45) NOT NULL,
 id_unidad_a INT(4) ZEROFILL AUTO_INCREMENT NOT NULL,
 
@@ -36,6 +39,7 @@ CONSTRAINT unidad_esp_1 FOREIGN KEY (id_unidad_a) REFERENCES Unidades (id_unidad
 ON UPDATE CASCADE ON DELETE RESTRICT)
 COMMENT = 'Designacion para el Material de fabricacion del producto.' ENGINE=InnoDB;
 
+################################################################################
 
 CALL Debug.debug_insert(@l_proc_id, 'Creating table Esp_2');
 
@@ -50,6 +54,7 @@ CONSTRAINT unidad_esp_2 FOREIGN KEY (id_unidad_b) REFERENCES Unidades (id_Unidad
 ON UPDATE CASCADE ON DELETE RESTRICT)
 COMMENT = 'Designacion para el Tipo de material producto.' ENGINE=InnoDB;
 
+################################################################################
 
 CALL Debug.debug_insert(@l_proc_id, 'Creating table Esp_3');
 
@@ -64,6 +69,7 @@ CONSTRAINT unidad_esp_3 FOREIGN KEY (id_unidad_c) REFERENCES Unidades (id_Unidad
 ON UPDATE CASCADE ON DELETE RESTRICT)
 COMMENT = 'Designacion para el Formato segun el producto.' ENGINE=InnoDB;
 
+################################################################################
 
 CALL Debug.debug_insert(@l_proc_id, 'Creating table Esp_4');
 
@@ -78,6 +84,7 @@ CONSTRAINT unidad_esp_4 FOREIGN KEY (id_unidad_d) REFERENCES Unidades (id_Unidad
 ON UPDATE CASCADE ON DELETE RESTRICT)
 COMMENT = 'Designacion para el Diametro Nominal segun el tipo de producto.' ENGINE=InnoDB;
 
+################################################################################
 
 CALL Debug.debug_insert(@l_proc_id, 'Creating table Esp_5');
 
@@ -92,6 +99,7 @@ CONSTRAINT unidad_esp_5 FOREIGN KEY (id_unidad_e) REFERENCES Unidades (id_Unidad
 ON UPDATE CASCADE ON DELETE RESTRICT)
 COMMENT = 'Designacion para el Espesor segun el tipo de producto.'ENGINE=InnoDB;
 
+################################################################################
 
 CALL Debug.debug_insert(@l_proc_id, 'Creating table Esp_6');
 
@@ -106,6 +114,7 @@ CONSTRAINT unidad_esp_6 FOREIGN KEY (id_unidad_f) REFERENCES Unidades (id_Unidad
 ON UPDATE CASCADE ON DELETE RESTRICT)
 COMMENT = 'Designacion para el Peso segun el tipo de producto.'ENGINE=InnoDB;
 
+################################################################################
 
 CALL Debug.debug_insert(@l_proc_id, 'Creating table Esp_7');
 
@@ -120,6 +129,7 @@ CONSTRAINT unidad_esp_7 FOREIGN KEY (id_unidad) REFERENCES Unidades (id_Unidad)
 ON UPDATE CASCADE ON DELETE RESTRICT)
 COMMENT = 'Designacion para Rpm segun el tipo de producto.'ENGINE=InnoDB;
 
+################################################################################
 
 CALL Debug.debug_insert(@l_proc_id, 'Creating table Esp_8');
 
@@ -134,6 +144,7 @@ CONSTRAINT unidad_esp_8 FOREIGN KEY (id_unidad) REFERENCES Unidades (id_Unidad)
 ON UPDATE CASCADE ON DELETE RESTRICT)
 COMMENT = 'Designacion para la Potencia segun el tipo de producto.'ENGINE=InnoDB;
 
+################################################################################
 
 CALL Debug.debug_insert(@l_proc_id, 'Creating table Esp_9');
 
@@ -148,6 +159,7 @@ CONSTRAINT unidad_esp_9 FOREIGN KEY (id_unidad) REFERENCES Unidades (id_Unidad)
 ON UPDATE CASCADE ON DELETE RESTRICT)
 COMMENT = 'Designacion para la Marca segun el tipo de producto.'ENGINE=InnoDB;
 
+################################################################################
 
 CALL Debug.debug_insert(@l_proc_id, 'Creating table Esp_10');
 
@@ -162,6 +174,7 @@ CONSTRAINT unidad_esp_10 FOREIGN KEY (id_unidad) REFERENCES Unidades (id_Unidad)
 ON UPDATE CASCADE ON DELETE RESTRICT)
 COMMENT = 'Designacion para la Referencia segun el tipo de producto.'ENGINE=InnoDB;
 
+################################################################################
 
 CALL Debug.debug_insert(@l_proc_id, 'Creating table Esp_11');
 
@@ -176,6 +189,7 @@ CONSTRAINT unidad_esp_11 FOREIGN KEY (id_unidad) REFERENCES Unidades (id_Unidad)
 ON UPDATE CASCADE ON DELETE RESTRICT)
 COMMENT = 'Designacion para el Color segun el tipo de producto.'ENGINE=InnoDB;
 
+################################################################################
 
 CALL Debug.debug_insert(@l_proc_id, 'Creating table Esp_12');
 
@@ -191,3 +205,5 @@ ON UPDATE CASCADE ON DELETE RESTRICT)
 COMMENT = 'Designacion para el Origen segun el tipo de producto.'ENGINE=InnoDB;
 
 CALL Debug.debug_off(@l_proc_id);
+
+################################################################################

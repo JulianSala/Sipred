@@ -6,7 +6,7 @@
 **
 *****************************************************************************
 **
-**  configwidget.cpp is part of Sipred.
+**  librarymodulefactory.h is part of Sipred.
 **
 **    Sipred is free software: you can redistribute it and/or modify
 **    it under the terms of the GNU General Public License as published by
@@ -23,40 +23,19 @@
 **
 ****************************************************************************/
 
-#include "../include/configwidget.h"
+#ifndef LIBRARYMODULEFACTORY_H
+#define LIBRARYMODULEFACTORY_H
 
-#include <QtGui>
-#include <QtUiTools>
+#include <QtPlugin>
+#include "modulefactory.h"
 
-ConfigWidget::ConfigWidget(QObject *parent) :
-    QObject(parent)
+class LibraryModuleFactory: public QObject, public ModuleFactory
 {
-    m_widget = NULL;
-    loadWidget();
-}
+    Q_OBJECT
+    Q_INTERFACES(ModuleFactory)
 
-bool ConfigWidget::loadWidget()
-{
-    QFile file(":/ui/budgetplanner_config.ui");
+public:
+    Module *module();
+};
 
-    if (!file.open(QIODevice::ReadOnly)) {
-        qWarning() << "BudgetPlanner: Can't open config dialog.";
-        return false;
-    }
-
-    QUiLoader loader;
-
-    m_widget = qobject_cast<QWidget *>(loader.load(&file));
-
-    if (!m_widget) {
-        qWarning() << "BudgetPlanner: Can't load config dialog.";
-        return false;
-    }
-
-    return true;
-}
-
-QWidget* ConfigWidget::widget() const
-{
-    return m_widget;
-}
+#endif // LIBRARYMODULEFACTORY_H

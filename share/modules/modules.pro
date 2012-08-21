@@ -4,4 +4,5 @@ TEMPLATE = subdirs
 SUBDIRS += \
     sqlmodule \
     configmodule \
-    budgetplanner
+    budgetplanner \
+    library

@@ -31,6 +31,7 @@
 
 class CentralWidget;
 class ControlWidget;
+class ConfigWidget;
 class ModuleMngr;
 
 class BudgetPlanner : public QObject, public Module
@@ -79,6 +80,7 @@ private:
     ModuleMngr *m_moduleMngr;
     CentralWidget *m_centralWidget;
     ControlWidget *m_controlWidget;
+    ConfigWidget *m_configWidget;
 };
 
 #endif // BUDGETPLANNER_H

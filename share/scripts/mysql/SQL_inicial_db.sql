@@ -1,7 +1,7 @@
 CREATE DATABASE Sipred;
 USE Sipred;
 
-
+################################################################################
 
 # Creacion de tabla de unidades
 CREATE TABLE Unidades (id_unidad INT (4) ZEROFILL AUTO_INCREMENT NOT NULL,
@@ -9,9 +9,7 @@ descripcion VARCHAR(30) NOT NULL,
 simbolo VARCHAR (16) NOT NULL,
 PRIMARY KEY (id_unidad)) ENGINE=InnoDB;
 
-
-
-
+################################################################################
 
 # Creacion de especificaciones.
 CREATE TABLE Esp_1 (id_esp_mat VARCHAR(5) NOT NULL,
@@ -25,6 +23,8 @@ CONSTRAINT unidad_esp_1 FOREIGN KEY (id_unidad_mat) REFERENCES Unidades (id_unid
 ON UPDATE CASCADE ON DELETE RESTRICT)
 COMMENT = 'Designacion para el Material de fabricacion del producto.' ENGINE=InnoDB;
 
+################################################################################
+
 CREATE TABLE Esp_2 (id_esp_tip VARCHAR(5) NOT NULL,
 especificacion VARCHAR(45) NOT NULL,
 id_unidad_tip INT (4) ZEROFILL AUTO_INCREMENT NOT NULL,
@@ -35,6 +35,8 @@ INDEX (id_unidad_tip),
 CONSTRAINT unidad_esp_2 FOREIGN KEY (id_unidad_tip) REFERENCES Unidades (id_Unidad)
 ON UPDATE CASCADE ON DELETE RESTRICT)
 COMMENT = 'Designacion para el Tipo de material producto.' ENGINE=InnoDB;
+
+################################################################################
 
 CREATE TABLE Esp_3 (id_esp_for VARCHAR(5) NOT NULL,
 especificacion VARCHAR(45) NOT NULL,
@@ -47,6 +49,8 @@ CONSTRAINT unidad_esp_3 FOREIGN KEY (id_unidad_for) REFERENCES Unidades (id_Unid
 ON UPDATE CASCADE ON DELETE RESTRICT)
 COMMENT = 'Designacion para el Formato segun el producto.' ENGINE=InnoDB;
 
+################################################################################
+
 CREATE TABLE Esp_4 (id_esp_dia VARCHAR(5) NOT NULL,
 especificacion VARCHAR(45) NOT NULL,
 id_unidad_dia INT (4) ZEROFILL AUTO_INCREMENT NOT NULL,
@@ -57,6 +61,8 @@ INDEX (id_unidad_dia),
 CONSTRAINT unidad_esp_4 FOREIGN KEY (id_unidad_dia) REFERENCES Unidades (id_Unidad)
 ON UPDATE CASCADE ON DELETE RESTRICT)
 COMMENT = 'Designacion para el Diametro Nominal segun el tipo de producto.' ENGINE=InnoDB;
+
+################################################################################
 
 CREATE TABLE Esp_5 (id_esp_esp VARCHAR(5) NOT NULL,
 especificacion VARCHAR(45) NOT NULL,
@@ -69,6 +75,8 @@ CONSTRAINT unidad_esp_5 FOREIGN KEY (id_unidad_esp) REFERENCES Unidades (id_Unid
 ON UPDATE CASCADE ON DELETE RESTRICT)
 COMMENT = 'Designacion para el Espesor segun el tipo de producto.'ENGINE=InnoDB;
 
+################################################################################
+
 CREATE TABLE Esp_6 (id_esp_pes VARCHAR(5) NOT NULL,
 especificacion VARCHAR(45) NOT NULL,
 id_unidad_pes INT (4) ZEROFILL AUTO_INCREMENT NOT NULL,
@@ -79,6 +87,8 @@ INDEX (id_unidad_pes),
 CONSTRAINT unidad_esp_6 FOREIGN KEY (id_unidad_pes) REFERENCES Unidades (id_Unidad)
 ON UPDATE CASCADE ON DELETE RESTRICT)
 COMMENT = 'Designacion para el Peso segun el tipo de producto.'ENGINE=InnoDB;
+
+################################################################################
 
 CREATE TABLE Esp_7 (id_esp_rpm VARCHAR(5) NOT NULL,
 especificacion VARCHAR(45) NOT NULL,
@@ -91,6 +101,8 @@ CONSTRAINT unidad_esp_7 FOREIGN KEY (id_unidad_rpm) REFERENCES Unidades (id_Unid
 ON UPDATE CASCADE ON DELETE RESTRICT)
 COMMENT = 'Designacion para Rpm segun el tipo de producto.'ENGINE=InnoDB;
 
+################################################################################
+
 CREATE TABLE Esp_8 (id_esp_pot VARCHAR(5) NOT NULL,
 especificacion VARCHAR(45) NOT NULL,
 id_unidad_pot INT (4) ZEROFILL AUTO_INCREMENT NOT NULL,
@@ -101,6 +113,8 @@ INDEX (id_unidad_pot),
 CONSTRAINT unidad_esp_8 FOREIGN KEY (id_unidad_pot) REFERENCES Unidades (id_Unidad)
 ON UPDATE CASCADE ON DELETE RESTRICT)
 COMMENT = 'Designacion para la Potencia segun el tipo de producto.'ENGINE=InnoDB;
+
+################################################################################
 
 CREATE TABLE Esp_9 (id_esp_mar VARCHAR(5) NOT NULL,
 especificacion VARCHAR(45) NOT NULL,
@@ -113,6 +127,8 @@ CONSTRAINT unidad_esp_9 FOREIGN KEY (id_unidad_mar) REFERENCES Unidades (id_Unid
 ON UPDATE CASCADE ON DELETE RESTRICT)
 COMMENT = 'Designacion para la Marca segun el tipo de producto.'ENGINE=InnoDB;
 
+################################################################################
+
 CREATE TABLE Esp_10 (id_esp_ref VARCHAR(5) NOT NULL,
 especificacion VARCHAR(45) NOT NULL,
 id_unidad_ref INT (4) ZEROFILL AUTO_INCREMENT NOT NULL,
@@ -124,6 +140,8 @@ CONSTRAINT unidad_esp_10 FOREIGN KEY (id_unidad_ref) REFERENCES Unidades (id_Uni
 ON UPDATE CASCADE ON DELETE RESTRICT)
 COMMENT = 'Designacion para la Referencia segun el tipo de producto.'ENGINE=InnoDB;
 
+################################################################################
+
 CREATE TABLE Esp_11 (id_esp_col VARCHAR(5) NOT NULL,
 especificacion VARCHAR(45) NOT NULL,
 id_unidad_col INT (4) ZEROFILL AUTO_INCREMENT NOT NULL,
@@ -134,6 +152,8 @@ INDEX (id_unidad_col),
 CONSTRAINT unidad_esp_11 FOREIGN KEY (id_unidad_col) REFERENCES Unidades (id_Unidad)
 ON UPDATE CASCADE ON DELETE RESTRICT)
 COMMENT = 'Designacion para el Color segun el tipo de producto.'ENGINE=InnoDB;
+
+################################################################################
 
 CREATE TABLE Esp_12 (id_esp_ori VARCHAR(5) NOT NULL,
 especificacion VARCHAR(45) NOT NULL,
