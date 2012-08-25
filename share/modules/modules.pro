@@ -5,4 +5,4 @@ SUBDIRS += \
     sqlmodule \
     configmodule \
     budgetplanner \
-    library
+#    library

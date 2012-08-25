@@ -1,7 +1,9 @@
+#
 # This script create intial Datase for Sipred master table.
 # use without argument.
 #
 # $ mysql -u root -p < create_db.sql
+#
 
 # Setup debuger option
 SET @l_proc_id := 'Create main Sipred db';

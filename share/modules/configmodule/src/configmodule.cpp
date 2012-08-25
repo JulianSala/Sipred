@@ -201,11 +201,13 @@ void ConfigModule::loadConfigDialogs()
     if (!listView)
         return;
 
+    QStandardItemModel *model = qobject_cast<QStandardItemModel *>(listView->model());
+    model->clear();
+
     foreach (QString id, m_moduleMngr->avaliableModules()) {
         Module *module = m_moduleMngr->module(id);
         if (module->configDialog()) {
             stacked->addWidget(module->configDialog());
-            QStandardItemModel *model = qobject_cast<QStandardItemModel *>(listView->model());
             QStandardItem *item = new QStandardItem(module->icon(), module->name());
             item->setFlags(item->flags() & ~Qt::ItemIsEditable);
             model->appendRow(item);
@@ -232,7 +234,7 @@ void ConfigModule::applyButtonClicked()
     m_moduleMngr->saveModuleConfig();
 }
 
-void ConfigModule::cancelButtonClucked()
+void ConfigModule::cancelButtonClicked()
 {
 
 }
@@ -275,7 +277,7 @@ bool ConfigModule::loadDialog()
 
     QPushButton *cancelButton = m_widget->findChild<QPushButton *>("cancelPushButton");
     if (cancelButton) {
-        connect(cancelButton, SIGNAL(clicked()), this, SLOT(cancelButtonClucked()));
+        connect(cancelButton, SIGNAL(clicked()), this, SLOT(cancelButtonClicked()));
         connect(cancelButton, SIGNAL(clicked()), m_widget, SLOT(close()));
     } else {
         qWarning() << "ConfigModule: Can't find cancel button.";

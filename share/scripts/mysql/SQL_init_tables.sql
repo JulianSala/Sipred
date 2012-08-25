@@ -18,191 +18,217 @@ CALL Debug.debug_insert(@l_proc_id, 'Creating table Unidades');
 
 ################################################################################
 
-CREATE TABLE Unidades (id_unidad INT(4) ZEROFILL AUTO_INCREMENT NOT NULL,
+CREATE TABLE Unidades (id_und INT(4) ZEROFILL AUTO_INCREMENT NOT NULL,
 descripcion VARCHAR(30) NOT NULL,
 simbolo VARCHAR(16) NOT NULL,
-PRIMARY KEY (id_unidad))
+PRIMARY KEY (id_und))
 COMMENT = 'Designación de las unidades para las distintas tablas' ENGINE=InnoDB;
+
+SHOW WARNINGS;
 
 ################################################################################
 
 CALL Debug.debug_insert(@l_proc_id, 'Creating table Esp_1');
 
 CREATE TABLE Esp_1 (id_esp_1 VARCHAR(5) NOT NULL,
-especificacion VARCHAR(45) NOT NULL,
-id_unidad_a INT(4) ZEROFILL AUTO_INCREMENT NOT NULL,
+esp VARCHAR(45) NOT NULL,
+id_und_1 INT(4) ZEROFILL AUTO_INCREMENT NOT NULL,
 
-PRIMARY KEY (id_esp_a),
-INDEX (id_unidad_a),
+PRIMARY KEY (id_esp_1),
+INDEX (id_und_1),
 
-CONSTRAINT unidad_esp_1 FOREIGN KEY (id_unidad_a) REFERENCES Unidades (id_unidad)
+CONSTRAINT und_esp_1 FOREIGN KEY (id_und_1) REFERENCES Unidades (id_und)
 ON UPDATE CASCADE ON DELETE RESTRICT)
 COMMENT = 'Designacion para el Material de fabricacion del producto.' ENGINE=InnoDB;
+
+SHOW WARNINGS;
 
 ################################################################################
 
 CALL Debug.debug_insert(@l_proc_id, 'Creating table Esp_2');
 
-CREATE TABLE Esp_2 (id_esp_b VARCHAR(5) NOT NULL,
-especificacion VARCHAR(45) NOT NULL,
-id_unidad_b INT (4) ZEROFILL AUTO_INCREMENT NOT NULL,
+CREATE TABLE Esp_2 (id_esp_2 VARCHAR(5) NOT NULL,
+esp VARCHAR(45) NOT NULL,
+id_und_2 INT (4) ZEROFILL AUTO_INCREMENT NOT NULL,
 
-PRIMARY KEY (id_esp_b),
-INDEX (id_unidad_b),
+PRIMARY KEY (id_esp_2),
+INDEX (id_und_2),
 
-CONSTRAINT unidad_esp_2 FOREIGN KEY (id_unidad_b) REFERENCES Unidades (id_Unidad)
+CONSTRAINT und_esp_2 FOREIGN KEY (id_und_2) REFERENCES Unidades (id_und)
 ON UPDATE CASCADE ON DELETE RESTRICT)
 COMMENT = 'Designacion para el Tipo de material producto.' ENGINE=InnoDB;
+
+SHOW WARNINGS;
 
 ################################################################################
 
 CALL Debug.debug_insert(@l_proc_id, 'Creating table Esp_3');
 
-CREATE TABLE Esp_3 (id_esp_c VARCHAR(5) NOT NULL,
-especificacion VARCHAR(45) NOT NULL,
-id_unidad_c INT(4) ZEROFILL AUTO_INCREMENT NOT NULL,
+CREATE TABLE Esp_3 (id_esp_3 VARCHAR(5) NOT NULL,
+esp VARCHAR(45) NOT NULL,
+id_und_3 INT(4) ZEROFILL AUTO_INCREMENT NOT NULL,
 
-PRIMARY KEY (id_esp_c),
-INDEX (id_unidad_c),
+PRIMARY KEY (id_esp_3),
+INDEX (id_und_3),
 
-CONSTRAINT unidad_esp_3 FOREIGN KEY (id_unidad_c) REFERENCES Unidades (id_Unidad)
+CONSTRAINT und_esp_3 FOREIGN KEY (id_und_3) REFERENCES Unidades (id_und)
 ON UPDATE CASCADE ON DELETE RESTRICT)
 COMMENT = 'Designacion para el Formato segun el producto.' ENGINE=InnoDB;
 
-################################################################################
+SHOW WARNINGS;
+
+################################################################################Debug.debug_on
 
 CALL Debug.debug_insert(@l_proc_id, 'Creating table Esp_4');
 
-CREATE TABLE Esp_4 (id_esp_d VARCHAR(5) NOT NULL,
-especificacion VARCHAR(45) NOT NULL,
-id_unidad_d INT(4) ZEROFILL AUTO_INCREMENT NOT NULL,
+CREATE TABLE Esp_4 (id_esp_4 VARCHAR(5) NOT NULL,
+esp VARCHAR(45) NOT NULL,
+id_und_4 INT(4) ZEROFILL AUTO_INCREMENT NOT NULL,
 
-PRIMARY KEY (id_esp_d),
-INDEX (id_unidad_d),
+PRIMARY KEY (id_esp_4),
+INDEX (id_und_4),
 
-CONSTRAINT unidad_esp_4 FOREIGN KEY (id_unidad_d) REFERENCES Unidades (id_Unidad)
+CONSTRAINT und_esp_4 FOREIGN KEY (id_und_4) REFERENCES Unidades (id_und)
 ON UPDATE CASCADE ON DELETE RESTRICT)
 COMMENT = 'Designacion para el Diametro Nominal segun el tipo de producto.' ENGINE=InnoDB;
+
+SHOW WARNINGS;
 
 ################################################################################
 
 CALL Debug.debug_insert(@l_proc_id, 'Creating table Esp_5');
 
-CREATE TABLE Esp_5 (id_esp_e VARCHAR(5) NOT NULL,
-especificacion VARCHAR(45) NOT NULL,
-id_unidad_e INT(4) ZEROFILL AUTO_INCREMENT NOT NULL,
+CREATE TABLE Esp_5 (id_esp_5 VARCHAR(5) NOT NULL,
+esp VARCHAR(45) NOT NULL,
+id_und_5 INT(4) ZEROFILL AUTO_INCREMENT NOT NULL,
 
-PRIMARY KEY (id_esp_e),
-INDEX (id_unidad_e),
+PRIMARY KEY (id_esp_5),
+INDEX (id_und_5),
 
-CONSTRAINT unidad_esp_5 FOREIGN KEY (id_unidad_e) REFERENCES Unidades (id_Unidad)
+CONSTRAINT und_esp_5 FOREIGN KEY (id_und_5) REFERENCES Unidades (id_und)
 ON UPDATE CASCADE ON DELETE RESTRICT)
-COMMENT = 'Designacion para el Espesor segun el tipo de producto.'ENGINE=InnoDB;
+COMMENT = 'Designacion para el Espesor segun el tipo de producto.' ENGINE=InnoDB;
+
+SHOW WARNINGS;
 
 ################################################################################
 
 CALL Debug.debug_insert(@l_proc_id, 'Creating table Esp_6');
 
-CREATE TABLE Esp_6 (id_esp_f VARCHAR(5) NOT NULL,
-especificacion VARCHAR(45) NOT NULL,
-id_unidad_f INT (4) ZEROFILL AUTO_INCREMENT NOT NULL,
+CREATE TABLE Esp_6 (id_esp_6 VARCHAR(5) NOT NULL,
+esp VARCHAR(45) NOT NULL,
+id_und_6 INT (4) ZEROFILL AUTO_INCREMENT NOT NULL,
 
-PRIMARY KEY (id_esp_f),
-INDEX (id_unidad_f),
+PRIMARY KEY (id_esp_6),
+INDEX (id_und_6),
 
-CONSTRAINT unidad_esp_6 FOREIGN KEY (id_unidad_f) REFERENCES Unidades (id_Unidad)
+CONSTRAINT und_esp_6 FOREIGN KEY (id_und_6) REFERENCES Unidades (id_und)
 ON UPDATE CASCADE ON DELETE RESTRICT)
-COMMENT = 'Designacion para el Peso segun el tipo de producto.'ENGINE=InnoDB;
+COMMENT = 'Designacion para el Peso segun el tipo de producto.' ENGINE=InnoDB;
+
+SHOW WARNINGS;
 
 ################################################################################
 
 CALL Debug.debug_insert(@l_proc_id, 'Creating table Esp_7');
 
-CREATE TABLE Esp_7 (id_esp VARCHAR(5) NOT NULL,
-especificacion VARCHAR(45) NOT NULL,
-id_unidad INT (4) ZEROFILL AUTO_INCREMENT NOT NULL,
+CREATE TABLE Esp_7 (id_esp_7 VARCHAR(5) NOT NULL,
+esp VARCHAR(45) NOT NULL,
+id_und_7 INT (4) ZEROFILL AUTO_INCREMENT NOT NULL,
 
-PRIMARY KEY (id_esp),
-INDEX (id_unidad),
+PRIMARY KEY (id_esp_7),
+INDEX (id_und_7),
 
-CONSTRAINT unidad_esp_7 FOREIGN KEY (id_unidad) REFERENCES Unidades (id_Unidad)
+CONSTRAINT und_esp_7 FOREIGN KEY (id_und_7) REFERENCES Unidades (id_und)
 ON UPDATE CASCADE ON DELETE RESTRICT)
-COMMENT = 'Designacion para Rpm segun el tipo de producto.'ENGINE=InnoDB;
+COMMENT = 'Designacion para Rpm segun el tipo de producto.' ENGINE=InnoDB;
+
+SHOW WARNINGS;
 
 ################################################################################
 
 CALL Debug.debug_insert(@l_proc_id, 'Creating table Esp_8');
 
-CREATE TABLE Esp_8 (id_esp VARCHAR(5) NOT NULL,
-especificacion VARCHAR(45) NOT NULL,
-id_unidad INT (4) ZEROFILL AUTO_INCREMENT NOT NULL,
+CREATE TABLE Esp_8 (id_esp_8 VARCHAR(5) NOT NULL,
+esp VARCHAR(45) NOT NULL,
+id_und_8 INT (4) ZEROFILL AUTO_INCREMENT NOT NULL,
 
-PRIMARY KEY (id_esp),
-INDEX (id_unidad),
+PRIMARY KEY (id_esp_8),
+INDEX (id_und_8),
 
-CONSTRAINT unidad_esp_8 FOREIGN KEY (id_unidad) REFERENCES Unidades (id_Unidad)
+CONSTRAINT und_esp_8 FOREIGN KEY (id_und_8) REFERENCES Unidades (id_und)
 ON UPDATE CASCADE ON DELETE RESTRICT)
-COMMENT = 'Designacion para la Potencia segun el tipo de producto.'ENGINE=InnoDB;
+COMMENT = 'Designacion para la Potencia segun el tipo de producto.' ENGINE=InnoDB;
+
+SHOW WARNINGS;
 
 ################################################################################
 
 CALL Debug.debug_insert(@l_proc_id, 'Creating table Esp_9');
 
-CREATE TABLE Esp_9 (id_esp VARCHAR(5) NOT NULL,
-especificacion VARCHAR(45) NOT NULL,
-id_unidad INT (4) ZEROFILL AUTO_INCREMENT NOT NULL,
+CREATE TABLE Esp_9 (id_esp_9 VARCHAR(5) NOT NULL,
+esp VARCHAR(45) NOT NULL,
+id_und_9 INT (4) ZEROFILL AUTO_INCREMENT NOT NULL,
 
-PRIMARY KEY (id_esp),
-INDEX (id_unidad),
+PRIMARY KEY (id_esp_9),
+INDEX (id_und_9),
 
-CONSTRAINT unidad_esp_9 FOREIGN KEY (id_unidad) REFERENCES Unidades (id_Unidad)
+CONSTRAINT und_esp_9 FOREIGN KEY (id_und_9) REFERENCES Unidades (id_und)
 ON UPDATE CASCADE ON DELETE RESTRICT)
-COMMENT = 'Designacion para la Marca segun el tipo de producto.'ENGINE=InnoDB;
+COMMENT = 'Designacion para la Marca segun el tipo de producto.' ENGINE=InnoDB;
+
+SHOW WARNINGS;
 
 ################################################################################
 
 CALL Debug.debug_insert(@l_proc_id, 'Creating table Esp_10');
 
-CREATE TABLE Esp_10 (id_esp VARCHAR(5) NOT NULL,
-especificacion VARCHAR(45) NOT NULL,
-id_unidad INT (4) ZEROFILL AUTO_INCREMENT NOT NULL,
+CREATE TABLE Esp_10 (id_esp_10 VARCHAR(5) NOT NULL,
+esp VARCHAR(45) NOT NULL,
+id_und_10 INT (4) ZEROFILL AUTO_INCREMENT NOT NULL,
 
-PRIMARY KEY (id_esp),
-INDEX (id_unidad),
+PRIMARY KEY (id_esp_10),
+INDEX (id_und_10),
 
-CONSTRAINT unidad_esp_10 FOREIGN KEY (id_unidad) REFERENCES Unidades (id_Unidad)
+CONSTRAINT und_esp_10 FOREIGN KEY (id_und_10) REFERENCES Unidades (id_und)
 ON UPDATE CASCADE ON DELETE RESTRICT)
-COMMENT = 'Designacion para la Referencia segun el tipo de producto.'ENGINE=InnoDB;
+COMMENT = 'Designacion para la Referencia segun el tipo de producto.' ENGINE=InnoDB;
+
+SHOW WARNINGS;
 
 ################################################################################
 
 CALL Debug.debug_insert(@l_proc_id, 'Creating table Esp_11');
 
-CREATE TABLE Esp_11 (id_esp VARCHAR(5) NOT NULL,
-especificacion VARCHAR(45) NOT NULL,
-id_unidad INT (4) ZEROFILL AUTO_INCREMENT NOT NULL,
+CREATE TABLE Esp_11 (id_esp_11 VARCHAR(5) NOT NULL,
+esp VARCHAR(45) NOT NULL,
+id_und_11 INT (4) ZEROFILL AUTO_INCREMENT NOT NULL,
 
-PRIMARY KEY (id_esp),
-INDEX (id_unidad),
+PRIMARY KEY (id_esp_11),
+INDEX (id_und_11),
 
-CONSTRAINT unidad_esp_11 FOREIGN KEY (id_unidad) REFERENCES Unidades (id_Unidad)
+CONSTRAINT und_esp_11 FOREIGN KEY (id_und_11) REFERENCES Unidades (id_und)
 ON UPDATE CASCADE ON DELETE RESTRICT)
-COMMENT = 'Designacion para el Color segun el tipo de producto.'ENGINE=InnoDB;
+COMMENT = 'Designacion para el Color segun el tipo de producto.' ENGINE=InnoDB;
+
+SHOW WARNINGS;
 
 ################################################################################
 
 CALL Debug.debug_insert(@l_proc_id, 'Creating table Esp_12');
 
-CREATE TABLE Esp_12 (id_esp VARCHAR(5) NOT NULL,
-especificacion VARCHAR(45) NOT NULL,
-id_unidad INT (4) ZEROFILL AUTO_INCREMENT NOT NULL,
+CREATE TABLE Esp_12 (id_esp_12 VARCHAR(5) NOT NULL,
+esp VARCHAR(45) NOT NULL,
+id_und_12 INT (4) ZEROFILL AUTO_INCREMENT NOT NULL,
 
-PRIMARY KEY (id_esp),
-INDEX (id_unidad),
+PRIMARY KEY (id_esp_12),
+INDEX (id_und_12),
 
-CONSTRAINT unidad_esp_12 FOREIGN KEY (id_unidad) REFERENCES Unidades (id_Unidad)
+CONSTRAINT und_esp_12 FOREIGN KEY (id_und_12) REFERENCES Unidades (id_und)
 ON UPDATE CASCADE ON DELETE RESTRICT)
-COMMENT = 'Designacion para el Origen segun el tipo de producto.'ENGINE=InnoDB;
+COMMENT = 'Designacion para el Origen segun el tipo de producto.' ENGINE=InnoDB;
+
+SHOW WARNINGS;
 
 CALL Debug.debug_off(@l_proc_id);
 

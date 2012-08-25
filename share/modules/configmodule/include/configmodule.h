@@ -75,7 +75,7 @@ public slots:
 
     void okButtonClicked();
     void applyButtonClicked();
-    void cancelButtonClucked();
+    void cancelButtonClicked();
 
 private:
     bool loadDialog();

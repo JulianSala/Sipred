@@ -33,60 +33,63 @@ caracteristicas VARCHAR(6) NOT NULL,
 consecutivo INT(3) ZEROFILL NOT NULL DEFAULT 001 ,
 descripcion VARCHAR(45) NOT NULL,
 unidad_compra INT (4) ZEROFILL NOT NULL,
-id_esp_1 VARCHAR(5) NOT NULL,
-id_esp_2 VARCHAR(5) NOT NULL,
-id_esp_3 VARCHAR(5) NOT NULL,
-id_esp_4 VARCHAR(5) NOT NULL,
-id_esp_5 VARCHAR(5) NOT NULL,
-id_esp_6 VARCHAR(5) NOT NULL,
-id_esp_7 VARCHAR(5) NOT NULL,
-id_esp_8 VARCHAR(5) NOT NULL,
-id_esp_9 VARCHAR(5) NOT NULL,
-id_esp_10 VARCHAR(5) NOT NULL,
-id_esp_11 VARCHAR(5) NOT NULL,
-id_esp_12 VARCHAR(5) NOT NULL,
+col_esp_1 VARCHAR(5) NOT NULL,
+col_esp_2 VARCHAR(5) NOT NULL,
+col_esp_3 VARCHAR(5) NOT NULL,
+col_esp_4 VARCHAR(5) NOT NULL,
+col_esp_5 VARCHAR(5) NOT NULL,
+col_esp_6 VARCHAR(5) NOT NULL,
+col_esp_7 VARCHAR(5) NOT NULL,
+col_esp_8 VARCHAR(5) NOT NULL,
+col_esp_9 VARCHAR(5) NOT NULL,
+col_esp_10 VARCHAR(5) NOT NULL,
+col_esp_11 VARCHAR(5) NOT NULL,
+col_esp_12 VARCHAR(5) NOT NULL,
 
 PRIMARY KEY (grupo, caracteristicas, consecutivo),
 INDEX Id_material (grupo, caracteristicas, consecutivo),
-INDEX (id_esp_1),
-INDEX (id_esp_2),
-INDEX (id_esp_3),
-INDEX (id_esp_4),
-INDEX (id_esp_5),
-INDEX (id_esp_6),
-INDEX (id_esp_7),
-INDEX (id_esp_8),
-INDEX (id_esp_9),
-INDEX (id_esp_10),
-INDEX (id_esp_11),
-INDEX (id_esp_12),
+INDEX (col_esp_1),
+INDEX (col_esp_2),
+INDEX (col_esp_3),
+INDEX (col_esp_4),
+INDEX (col_esp_5),
+INDEX (col_esp_6),
+INDEX (col_esp_7),
+INDEX (col_esp_8),
+INDEX (col_esp_9),
+INDEX (col_esp_10),
+INDEX (col_esp_11),
+INDEX (col_esp_12),
 
-CONSTRAINT esp_1 FOREIGN KEY (id_esp_1) REFERENCES Esp_1 (id_esp_a)
+CONSTRAINT esp_1 FOREIGN KEY (col_esp_1) REFERENCES Esp_1 (id_esp_1)
 ON UPDATE CASCADE ON DELETE RESTRICT,
-CONSTRAINT esp_2 FOREIGN KEY (id_esp_2) REFERENCES Esp_2 (id_esp_b)
+CONSTRAINT esp_2 FOREIGN KEY (col_esp_2) REFERENCES Esp_2 (id_esp_2)
 ON UPDATE CASCADE ON DELETE RESTRICT,
-CONSTRAINT esp_3 FOREIGN KEY (id_esp_3) REFERENCES Esp_3 (id_esp_c)
+CONSTRAINT esp_3 FOREIGN KEY (col_esp_3) REFERENCES Esp_3 (id_esp_3)
 ON UPDATE CASCADE ON DELETE RESTRICT,
-CONSTRAINT esp_4 FOREIGN KEY (id_esp_4) REFERENCES Esp_4 (id_esp_d)
+CONSTRAINT esp_4 FOREIGN KEY (col_esp_4) REFERENCES Esp_4 (id_esp_4)
 ON UPDATE CASCADE ON DELETE RESTRICT,
-CONSTRAINT esp_5 FOREIGN KEY (id_esp_5) REFERENCES Esp_5 (id_esp_e)
+CONSTRAINT esp_5 FOREIGN KEY (col_esp_5) REFERENCES Esp_5 (id_esp_5)
 ON UPDATE CASCADE ON DELETE RESTRICT,
-CONSTRAINT esp_6 FOREIGN KEY (id_esp_6) REFERENCES Esp_6 (id_esp_f)
+CONSTRAINT esp_6 FOREIGN KEY (col_esp_6) REFERENCES Esp_6 (id_esp_6)
 ON UPDATE CASCADE ON DELETE RESTRICT,
-CONSTRAINT esp_7 FOREIGN KEY (id_esp_7) REFERENCES Esp_7 (id_esp)
+CONSTRAINT esp_7 FOREIGN KEY (col_esp_7) REFERENCES Esp_7 (id_esp_7)
 ON UPDATE CASCADE ON DELETE RESTRICT,
-CONSTRAINT esp_8 FOREIGN KEY (id_esp_8) REFERENCES Esp_8 (id_esp)
+CONSTRAINT esp_8 FOREIGN KEY (col_esp_8) REFERENCES Esp_8 (id_esp_8)
 ON UPDATE CASCADE ON DELETE RESTRICT,
-CONSTRAINT esp_9 FOREIGN KEY (id_esp_9) REFERENCES Esp_9 (id_esp)
+CONSTRAINT esp_9 FOREIGN KEY (col_esp_9) REFERENCES Esp_9 (id_esp_9)
 ON UPDATE CASCADE ON DELETE RESTRICT,
-CONSTRAINT esp_10 FOREIGN KEY (id_esp_10) REFERENCES Esp_10 (id_esp)
+CONSTRAINT esp_10 FOREIGN KEY (col_esp_10) REFERENCES Esp_10 (id_esp_10)
 ON UPDATE CASCADE ON DELETE RESTRICT,
-CONSTRAINT esp_11 FOREIGN KEY (id_esp_11) REFERENCES Esp_11 (id_esp)
+CONSTRAINT esp_11 FOREIGN KEY (col_esp_11) REFERENCES Esp_11 (id_esp_11)
 ON UPDATE CASCADE ON DELETE RESTRICT,
-CONSTRAINT esp_12 FOREIGN KEY (id_esp_12) REFERENCES Esp_12 (id_esp)
+CONSTRAINT esp_12 FOREIGN KEY (col_esp_12) REFERENCES Esp_12 (id_esp_12)
 ON UPDATE CASCADE ON DELETE RESTRICT)
-COMMENT = 'Tabla generica de referencia para todos los materiales.' ENGINE=InnoDB;
+COMMENT = 'Tabla generica de referencia para todos los materiales.' 
+ENGINE=InnoDB;
 
 CALL Debug.debug_insert(@l_proc_id, 'Master table it is ready.');
+
+SHOW WARNINGS;
 
 CALL Debug.debug_off(@l_proc_id);
