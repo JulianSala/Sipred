@@ -50,8 +50,8 @@ position VARCHAR(35) NOT NULL,
 mail VARCHAR(45),
 phone BIGINT,
 PRIMARY KEY (id_sales))
-COMMENT = 'Tabla para almacenar los nombre e identidades de los gestores 
-comerciales' ENGINE=InnoDB;
+COMMENT = 'Nombre e identidades de los gestores comerciales'
+ENGINE=InnoDB;
 
 SHOW WARNINGS;
 
@@ -62,7 +62,7 @@ CALL Debug.debug_insert(@l_proc_id, 'Creating table Priority');
 CREATE TABLE Priority (id_priority VARCHAR(2) NOT NULL,
 description VARCHAR(30) NOT NULL,
 PRIMARY KEY (id_priority))
-COMMENT = 'Tabla para almacenar los niveles de prioridad de los presupuestos'
+COMMENT = 'Niveles de prioridad de los presupuestos'
 ENGINE=InnoDB;
 
 SHOW WARNINGS;
@@ -74,7 +74,7 @@ CALL Debug.debug_insert(@l_proc_id, 'Creating table State');
 CREATE TABLE States (id_state VARCHAR(2) NOT NULL,
 description VARCHAR(30) NOT NULL,
 PRIMARY KEY (id_state))
-COMMENT = 'Tabla para almacenar los distintos estados de cada presupuesto'
+COMMENT = 'Estados de cada presupuesto'
 ENGINE=InnoDB;
 
 SHOW WARNINGS;
@@ -158,7 +158,7 @@ CALL Debug.debug_insert(@l_proc_id, 'Creating table Reference');
 
 CREATE TABLE Reference (id_reference INT ZEROFILL AUTO_INCREMENT NOT NULL,
 project INT(4) ZEROFILL NOT NULL,
-equipment INT(4) NOT NULL,
+equipment INT(4) ZEROFILL NOT NULL,
 
 PRIMARY KEY (id_reference),
 INDEX (project),

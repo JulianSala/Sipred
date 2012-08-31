@@ -35,6 +35,8 @@
 # $ mysql <
 ##
 
+USE Sipred;
+
 SET @l_proc_id := 'Creating tables';
 CALL Debug.debug_on(@l_proc_id);
 CALL Debug.debug_insert(@l_proc_id, 'Creating table Providers');
@@ -60,10 +62,10 @@ CREATE TABLE Prices (id_price INT(4) ZEROFILL AUTO_INCREMENT NOT NULL,
 material_group VARCHAR(3) NOT NULL COMMENT 'Corresponding material group',
 material_car VARCHAR(6) NOT NULL COMMENT 'Corresponding material caracteristics code',
 material_count INT(3) ZEROFILL NOT NULL,
-price FLOAT,
+price DOUBLE (10,3),
 unit_price INT(4) ZEROFILL NOT NULL,
 commits TEXT,
-provider INT(4) NOT NULL,
+provider INT(4) ZEROFILL NOT NULL,
 
 PRIMARY KEY (id_price),
 INDEX (material_group, material_car, material_count),
@@ -72,7 +74,7 @@ INDEX (provider),
 
 CONSTRAINT material FOREIGN KEY (material_group, material_car, material_count) REFERENCES Materiales (grupo, caracteristicas, consecutivo)
 ON UPDATE CASCADE ON DELETE RESTRICT,
-CONSTRAINT unit_price FOREIGN KEY (unit_price) REFERENCES Unidades (id_und)
+CONSTRAINT unit FOREIGN KEY (unit_price) REFERENCES Unidades (id_und)
 ON UPDATE CASCADE ON DELETE RESTRICT,
 CONSTRAINT provider FOREIGN KEY (provider) REFERENCES Providers (id_provider)
 ON UPDATE CASCADE ON DELETE RESTRICT)

@@ -8,7 +8,7 @@
 ##
 #############################################################################
 ##
-##  BP_create_db.sql is part of Sipred.
+##  BP_load_data.sql is part of Sipred.
 ##
 ##    Sipred is free software: you can redistribute it and/or modify
 ##    it under the terms of the GNU General Public License as published by
@@ -25,28 +25,8 @@
 ##
 #############################################################################
 
-#
-# This script create intial Datase for Sipred Budget Planner.
-# use without argument.
-#
-# $ mysql -u root -p < create_db.sql
-#
+USE Sipred;
 
-SET @l_proc_id := 'Create main Budget Planner db';
-CALL Debug.debug_on(@l_proc_id);
-
-SET @_sipred_exists_ := (SELECT IF(EXISTS (SELECT SCHEMA_NAME FROM
-                        INFORMATION_SCHEMA.SCHEMATA
-                        WHERE SCHEMA_NAME = 'SipredBP'), 'Yes','No'));
-
-CALL Debug.debug_insert(@l_proc_id, CONCAT('SipredBP db exists: ',
-                                            @_sipred_exists_));
-
-DROP DATABASE IF EXISTS SipredBP;
-
-CREATE DATABASE SipredBP;
-
-# End debug option
-
-CALL Debug.debug_insert(@l_proc_id, 'SipredBP database have been created.');
-CALL Debug.debug_off(@l_proc_id);
+LOAD DATA LOCAL INFILE '%1' REPLACE INTO TABLE %2 
+FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n'
+IGNORE 1 LINES;
