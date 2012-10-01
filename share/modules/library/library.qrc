@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/ui">
+        <file alias="librarymodule_central.ui">share/librarymodule_central.ui</file>
+    </qresource>
+    <qresource prefix="/icons">
+        <file alias="d_librarymodule.png">share/wmp_1.png</file>
+        <file alias="e_librarymodule.png">share/wmp_3.png</file>
+    </qresource>
+</RCC>

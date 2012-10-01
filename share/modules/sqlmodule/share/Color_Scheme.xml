@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--La raiz de configuración del esquema-->
+<Schemes>
+  <Scheme>
+    <name>Normal</name>
+    <property name="background">
+      <string>Area de texto</string>
+      <color>
+	<red>255</red>
+	<green>255</green>
+	<blue>255</blue>
+      </color>
+    </property>
+    <property name="highlighted-bracket">
+      <string>Color de bracket</string>
+      <color>
+	<red>237</red>
+	<green>249</green>
+	<blue>255</blue>
+      </color>
+    </property>
+    <property name="highlighted-line">
+      <string>Color de liena resaltada</string>
+      <color>
+	<red>248</red>
+	<green>247</green>
+	<blue>246</blue>
+      </color>
+    </property>
+    <property name="normal-text">
+      <string>Color de texto normal</string>
+      <color>
+	<red>248</red>
+	<green>247</green>
+	<blue>246</blue>
+      </color>
+    </property>
+  </Scheme>
+</Schemes>
