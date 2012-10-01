@@ -28,6 +28,7 @@
 
 #include <QObject>
 #include "module.h"
+#include "centralwidget.h"
 
 class LibraryModule : public QObject, public Module
 {
@@ -35,8 +36,45 @@ class LibraryModule : public QObject, public Module
 
 public:
     LibraryModule(QObject *parent = 0);
+    ~LibraryModule();
 
-    
+    QString id() const;
+    QString name() const;
+    QString version() const;
+    QString summary() const;
+    QString category() const;
+    QString author() const;
+    QString mail() const;
+    QString webside() const;
+    QString license() const;
+    QIcon icon() const;
+
+    ModuleType type() const;
+
+    QVariant dependences() const;
+//    QString instance() const;
+    bool configurable() const;
+    QWidget *configDialog() const;
+    QHash<QString, QVariant> defaultConfig() const;
+    bool setConfig(const QVariant &);
+//    bool setConfigs(const QVariant &);
+
+    QMenu *menu() const;
+    QWidget *centralWidget() const;
+    QWidget *controlsWidget() const;
+    QWidget *additionalWidget() const;
+
+    void registerModuleManager(ModuleMngr *);
+
+public slots:
+    bool start();
+    bool stop();
+    void applyConfig();
+
+private:
+    ModuleMngr *m_moduleManager;
+    CentralWidget *m_centralWidget;
+
 };
 
 #endif // LIBRARYMODULE_H

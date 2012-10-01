@@ -57,6 +57,7 @@ public slots:
     void quitApp();
 
     /* Tools Menu */
+    void setCurrentToolWidget(int n);
 
 protected:
     InterfaceMngr(const InterfaceMngrPrivate &d);

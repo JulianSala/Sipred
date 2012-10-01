@@ -61,6 +61,8 @@ private:
     void initializeMenus();
     void centerWindow();
 
+    QSignalMapper *m_toolBarMapper;
+
     QMenuBar *m_menuBar;
     QToolBar *m_toolBar;
     QStackedWidget *m_centralWidget;

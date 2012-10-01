@@ -56,32 +56,34 @@ void InterfaceMngr::registerModuleManager(ModuleMngr *moduleMngr)
 
     qDebug() << d->m_moduleManager->avaliableModules(Module::ModuleTypeCore);
 
+    QStackedWidget *stackedWidget = d->m_dockWidget->findChild<QStackedWidget *>();
+
+    connect(d->m_centralWidget, SIGNAL(currentChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
+
     foreach (QString moduleId, d->m_moduleManager->avaliableModules()) {
         Module *module = d->m_moduleManager->module(moduleId);
         if (module->menu())
             d->m_mainwindow->menuBar()->addMenu(module->menu());
 
-        if (module->centralWidget()) {
+        if (module->centralWidget())
             d->m_centralWidget->addWidget(module->centralWidget());
+
+        if (module->type() != Module::ModuleTypeCore) {
+            QAction *buttonAction = d->m_toolBar->addAction(module->icon(), module->name());
+            connect(buttonAction, SIGNAL(triggered()), d->m_toolBarMapper, SLOT(map()));
+            d->m_toolBarMapper->setMapping(buttonAction, module->centralWidget());
         }
 
+
         if (module->controlsWidget()) {
-            QToolBox *toolBox = d->m_dockWidget->findChild<QToolBox *>();
-            if (toolBox) {
-                if (toolBox->count() == 1 &&
-                    toolBox->itemText(toolBox->currentIndex()).isEmpty()) {
-                    toolBox->addItem(module->controlsWidget(),
-                                     module->icon(),
-                                     module->name());
-                    toolBox->removeItem(0);
-                } else {
-                    toolBox->addItem(module->controlsWidget(),
-                                     module->icon(),
-                                     module->name());
-                }
-            }
+            stackedWidget->addWidget(module->controlsWidget());
+        } else {
+            stackedWidget->addWidget(new QWidget(stackedWidget));
         }
     }
+
+    connect(d->m_toolBarMapper, SIGNAL(mapped(QWidget*)), d->m_centralWidget, SLOT(setCurrentWidget(QWidget*)));
+
 }
 
 void InterfaceMngr::registerPluginManager(PluginMngr *pluginMngr)
@@ -116,7 +118,7 @@ void InterfaceMngr::initInterface()
     if (!d->m_dockWidget)
         d->setDefaultDock();
 
-    d->m_mainwindow->addDockWidget(Qt::LeftDockWidgetArea, d->m_dockWidget);
+    d->m_mainwindow->addDockWidget(Qt::RightDockWidgetArea, d->m_dockWidget);
 
     d->initializeMenus();
 
@@ -153,6 +155,21 @@ void InterfaceMngr::quitApp()
 
 }
 
+void InterfaceMngr::setCurrentToolWidget(int n)
+{
+    Q_D(InterfaceMngr);
+
+    QStackedWidget *stacked = d->m_dockWidget->findChild<QStackedWidget *>();
+    QWidget *w = stacked->widget(n);
+
+    QList<QObject *> objectList = w->findChildren<QObject *>();
+
+    if (objectList.isEmpty())
+        d->m_dockWidget->setVisible(false);
+    else
+        d->m_dockWidget->setVisible(true);
+}
+
 /****************************************************************************
  *                          InterfaceMngrPrivate
  ***************************************************************************/
@@ -164,6 +181,7 @@ InterfaceMngrPrivate::InterfaceMngrPrivate(InterfaceMngr *q) :
     m_moduleManager = NULL;
     m_pluginManager = NULL;
     m_menuBar = NULL;
+    m_toolBarMapper = NULL;
     m_toolBar = NULL;
     m_centralWidget = NULL;
     m_dockWidget = NULL;
@@ -229,13 +247,22 @@ void InterfaceMngrPrivate::setDefaultWindow()
         qFatal("Can't load default mainwindow.");
     }
 
-    QIcon icon(":/thumbnail/logo_sipred");
+    m_toolBar = new QToolBar("Barra de Herramientas", m_mainwindow);
+    m_toolBar->setIconSize(QSize(48, 48));
+    m_toolBar->setMovable(false);
+    m_toolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+
+    m_mainwindow->addToolBar(Qt::LeftToolBarArea, m_toolBar);
+
+    QIcon icon(":/thumbnail/thumbnail_sipred.png");
     m_mainwindow->setWindowIcon(icon);
     setWindowTitle("Dismet");
 }
 
 void InterfaceMngrPrivate::setDefaultDock()
 {
+    Q_Q(InterfaceMngr);
+
     QFile file(":/ui/dockwidget");
 
     if (!file.open(QIODevice::ReadOnly))
@@ -248,13 +275,13 @@ void InterfaceMngrPrivate::setDefaultDock()
     if (!m_dockWidget)
         qFatal("Can't load default dockwidget");
 
-    QToolBox *toolBox = m_dockWidget->findChild<QToolBox *>();
+    QStackedWidget *stackedWidget = m_dockWidget->findChild<QStackedWidget *>();
 
-    if (!toolBox)
+    if (!stackedWidget)
         qFatal("Can't find tool box.");
 
-    QObject::connect(toolBox, SIGNAL(currentChanged(int)), m_centralWidget, SLOT(setCurrentIndex(int)));
-    toolBox->setCurrentIndex(0);
+    QObject::connect(stackedWidget, SIGNAL(currentChanged(int)), q, SLOT(setCurrentToolWidget(int)));
+    stackedWidget->setCurrentIndex(0);
 
     m_dockWidget->setWindowTitle("Herramientas");
 }
@@ -289,6 +316,8 @@ void InterfaceMngrPrivate::initializeMenus()
 
     if (!m_mainwindow)
         qFatal("Can't init actions, Mainwindow is not found");
+
+    m_toolBarMapper = new QSignalMapper(q);
 
     QList<QAction *> actionList;
 

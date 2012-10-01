@@ -24,8 +24,7 @@
 ##    along with Sipred. If not, see <http://www.gnu.org/licenses/>.
 ##
 ################################################################################
-
-##
+#
 # Create price table for be used in budget of Sipred System
 #
 # this script do not allow load data from external resources like
@@ -33,7 +32,7 @@
 # Use this script without parameters:
 #
 # $ mysql <
-##
+#
 
 USE Sipred;
 
@@ -45,9 +44,13 @@ CALL Debug.debug_insert(@l_proc_id, 'Creating table Providers');
 
 CREATE TABLE Providers (id_provider INT(4) ZEROFILL AUTO_INCREMENT NOT NULL,
 provider_name VARCHAR(45) NOT NULL,
+nit_number BIGINT,
+city VARCHAR(45),
+country VARCHAR(45),
+street TEXT,
+phone BIGINT,
 contact_name VARCHAR(45),
 mail VARCHAR(45),
-phone BIGINT,
 PRIMARY KEY (id_provider))
 COMMENT = 'Tabla para almacenar los datos de proveedores.'
 ENGINE=InnoDB;
@@ -62,10 +65,13 @@ CREATE TABLE Prices (id_price INT(4) ZEROFILL AUTO_INCREMENT NOT NULL,
 material_group VARCHAR(3) NOT NULL COMMENT 'Corresponding material group',
 material_car VARCHAR(6) NOT NULL COMMENT 'Corresponding material caracteristics code',
 material_count INT(3) ZEROFILL NOT NULL,
-price DOUBLE (10,3),
+price DOUBLE (15,2),
 unit_price INT(4) ZEROFILL NOT NULL,
 commits TEXT,
 provider INT(4) ZEROFILL NOT NULL,
+validity_period INT(2) DEFAULT 6,
+last_update DATE,
+updated ENUM ('Y' ,'N') DEFAULT 'Y' NOT NULL,
 
 PRIMARY KEY (id_price),
 INDEX (material_group, material_car, material_count),

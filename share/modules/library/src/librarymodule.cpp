@@ -24,8 +24,141 @@
 ****************************************************************************/
 
 #include "../include/librarymodule.h"
+#include <modulemngr.h>
 
 LibraryModule::LibraryModule(QObject *parent) :
     QObject(parent)
+{
+    m_moduleManager = NULL;
+    m_centralWidget = NULL;
+}
+
+LibraryModule::~LibraryModule()
+{
+
+}
+
+QString LibraryModule::id() const
+{
+    return QString("LibraryModule");
+}
+
+QString LibraryModule::name() const
+{
+    return QString("Libreria");
+}
+
+QString LibraryModule::version() const
+{
+    return QString("2.1.0");
+}
+
+QString LibraryModule::summary() const
+{
+    return QString("Management all database data like a library.");
+}
+
+QString LibraryModule::category() const
+{
+    return QString("SQL");
+}
+
+QString LibraryModule::author() const
+{
+    return QString("Edwin Vasquez Torres");
+}
+
+QString LibraryModule::mail() const
+{
+    return QString("edwincart@hotmail.com");
+}
+
+QString LibraryModule::webside() const
+{
+    return QString("https://github.com/thanatosJSSE/Sipred");
+}
+
+QString LibraryModule::license() const
+{
+    return QString("GPLv3");
+}
+
+QIcon LibraryModule::icon() const
+{
+    return QIcon(":/icons/e_librarymodule.png");
+}
+
+Module::ModuleType LibraryModule::type() const
+{
+    return Module::ModuleTypeSql;
+}
+
+QVariant LibraryModule::dependences() const
+{
+    return QStringList();
+}
+
+bool LibraryModule::configurable() const
+{
+    return true;
+}
+
+QWidget* LibraryModule::configDialog() const
+{
+    return NULL;
+}
+
+QHash<QString, QVariant> LibraryModule::defaultConfig() const
+{
+    QHash<QString, QVariant> hash;
+    return hash;
+}
+
+bool LibraryModule::setConfig(const QVariant &value)
+{
+    Q_UNUSED(value)
+    return true;
+}
+
+QMenu *LibraryModule::menu() const
+{
+    return NULL;
+}
+
+QWidget* LibraryModule::centralWidget() const
+{
+    return m_centralWidget->widget();
+}
+
+QWidget* LibraryModule::controlsWidget() const
+{
+    return NULL;
+}
+
+QWidget* LibraryModule::additionalWidget() const
+{
+    return NULL;
+}
+
+void LibraryModule::registerModuleManager(ModuleMngr *modMngr)
+{
+    m_moduleManager = modMngr;
+    connect(m_moduleManager, SIGNAL(destroyed()),
+            this, SLOT(stop()));
+}
+
+bool LibraryModule::start()
+{
+    m_centralWidget = new CentralWidget(":/ui/librarymodule_central.ui", this);
+
+    return true;
+}
+
+bool LibraryModule::stop()
+{
+    return true;
+}
+
+void LibraryModule::applyConfig()
 {
 }

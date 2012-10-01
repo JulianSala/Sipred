@@ -19,4 +19,6 @@ HEADERS += \
     include/librarymodulefactory.h
 
 OTHER_FILES += \
+    share/librarymodule_central.ui \
+
 
